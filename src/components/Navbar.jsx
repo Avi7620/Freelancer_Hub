@@ -59,6 +59,7 @@ const Navbar = () => {
             onClick={() => navigate("/")}
           >
             Freelancer Hub
+            
           </Typography>
 
           {/* Desktop Navigation */}
