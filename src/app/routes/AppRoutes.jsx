@@ -3,7 +3,6 @@ import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "@/pages/Home";
 import Register from "@/pages/FreelancerSignUp";
-import Login from "@/pages/Login";
 
 const AppRoutes = () => {
   const routes = useRoutes([
@@ -15,10 +14,6 @@ const AppRoutes = () => {
     {
       element: <AuthLayout />,
       children: [{ path: "/register", element: <Register /> }],
-    },
-    {
-      element : <MainLayout />,
-      children: [{ path:"/login",element: <Login />}],
     },
   ]);
 
