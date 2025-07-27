@@ -2,6 +2,7 @@
 using FreelancerHub.Core.IdentityEntities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace FreelancerHub.Infrastructure.DbContext
 {
@@ -46,6 +47,14 @@ namespace FreelancerHub.Infrastructure.DbContext
                 .WithOne(u => u.FreelancerProfile)
                 .HasForeignKey<FreelancerProfile>(fp => fp.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            // ✅ Fix decimal precision warning for HourlyRate
+            builder.Entity<FreelancerProfile>()
+                .Property(fp => fp.HourlyRate)
+                .HasPrecision(18, 2); 
+
+
         }
 
   

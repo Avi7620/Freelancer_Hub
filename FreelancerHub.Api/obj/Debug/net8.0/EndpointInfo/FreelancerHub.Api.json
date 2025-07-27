@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Auth/register": {
+    "/api/Auth/freelancer-signup": {
       "post": {
         "tags": [
           "Auth"
@@ -25,6 +25,170 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/RegisterDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/freelancer/auth/register": {
+      "post": {
+        "tags": [
+          "FreelancerSignup"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "Availability",
+                  "Categories",
+                  "City",
+                  "ConfirmPassword",
+                  "Country",
+                  "Description",
+                  "Email",
+                  "Experience",
+                  "FirstName",
+                  "HourlyRate",
+                  "LastName",
+                  "Password",
+                  "Phone",
+                  "Portfolio",
+                  "Skills",
+                  "Title"
+                ],
+                "type": "object",
+                "properties": {
+                  "FirstName": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "LastName": {
+                    "maxLength": 50,
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "Password": {
+                    "minLength": 6,
+                    "type": "string"
+                  },
+                  "ConfirmPassword": {
+                    "type": "string"
+                  },
+                  "Phone": {
+                    "type": "string",
+                    "format": "tel"
+                  },
+                  "Country": {
+                    "type": "string"
+                  },
+                  "City": {
+                    "type": "string"
+                  },
+                  "Title": {
+                    "maxLength": 100,
+                    "type": "string"
+                  },
+                  "Description": {
+                    "minLength": 50,
+                    "type": "string"
+                  },
+                  "Experience": {
+                    "type": "string"
+                  },
+                  "HourlyRate": {
+                    "type": "string"
+                  },
+                  "Availability": {
+                    "type": "string"
+                  },
+                  "Skills": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Categories": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Portfolio": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "AgreeToTerms": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "FirstName": {
+                  "style": "form"
+                },
+                "LastName": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "ConfirmPassword": {
+                  "style": "form"
+                },
+                "Phone": {
+                  "style": "form"
+                },
+                "Country": {
+                  "style": "form"
+                },
+                "City": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Experience": {
+                  "style": "form"
+                },
+                "HourlyRate": {
+                  "style": "form"
+                },
+                "Availability": {
+                  "style": "form"
+                },
+                "Skills": {
+                  "style": "form"
+                },
+                "Categories": {
+                  "style": "form"
+                },
+                "Portfolio": {
+                  "style": "form"
+                },
+                "AgreeToTerms": {
+                  "style": "form"
+                }
               }
             }
           }

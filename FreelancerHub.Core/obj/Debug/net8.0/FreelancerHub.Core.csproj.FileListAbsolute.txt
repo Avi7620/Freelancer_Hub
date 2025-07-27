@@ -10,3 +10,16 @@ C:\FreelancerHub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.dll
 C:\FreelancerHub\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
 C:\FreelancerHub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
 C:\FreelancerHub\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.deps.json
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.AssemblyReference.cache
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfoInputs.cache
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfo.cs
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.CoreCompileInputs.cache
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.sourcelink.json
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll

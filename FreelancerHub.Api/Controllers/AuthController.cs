@@ -19,7 +19,7 @@ namespace FreelancerHub.WebAPI.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("freelancer-signup")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
         {
             if (!ModelState.IsValid)

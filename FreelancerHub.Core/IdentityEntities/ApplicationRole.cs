@@ -9,7 +9,9 @@ namespace FreelancerHub.Core.IdentityEntities
 {
     public class ApplicationRole : IdentityRole<Guid>
     {
+        public ApplicationRole() : base() { }
 
+        public ApplicationRole(string roleName) : base(roleName) { }
 
     }
 }
