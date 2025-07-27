@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, Briefcase, Star, Upload, Check, ArrowLeft, ArrowRight, Mail, Lock, Phone, MapPin, Globe, DollarSign, Calendar } from 'lucide-react';
+import API from '../services/api'; 
 
 const categories = [
   'Web Development', 'Mobile Development', 'UI/UX Design', 'Graphic Design',
@@ -102,14 +103,11 @@ const FreelancerSignup = () => {
     setLoading(true);
     try {
       // Simulated API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      // Replace with real API call, e.g.:
-      // await fetch('/api/freelancer-signup', {
-      //   method: 'POST',
-      //   body: JSON.stringify(formData),
-      //   headers: { 'Content-Type': 'application/json' }
-      // });
+     await API.post('/freelancersignup', formData);
+     
       setSuccess(true);
+      // For Check Only
+      console.log("Account Created");
     } catch (error) {
       setErrors({ submit: 'Failed to create account. Please try again.' });
     } finally {
