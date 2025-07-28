@@ -1,8 +1,10 @@
-﻿using FreelancerHub.Core.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using FreelancerHub.Core.DTO;
 using FreelancerHub.Core.IdentityEntities;
 using FreelancerHub.Core.ServicesContracts;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace FreelancerHub.WebAPI.Controllers
 {
@@ -11,88 +13,60 @@ namespace FreelancerHub.WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IJwtService _jwtService;
-            
-        public AuthController(UserManager<ApplicationUser> userManager, IJwtService jwtService)
+
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IJwtService jwtService)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _jwtService = jwtService;
         }
 
-        [HttpPost("freelancer-signup")]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             if (!ModelState.IsValid)
             {
                 var errors = ModelState
-                    .Where(x => x.Value?.Errors.Count > 0)
+                    .Where(x => x.Value.Errors.Count > 0)
                     .ToDictionary(
                         kvp => kvp.Key,
-                        kvp => kvp.Value?.Errors.Select(e => e.ErrorMessage).ToArray() ?? new[] { "Invalid value" }
+                        kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()
                     );
+                return BadRequest(new { Errors = errors });
+            }
 
-                return Ok(new
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Unauthorized(new
                 {
-                    success = false,
-                    message = "Validation failed",
-                    errors
+                    Error = "Invalid credentials",
+                    Details = "The email address is not registered"
                 });
             }
 
-            var existingUser = await _userManager.FindByEmailAsync(registerDTO.Email);
-            if (existingUser != null)
-            {
-                return Ok(new
-                {
-                    success = false,
-                    message = "Email is already registered."
-                });
-            }
-
-            var newUser = new ApplicationUser
-            {
-                UserName = registerDTO.Email,
-                Email = registerDTO.Email,
-                PhoneNumber = registerDTO.PhoneNumber,
-                PersonName = registerDTO.PersonName
-            };
-
-            var result = await _userManager.CreateAsync(newUser, registerDTO.Password);
-
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!result.Succeeded)
             {
-                var identityErrors = result.Errors.Select(e => e.Description).ToList();
-
-                return Ok(new
+                return Unauthorized(new
                 {
-                    success = false,
-                    message = "User creation failed",
-                    errors = identityErrors
+                    Error = "Invalid credentials",
+                    Details = "The password is incorrect"
                 });
             }
 
-            var jwtResponse = _jwtService.CreateJwtToken(newUser);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var authResponse = _jwtService.CreateJwtToken(user, userRoles);
 
-          
-            Response.Cookies.Append("jwt", jwtResponse.Token!, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true, 
-                SameSite = SameSiteMode.Strict,
-                Expires = jwtResponse.Expiration
-            });
-
-            return Ok(new
-            {
-                success = true,
-                message = "User registered successfully",
-                user = new
-                {
-                    name = jwtResponse.PersonName,
-                    email = jwtResponse.Email
-                },
-                expiration = jwtResponse.Expiration
-            });
+            return Ok(authResponse);
         }
+
+     
+
     }
 }

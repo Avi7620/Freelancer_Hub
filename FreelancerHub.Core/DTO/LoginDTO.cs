@@ -9,12 +9,12 @@ namespace FreelancerHub.Core.DTO
 {
     public class LoginDTO
     {
-        [Required(ErrorMessage = "Email can't be blank")]
-        [EmailAddress(ErrorMessage = "Email should be in a proper email address format")]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; } = string.Empty;
 
-
-        [Required(ErrorMessage = "Password can't be blank")]
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty;
     }
+
 }

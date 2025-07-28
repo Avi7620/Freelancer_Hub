@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Auth/freelancer-signup": {
+    "/api/Auth/login": {
       "post": {
         "tags": [
           "Auth"
@@ -14,17 +14,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterDTO"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterDTO"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterDTO"
+                "$ref": "#/components/schemas/LoginDTO"
               }
             }
           }
@@ -36,7 +36,19 @@
         }
       }
     },
-    "/api/freelancer/auth/register": {
+    "/api/FreelancerDashboard/freelancer-dashboard": {
+      "get": {
+        "tags": [
+          "FreelancerDashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FreelancerSignup/register": {
       "post": {
         "tags": [
           "FreelancerSignup"
@@ -45,48 +57,25 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "required": [
-                  "Availability",
-                  "Categories",
-                  "City",
-                  "ConfirmPassword",
-                  "Country",
-                  "Description",
-                  "Email",
-                  "Experience",
-                  "FirstName",
-                  "HourlyRate",
-                  "LastName",
-                  "Password",
-                  "Phone",
-                  "Portfolio",
-                  "Skills",
-                  "Title"
-                ],
                 "type": "object",
                 "properties": {
                   "FirstName": {
-                    "maxLength": 50,
                     "type": "string"
                   },
                   "LastName": {
-                    "maxLength": 50,
                     "type": "string"
                   },
                   "Email": {
-                    "type": "string",
-                    "format": "email"
+                    "type": "string"
                   },
                   "Password": {
-                    "minLength": 6,
                     "type": "string"
                   },
                   "ConfirmPassword": {
                     "type": "string"
                   },
                   "Phone": {
-                    "type": "string",
-                    "format": "tel"
+                    "type": "string"
                   },
                   "Country": {
                     "type": "string"
@@ -95,11 +84,9 @@
                     "type": "string"
                   },
                   "Title": {
-                    "maxLength": 100,
                     "type": "string"
                   },
                   "Description": {
-                    "minLength": 50,
                     "type": "string"
                   },
                   "Experience": {
@@ -112,14 +99,12 @@
                     "type": "string"
                   },
                   "Skills": {
-                    "minItems": 1,
                     "type": "array",
                     "items": {
                       "type": "string"
                     }
                   },
                   "Categories": {
-                    "minItems": 1,
                     "type": "array",
                     "items": {
                       "type": "string"
@@ -203,28 +188,17 @@
   },
   "components": {
     "schemas": {
-      "RegisterDTO": {
+      "LoginDTO": {
         "required": [
           "email",
-          "password",
-          "personName",
-          "phoneNumber"
+          "password"
         ],
         "type": "object",
         "properties": {
-          "personName": {
-            "minLength": 1,
-            "type": "string"
-          },
           "email": {
             "minLength": 1,
             "type": "string",
             "format": "email"
-          },
-          "phoneNumber": {
-            "minLength": 1,
-            "pattern": "^[0-9]*$",
-            "type": "string"
           },
           "password": {
             "minLength": 1,

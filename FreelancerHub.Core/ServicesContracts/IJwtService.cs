@@ -7,7 +7,7 @@ namespace FreelancerHub.Core.ServicesContracts
 {
     public interface IJwtService
     {
-        AuthenticationResponse CreateJwtToken(ApplicationUser user);
+        AuthenticationResponse CreateJwtToken(ApplicationUser user, IList<string> roles);
         ClaimsPrincipal? GetPrincipalFromJwtToken(string? token);
     }
 

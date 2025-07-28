@@ -1,24 +1,34 @@
 [
   {
     "ContainingType": "FreelancerHub.WebAPI.Controllers.AuthController",
-    "Method": "Register",
-    "RelativePath": "api/Auth/freelancer-signup",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "registerDTO",
-        "Type": "FreelancerHub.Core.DTO.RegisterDTO",
+        "Name": "model",
+        "Type": "FreelancerHub.Core.DTO.LoginDTO",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "FreelancerDashboard",
+    "RelativePath": "api/FreelancerDashboard/freelancer-dashboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.API.Controllers.FreelancerSignupController",
     "Method": "Register",
-    "RelativePath": "api/freelancer/auth/register",
+    "RelativePath": "api/FreelancerSignup/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

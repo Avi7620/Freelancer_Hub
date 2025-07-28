@@ -7,12 +7,10 @@ using FreelancerHub.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-
-
 namespace FreelancerHub.API.Controllers
 {
     [ApiController]
-    [Route("api/freelancer/auth")]
+    [Route("api/[controller]")]
     public class FreelancerSignupController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -35,13 +33,6 @@ namespace FreelancerHub.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] FreelancerDTO freelancerDto)
         {
-            // Validate model
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                return BadRequest(new { Errors = errors });
-            }
-
             // Check if email already exists
             var existingUser = await _userManager.FindByEmailAsync(freelancerDto.Email);
             if (existingUser != null)
@@ -60,7 +51,6 @@ namespace FreelancerHub.API.Controllers
                         var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
                         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Portfolios", fileName);
 
-                        // Create directory if it doesn't exist
                         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -99,13 +89,8 @@ namespace FreelancerHub.API.Controllers
             // Assign role to user
             await _userManager.AddToRoleAsync(user, roleName);
 
-
-
-            // Parse hourly rate
-            if (!decimal.TryParse(freelancerDto.HourlyRate, out decimal hourlyRate))
-            {
-                return BadRequest(new { Error = "Invalid Hourly Rate format" });
-            }
+            // Parse hourly rate (with default fallback)
+            decimal.TryParse(freelancerDto.HourlyRate, out decimal hourlyRate);
 
             // Create freelancer profile
             var freelancerProfile = new FreelancerProfile
@@ -118,8 +103,8 @@ namespace FreelancerHub.API.Controllers
                 Experience = freelancerDto.Experience,
                 HourlyRate = hourlyRate,
                 Availability = freelancerDto.Availability,
-                Skills = freelancerDto.Skills,
-                Categories = freelancerDto.Categories,
+                Skills = freelancerDto.Skills ?? new List<string>(),
+                Categories = freelancerDto.Categories ?? new List<string>(),
                 PortfolioFilePaths = portfolioFilePaths
             };
 
@@ -127,16 +112,17 @@ namespace FreelancerHub.API.Controllers
             _dbContext.FreelancerProfiles.Add(freelancerProfile);
             await _dbContext.SaveChangesAsync();
 
-            // Generate JWT and refresh tokens
-            var authenticationResponse = _jwtService.CreateJwtToken(user);
+            var response = new FreelancerResponseDTO
+            {
+                Message = "Freelancer registered successfully.",
+                UserId = user.Id,
+                Email = user.Email,
+                Role = roleName
+            };
 
-            // Update user with refresh token
-            user.RefreshToken = authenticationResponse.RefreshToken;
-            user.RefreshTokenExpirationDateTime = authenticationResponse.RefreshTokenExpirationDateTime.Value;
-            await _userManager.UpdateAsync(user);
+            return Ok(response);
 
-            return Ok(authenticationResponse);
+
         }
-
     }
 }

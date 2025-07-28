@@ -19,51 +19,53 @@ namespace FreelancerHub.Core.Services
             _configuration = configuration;
         }
 
-        public AuthenticationResponse CreateJwtToken(ApplicationUser user)
+        public AuthenticationResponse CreateJwtToken(ApplicationUser user, IList<string> roles)
         {
-            // Create a DateTime object representing the token expiration time by adding the number of minutes specified in the configuration to the current UTC time.
-            DateTime expiration = DateTime.Now.AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
+            DateTime expiration = DateTime.Now.AddMinutes(
+                Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
 
-            // Create an array of Claim objects representing the user's claims, such as their ID, name, email, etc.
-            Claim[] claims = new Claim[] {
-     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), //Subject (user id)
-     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //JWT unique ID
-     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()), //Issued at (date and time of token generation)
-     new Claim(ClaimTypes.NameIdentifier, user.Email!), //Unique name identifier of the user (Email)
-     new Claim(ClaimTypes.Name, user.PersonName), //Name of the user
-     new Claim(ClaimTypes.Email, user.Email!) //Name of the user
-     };
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(JwtRegisteredClaimNames.Iat,
+            new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
+            ClaimValueTypes.Integer64),
+        new Claim(ClaimTypes.NameIdentifier, user.Email!),
+        new Claim(ClaimTypes.Name, user.PersonName),
+        new Claim(ClaimTypes.Email, user.Email!)
+    };
 
-            // Create a SymmetricSecurityKey object using the key specified in the configuration.
-            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
-            // Create a SigningCredentials object with the security key and the HMACSHA256 algorithm.
-            SigningCredentials signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
 
-            // Create a JwtSecurityToken object with the given issuer, audience, claims, expiration, and signing credentials.
-            JwtSecurityToken tokenGenerator = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
-            claims,
-            expires: expiration,
-            signingCredentials: signingCredentials
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: expiration,
+                signingCredentials: credentials
             );
 
-            // Create a JwtSecurityTokenHandler object and use it to write the token as a string.
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            string token = tokenHandler.WriteToken(tokenGenerator);
-
-            // Create and return an AuthenticationResponse object containing the token, user email, user name, and token expiration time.
-            return new AuthenticationResponse()
+            return new AuthenticationResponse
             {
-                Token = token,
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Email = user.Email,
                 PersonName = user.PersonName,
                 Expiration = expiration,
-                RefreshToken = GenerateRefreshToken(),
-                RefreshTokenExpirationDateTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]))
+                // REMOVED: Refresh token generation
             };
         }
+
+        // REMOVED: GenerateRefreshToken() method
+
 
 
 
@@ -95,13 +97,8 @@ namespace FreelancerHub.Core.Services
         }
 
 
-        private string GenerateRefreshToken()
-        {
-            byte[] bytes = new byte[64];
-            var randomNumberGenerator = RandomNumberGenerator.Create();
-            randomNumberGenerator.GetBytes(bytes);
-            return Convert.ToBase64String(bytes);
-        }
+   
+   
 
 
 
