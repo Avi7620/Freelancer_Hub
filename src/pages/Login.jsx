@@ -1,19 +1,56 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Users, Briefcase, Star, ArrowRight } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 function Login() {
+  const { login, isAuthenticated, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     setIsLoading(true);
-    // Simulate login process
-    setTimeout(() => setIsLoading(false), 2000);
+    
+    try {
+      await login({ email, password });
+      setSuccess('Login successful! Welcome back.');
+    } catch (error) {
+      setError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // If user is already authenticated, show welcome message
+  if (isAuthenticated && user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 max-w-md w-full mx-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Users className="w-8 h-8 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
+            <p className="text-gray-600 mb-4">Hello, {user.personName}</p>
+            <p className="text-sm text-gray-500 mb-6">You are successfully logged in as {user.email}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
+            >
+              Continue to Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex">
@@ -103,6 +140,20 @@ function Login() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Error Message */}
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                  <p className="text-red-600 text-sm font-medium">{error}</p>
+                </div>
+              )}
+
+              {/* Success Message */}
+              {success && (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <p className="text-green-600 text-sm font-medium">{success}</p>
+                </div>
+              )}
+
               {/* Email Field */}
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -191,7 +242,7 @@ function Login() {
             <div className="mt-8 pt-6 border-t border-gray-200">
               <p className="text-center text-gray-600">
                 Don't have an account?{' '}
-                <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">
                   Sign up for free
                 </Link>
               </p>
