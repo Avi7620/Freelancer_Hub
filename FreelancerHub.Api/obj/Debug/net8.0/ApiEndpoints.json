@@ -17,12 +17,290 @@
   },
   {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
-    "Method": "FreelancerDashboard",
-    "RelativePath": "api/FreelancerDashboard/freelancer-dashboard",
+    "Method": "GetCategories",
+    "RelativePath": "api/freelancer/dashboard/categories",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "AddCategories",
+    "RelativePath": "api/freelancer/dashboard/categories",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryNames",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "RemoveAllCategories",
+    "RelativePath": "api/freelancer/dashboard/categories",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "RemoveCategory",
+    "RelativePath": "api/freelancer/dashboard/categories/{categoryId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateCategory",
+    "RelativePath": "api/freelancer/dashboard/categories/{categoryId}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateCategoryRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "GetFullProfile",
+    "RelativePath": "api/freelancer/dashboard/full-profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateFullProfile",
+    "RelativePath": "api/freelancer/dashboard/full-profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateFullProfileRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "GetProfile",
+    "RelativePath": "api/freelancer/dashboard/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "CreateProfile",
+    "RelativePath": "api/freelancer/dashboard/profile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "profile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/freelancer/dashboard/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "profile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "DeleteProfile",
+    "RelativePath": "api/freelancer/dashboard/profile",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateBasicInfo",
+    "RelativePath": "api/freelancer/dashboard/profile/basic-info",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateBasicInfoRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateLocation",
+    "RelativePath": "api/freelancer/dashboard/profile/location",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateLocationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdatePortfolio",
+    "RelativePath": "api/freelancer/dashboard/profile/portfolio",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdatePortfolioRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateRateAndAvailability",
+    "RelativePath": "api/freelancer/dashboard/profile/rate-availability",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateRateAvailabilityRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "GetSkills",
+    "RelativePath": "api/freelancer/dashboard/skills",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "AddSkills",
+    "RelativePath": "api/freelancer/dashboard/skills",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "skillNames",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "RemoveAllSkills",
+    "RelativePath": "api/freelancer/dashboard/skills",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "RemoveSkill",
+    "RelativePath": "api/freelancer/dashboard/skills/{skillId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "skillId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
+    "Method": "UpdateSkill",
+    "RelativePath": "api/freelancer/dashboard/skills/{skillId}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "skillId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "FreelancerHub.Core.DTO.UpdateSkillRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

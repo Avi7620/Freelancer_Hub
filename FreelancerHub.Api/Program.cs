@@ -31,7 +31,12 @@ builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<ISkillRepository , SkillRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 
+builder.Services.AddScoped<IFreelancerData, FreelancerDataRepository>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+
+builder.Services.AddScoped<IFreelancerDashboardService, FreelancerDashboardService>();
 
 
 builder.Services.AddAuthorization();
