@@ -7,7 +7,7 @@ import {
   BrowseTalent,
   Testimonials,
   TalentStats,
-} from "@/components/home";
+} from "@/components/home/";
 
 const Home = () => {
   return (

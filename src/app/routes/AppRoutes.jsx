@@ -2,10 +2,12 @@ import { useRoutes } from "react-router-dom";
 import { AuthProvider, useAuth } from '../../contexts/AuthContext';
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
-import Home from "@/pages/Home";
-import Register from "@/pages/FreelancerSignUp";
-import Login from "@/pages/Login";
-import ForgotPassword from "../../pages/ForgotPassword";
+import Home from "../../components/Home";
+import Register from "../../components/signup/FreelancerSignup";
+import Login from "../../components/Login";
+import ForgotPassword from "../../components/ForgotPassword";
+import FreelancerDashboard from "../../components/freelancer_dashboard/FreelancerDashboard";
+import FreelancerSignup from "../../components/signup/FreelancerSignup";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -33,7 +35,7 @@ const AppRoutes = () => {
     },
     {
       element: <AuthLayout />,
-      children: [{ path: "/register", element: <Register /> }],
+      children: [{ path: "/register", element: <FreelancerSignup /> }],
     },
     {
       element: <AuthLayout />,
