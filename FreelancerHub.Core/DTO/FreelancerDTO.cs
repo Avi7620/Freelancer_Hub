@@ -18,8 +18,8 @@ namespace FreelancerHub.Core.DTO
         public string? Experience { get; set; }
         public string? HourlyRate { get; set; }
         public string? Availability { get; set; }
-        public List<string>? Skills { get; set; }
-        public List<string>? Categories { get; set; }
+        public List<string>? Skills { get; set; } = new List<string>();
+        public List<string>? Categories { get; set; } = new List<string>();
         public List<IFormFile>? Portfolio { get; set; }
         public bool AgreeToTerms { get; set; }
     }

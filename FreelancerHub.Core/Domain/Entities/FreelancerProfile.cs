@@ -22,10 +22,10 @@
 
             public string ? Availability { get; set; }
 
-                public List<string>? Skills { get; set; }
-                public List<string>? Categories { get; set; }
+            public List<string>? Skills { get; set; }
+            public List<string>? Categories { get; set; }
 
-                public List<string>? PortfolioFilePaths { get; set; }
+            public List<string>? PortfolioFilePaths { get; set; }
 
             public virtual ApplicationUser? User { get; set; }
         }

@@ -1,7 +1,9 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.Domain.RepositoryContracts;
 using FreelancerHub.Core.DTO;
 using FreelancerHub.Core.Enums;
 using FreelancerHub.Core.IdentityEntities;
+using FreelancerHub.Core.Services;
 using FreelancerHub.Core.ServicesContracts;
 using FreelancerHub.Infrastructure.DbContext;
 using Microsoft.AspNetCore.Identity;
@@ -17,23 +19,30 @@ namespace FreelancerHub.API.Controllers
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IJwtService _jwtService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly ISkillRepository _skillRespository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public FreelancerSignupController(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             IJwtService jwtService,
-            ApplicationDbContext dbContext)
+            ApplicationDbContext dbContext,
+            ISkillRepository  skillRespository,
+            ICategoryRepository categoryRepository
+            )
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtService = jwtService;
             _dbContext = dbContext;
+            _skillRespository = skillRespository;
+            _categoryRepository = categoryRepository;
         }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] FreelancerDTO freelancerDto)
         {
-            // Check if email already exists
             var existingUser = await _userManager.FindByEmailAsync(freelancerDto.Email);
             if (existingUser != null)
             {
@@ -52,11 +61,11 @@ namespace FreelancerHub.API.Controllers
                         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Portfolios", fileName);
 
                         Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream);
                         }
+
                         portfolioFilePaths.Add(fileName);
                     }
                 }
@@ -73,7 +82,6 @@ namespace FreelancerHub.API.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            // Create user with password
             var result = await _userManager.CreateAsync(user, freelancerDto.Password);
             if (!result.Succeeded)
             {
@@ -86,13 +94,11 @@ namespace FreelancerHub.API.Controllers
                 await _roleManager.CreateAsync(new ApplicationRole(roleName));
             }
 
-            // Assign role to user
             await _userManager.AddToRoleAsync(user, roleName);
 
-            // Parse hourly rate (with default fallback)
             decimal.TryParse(freelancerDto.HourlyRate, out decimal hourlyRate);
 
-            // Create freelancer profile
+            // Save freelancer profile
             var freelancerProfile = new FreelancerProfile
             {
                 UserId = user.Id,
@@ -103,14 +109,19 @@ namespace FreelancerHub.API.Controllers
                 Experience = freelancerDto.Experience,
                 HourlyRate = hourlyRate,
                 Availability = freelancerDto.Availability,
-                Skills = freelancerDto.Skills ?? new List<string>(),
-                Categories = freelancerDto.Categories ?? new List<string>(),
                 PortfolioFilePaths = portfolioFilePaths
             };
 
-            // Save profile
             _dbContext.FreelancerProfiles.Add(freelancerProfile);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(); // 👈 This is critical BEFORE adding skills/categories
+
+            // ✅ Now safe to add Skills
+
+
+
+        await    _skillRespository.AddSkillsAsync(user.Id, freelancerDto.Skills);
+
+            await _categoryRepository.AddCategoriesAsync(user.Id, freelancerDto.Categories);
 
             var response = new FreelancerResponseDTO
             {
@@ -121,8 +132,8 @@ namespace FreelancerHub.API.Controllers
             };
 
             return Ok(response);
-
-
         }
+
+
     }
 }

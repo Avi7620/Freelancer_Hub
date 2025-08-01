@@ -32,6 +32,26 @@ namespace FreelancerHub.Infrastructure.Migrations
                     b.ToTable("AdminProfiles");
                 });
 
+            modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FreelancerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.ClientProfile", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -81,6 +101,26 @@ namespace FreelancerHub.Infrastructure.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("FreelancerProfiles");
+                });
+
+            modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FreelancerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SkillName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FreelancerId");
+
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("FreelancerHub.Core.IdentityEntities.ApplicationRole", b =>
@@ -298,6 +338,17 @@ namespace FreelancerHub.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.Category", b =>
+                {
+                    b.HasOne("FreelancerHub.Core.Domain.Entities.FreelancerProfile", "Freelancer")
+                        .WithMany()
+                        .HasForeignKey("FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Freelancer");
+                });
+
             modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.ClientProfile", b =>
                 {
                     b.HasOne("FreelancerHub.Core.IdentityEntities.ApplicationUser", "User")
@@ -318,6 +369,17 @@ namespace FreelancerHub.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FreelancerHub.Core.Domain.Entities.Skill", b =>
+                {
+                    b.HasOne("FreelancerHub.Core.Domain.Entities.FreelancerProfile", "Freelancer")
+                        .WithMany()
+                        .HasForeignKey("FreelancerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Freelancer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

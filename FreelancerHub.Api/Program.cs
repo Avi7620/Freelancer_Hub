@@ -1,10 +1,10 @@
 
+using FreelancerHub.Core.Domain.RepositoryContracts;
 using FreelancerHub.Core.IdentityEntities;
 using FreelancerHub.Core.Services;
 using FreelancerHub.Core.ServicesContracts;
 using FreelancerHub.Infrastructure.DbContext;
-
-using FreelancerHub.Infrastructure.Seeders;
+using FreelancerHub.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -28,6 +28,10 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 
 builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddTransient<ISkillRepository , SkillRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+
+
 
 
 builder.Services.AddAuthorization();
@@ -99,11 +103,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-    await RoleSeeder.SeedRolesAsync(roleManager);
-}
+
 
 
 

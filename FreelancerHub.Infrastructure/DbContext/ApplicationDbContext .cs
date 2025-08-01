@@ -14,6 +14,11 @@ namespace FreelancerHub.Infrastructure.DbContext
         public DbSet<ClientProfile> ClientProfiles { get; set; }
         public DbSet<FreelancerProfile> FreelancerProfiles { get; set; }
 
+
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Skill> Skills { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -52,8 +57,13 @@ namespace FreelancerHub.Infrastructure.DbContext
             // ✅ Fix decimal precision warning for HourlyRate
             builder.Entity<FreelancerProfile>()
                 .Property(fp => fp.HourlyRate)
-                .HasPrecision(18, 2); 
+                .HasPrecision(18, 2);
 
+
+    //    builder.Entity<Skill>()
+    //.HasOne(s => s.FreelancerProfile)
+    //.WithMany()
+    //.HasForeignKey(s => s.FreelancerId);
 
         }
 
