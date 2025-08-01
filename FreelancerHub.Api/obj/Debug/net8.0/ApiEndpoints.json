@@ -16,13 +16,29 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerDashboardController",
-    "Method": "FreelancerDashboard",
-    "RelativePath": "api/FreelancerDashboard/freelancer-dashboard",
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerProfileController",
+    "Method": "GetProfile",
+    "RelativePath": "api/freelancer/profile",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerProfileController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/freelancer/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "profileUpdate",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj": {}
+    "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\FreelancerHub.Core.csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\FreelancerHub.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\FreelancerHub.Core.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\FreelancerHub.Core.csproj",
         "projectName": "FreelancerHub.Core",
-        "projectPath": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\FreelancerHub.Core.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\obj\\",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\FreelancerHub.Core.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -83,24 +83,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj",
         "projectName": "FreelancerHub.Infrastructure",
-        "projectPath": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Infrastructure\\obj\\",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Infrastructure\\FreelancerHub.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -115,8 +115,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\FreelancerHub.Core.csproj": {
-                "projectPath": "C:\\Users\\admin\\Source\\Repos\\Freelancer_Hub\\FreelancerHub.Core\\FreelancerHub.Core.csproj"
+              "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\FreelancerHub.Core.csproj": {
+                "projectPath": "C:\\Users\\Lenovo\\Desktop\\newFrelancerDB\\FreelancerHub.Core\\FreelancerHub.Core.csproj"
               }
             }
           }
@@ -131,7 +131,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -186,7 +186,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

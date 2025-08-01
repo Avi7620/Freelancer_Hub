@@ -23,3 +23,16 @@ C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\F
 C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
 C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
 C:\Users\admin\Source\Repos\Freelancer_Hub\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.deps.json
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfoInputs.cache
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfo.cs
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.sourcelink.json
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll

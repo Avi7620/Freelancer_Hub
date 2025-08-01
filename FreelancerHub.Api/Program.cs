@@ -1,10 +1,10 @@
 
+using FreelancerHub.Core.Domain.RepositoryContracts;
 using FreelancerHub.Core.IdentityEntities;
 using FreelancerHub.Core.Services;
 using FreelancerHub.Core.ServicesContracts;
 using FreelancerHub.Infrastructure.DbContext;
-
-using FreelancerHub.Infrastructure.Seeders;
+using FreelancerHub.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +29,7 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 
 builder.Services.AddTransient<IJwtService, JwtService>();
-
+builder.Services.AddScoped<IFreelancerProfileData ,FreelancerProfileData>();
 
 builder.Services.AddAuthorization();
 
@@ -83,11 +84,11 @@ builder.Services.AddCors(options =>
 });
 
 
-
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
     {
         opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 
@@ -99,11 +100,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-    await RoleSeeder.SeedRolesAsync(roleManager);
-}
 
 
 

@@ -2,6 +2,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
     namespace FreelancerHub.Core.Domain.Entities
     {
@@ -25,8 +26,10 @@
                 public List<string>? Skills { get; set; }
                 public List<string>? Categories { get; set; }
 
+
                 public List<string>? PortfolioFilePaths { get; set; }
 
-            public virtual ApplicationUser? User { get; set; }
+        [JsonIgnore]
+        public virtual ApplicationUser? User { get; set; }
         }
     }

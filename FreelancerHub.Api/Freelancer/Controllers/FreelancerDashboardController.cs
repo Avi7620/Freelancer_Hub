@@ -1,17 +1,89 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.Domain.RepositoryContracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FreelancerHub.Api.Freelancer.Controllers
 {
+    [Authorize(Roles = "Freelancer")]
     [ApiController]
-    [Route("api/[controller]")]
-    public class FreelancerDashboardController : Controller
+    [Route("api/freelancer/profile")]
+    public class FreelancerProfileController : ControllerBase
     {
-        [Authorize(Roles = "Freelancer")]
-        [HttpGet("freelancer-dashboard")]
-        public IActionResult FreelancerDashboard() {
+        private readonly IFreelancerProfileData _freelancerProfileData;
+        private readonly ILogger<FreelancerProfileController> _logger;
 
-            return Json("inside the freelancer Dashboard");
+        public FreelancerProfileController(
+            IFreelancerProfileData freelancerProfileData,
+            ILogger<FreelancerProfileController> logger)
+        {
+            _freelancerProfileData = freelancerProfileData;
+            _logger = logger;
         }
+
+        private Guid GetCurrentUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var guid))
+            {
+                throw new UnauthorizedAccessException("Invalid user ID");
+            }
+            return guid;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfile()
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                var profile = await _freelancerProfileData.GetProfileAsync(userId);
+
+                if (profile == null)
+                {
+                    return NotFound("Profile not found");
+                }
+
+                return Ok(profile);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting profile");
+                return StatusCode(500, "Error retrieving profile");
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProfile([FromForm] FreelancerProfile profileUpdate)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                profileUpdate.UserId = userId; // Ensure the ID matches the authenticated user
+
+                var updatedProfile = await _freelancerProfileData.UpdateProfileAsync(userId, profileUpdate);
+                return Ok(updatedProfile);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating profile");
+                return StatusCode(500, "Error updating profile");
+            }
+        }
+
+     
     }
 }

@@ -2,6 +2,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using System;
+using System.Text.Json.Serialization;
 
     namespace FreelancerHub.Core.IdentityEntities
     {
@@ -12,6 +13,8 @@
 
         public virtual AdminProfile? AdminProfile { get; set; }
         public virtual ClientProfile? ClientProfile { get; set; }
+
+        [JsonIgnore]
         public virtual FreelancerProfile? FreelancerProfile { get; set; }
 
      
