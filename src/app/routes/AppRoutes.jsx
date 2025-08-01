@@ -5,6 +5,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import Home from "@/pages/Home";
 import Register from "@/pages/FreelancerSignUp";
 import Login from "@/pages/Login";
+import ForgotPassword from "../../pages/ForgotPassword";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -40,6 +41,11 @@ const AppRoutes = () => {
       <AppContent />
     </AuthProvider> }],
     },
+    {
+      element: <AuthLayout />,
+      children: [{path : "/forgotPassword",element: <ForgotPassword/>}]
+
+    }
   ]);
 
   return routes;
