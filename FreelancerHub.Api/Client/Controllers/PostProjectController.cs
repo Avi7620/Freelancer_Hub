@@ -28,7 +28,7 @@ namespace FreelancerHub.Api.Client.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProject([FromForm] CreateProjectDto projectDto)
+        public async Task<IActionResult> CreateProject([FromBody]  CreateProjectDto projectDto)
         {
             try
             {
