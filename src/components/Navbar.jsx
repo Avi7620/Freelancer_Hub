@@ -90,7 +90,7 @@ const Navbar = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleNavigation("/register", true)}
+              onClick={() => handleNavigation("/signup", true)}
             >
               Sign Up
             </Button>
