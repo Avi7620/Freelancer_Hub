@@ -1,5 +1,5 @@
 import { useRoutes } from "react-router-dom";
-import { AuthProvider, useAuth } from '../../contexts/AuthContext';
+import { AuthProvider, useAuth } from "../../contexts/AuthContext";
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "../../components/Home";
@@ -7,7 +7,6 @@ import Register from "../../components/signup/FreelancerSignup";
 import Login from "../../components/Login";
 import ForgotPassword from "../../components/ForgotPassword";
 import FreelancerDashboard from "../../components/freelancer_dashboard/FreelancerDashboard";
-import FreelancerSignup from "../../components/signup/FreelancerSignup";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -23,34 +22,41 @@ function AppContent() {
     );
   }
 
-  return isAuthenticated ? <Dashboard /> : <Login />;
+  return isAuthenticated ? <FreelancerDashboard /> : <Login />;
 }
 
 const AppRoutes = () => {
-  const routes = useRoutes([
+  return useRoutes([
     {
       path: "/",
       element: <MainLayout />,
-      children: [{ path: "/", element: <Home /> }],
+      children: [{ index: true, element: <Home /> }],
     },
     {
+      path: "/",
       element: <AuthLayout />,
-      children: [{ path: "/register", element: <FreelancerSignup /> }],
+      children: [
+        { path: "register", element: <Register /> },
+        { path: "forgotPassword", element: <ForgotPassword /> },
+      ],
     },
     {
-      element: <AuthLayout />,
-      children: [{ path: "/login", element: <AuthProvider>
-      <AppContent />
-    </AuthProvider> }],
+      path: "/freelancer-dashboard",
+      element: (
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      ),
     },
     {
-      element: <AuthLayout />,
-      children: [{path : "/forgotPassword",element: <ForgotPassword/>}]
-
-    }
+      path: "/login",
+      element: (
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      ),
+    },
   ]);
-
-  return routes;
 };
 
 export default AppRoutes;

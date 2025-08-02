@@ -1,14 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import authService from '../services/authService';
+import { createContext, useContext, useState, useEffect } from "react";
+import API from "../services/api";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
@@ -16,22 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check authentication status on mount
   useEffect(() => {
     const checkAuth = () => {
-      try {
-        const isAuth = authService.isAuthenticated();
-        const userData = authService.getUser();
-        
-        setIsAuthenticated(isAuth);
+      const token = localStorage.getItem("token");
+      const userData = JSON.parse(localStorage.getItem("user"));
+
+      if (token) {
+        setIsAuthenticated(true);
         setUser(userData);
-      } catch (error) {
-        console.error('Error checking authentication:', error);
-        setIsAuthenticated(false);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
 
     checkAuth();
@@ -39,49 +29,45 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await authService.login(credentials);
-      const userData = authService.getUser();
-      
-      setUser(userData);
+      const response = await API.post("/Auth/login", credentials);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          personName: response.data.personName,
+          email: response.data.email,
+        })
+      );
+
+      setUser({
+        personName: response.data.personName,
+        email: response.data.email,
+      });
       setIsAuthenticated(true);
-      
+
       return response;
     } catch (error) {
-      setUser(null);
-      setIsAuthenticated(false);
       throw error;
     }
   };
 
   const logout = () => {
-    authService.logout();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setIsAuthenticated(false);
   };
 
-  // Method to make authenticated API calls
-  const authenticatedFetch = async (url, options = {}) => {
-    try {
-      return await authService.authenticatedFetch(url, options);
-    } catch (error) {
-      if (error.message === 'Authentication required') {
-        logout();
-      }
-      throw error;
-    }
-  };
-
-  const value = {
-    user,
-    isAuthenticated,
-    isLoading,
-    login,
-    logout,
-    authenticatedFetch,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
