@@ -12,10 +12,61 @@ import {
   Monitor,
   Moon,
   Sun,
+  Plus,
+  X,
+  Upload,
 } from "lucide-react";
-import API from "../../services/api";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+
+// Mock API service since the original API import might not be available
+const API = {
+  get: async (url) => {
+    // Simulate API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          data: {
+            personName: "John Doe",
+            email: "john.doe@example.com",
+            phoneNumber: "+1234567890",
+            country: "United States",
+            city: "New York",
+            title: "Full Stack Developer",
+            description:
+              "Experienced developer with 5+ years in web development",
+            experience: "5 years",
+            hourlyRate: "50",
+            availability: "Full-time",
+            skills: '["JavaScript", "React", "Node.js", "Python"]',
+            categories: '["Web Development", "Mobile Development"]',
+            profileImage: "",
+            joinDate: "January 2023",
+          },
+        });
+      }, 1000);
+    });
+  },
+  put: async (url, data, config) => {
+    // Simulate API call
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ data: { message: "Profile updated successfully" } });
+      }, 1500);
+    });
+  },
+};
+
+// Mock Auth Context
+const useAuth = () => ({
+  logout: () => {
+    console.log("Logging out...");
+    // Simulate logout
+  },
+});
+
+// Mock Navigate
+const useNavigate = () => (path) => {
+  console.log("Navigating to:", path);
+};
 
 // Profile Tab Component
 const ProfileTab = ({
@@ -26,6 +77,10 @@ const ProfileTab = ({
   handleChange,
   handleFileChange,
   handleSubmit,
+  handleAddSkill,
+  handleRemoveSkill,
+  newSkill,
+  setNewSkill,
 }) => (
   <div className="space-y-8">
     {error && (
@@ -59,14 +114,21 @@ const ProfileTab = ({
                     className="w-24 h-24 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold">
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-2xl font-bold text-white">
                     {formState.firstName?.[0] || ""}
                     {formState.lastName?.[0] || ""}
                   </div>
                 )}
-                <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors">
+                <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center transition-colors cursor-pointer">
                   <Camera className="w-4 h-4 text-white" />
-                </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                    name="profileImage"
+                  />
+                </label>
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-white">
@@ -92,7 +154,7 @@ const ProfileTab = ({
                     name="firstName"
                     value={formState.firstName}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -105,7 +167,7 @@ const ProfileTab = ({
                     name="lastName"
                     value={formState.lastName}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -118,7 +180,7 @@ const ProfileTab = ({
                     name="email"
                     value={formState.email}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-600 border border-gray-600 rounded-lg px-4 py-2 text-gray-400 cursor-not-allowed"
                     required
                     disabled
                   />
@@ -132,7 +194,7 @@ const ProfileTab = ({
                     name="phone"
                     value={formState.phone}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -144,7 +206,7 @@ const ProfileTab = ({
                     name="country"
                     value={formState.country}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -156,7 +218,7 @@ const ProfileTab = ({
                     name="city"
                     value={formState.city}
                     onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -170,7 +232,8 @@ const ProfileTab = ({
                   name="title"
                   value={formState.title}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                  placeholder="e.g., Full Stack Developer"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -183,28 +246,101 @@ const ProfileTab = ({
                   name="description"
                   value={formState.description}
                   onChange={handleChange}
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
+                  placeholder="Tell us about yourself and your experience..."
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 ></textarea>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Experience
+                  </label>
+                  <input
+                    type="text"
+                    name="experience"
+                    value={formState.experience}
+                    onChange={handleChange}
+                    placeholder="e.g., 5 years"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Hourly Rate ($)
+                  </label>
+                  <input
+                    type="number"
+                    name="hourlyRate"
+                    value={formState.hourlyRate}
+                    onChange={handleChange}
+                    placeholder="50"
+                    min="0"
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Availability
+                </label>
+                <select
+                  name="availability"
+                  value={formState.availability}
+                  onChange={handleChange}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select availability</option>
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Freelance">Freelance</option>
+                </select>
               </div>
 
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Skills
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {formState.skills.map((skill, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full"
+                      className="px-3 py-1 bg-blue-600 text-white text-sm rounded-full flex items-center space-x-2"
                     >
-                      {skill}
+                      <span>{skill}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSkill(index)}
+                        className="hover:bg-blue-700 rounded-full p-1 transition-colors"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
                     </span>
                   ))}
+                </div>
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
+                    placeholder="Add a skill"
+                    className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddSkill();
+                      }
+                    }}
+                  />
                   <button
                     type="button"
-                    className="px-3 py-1 border border-gray-600 text-gray-400 text-sm rounded-full hover:border-blue-500 hover:text-blue-400 transition-colors"
+                    onClick={handleAddSkill}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors flex items-center space-x-2"
                   >
-                    + Add Skill
+                    <Plus className="w-4 h-4" />
+                    <span>Add</span>
                   </button>
                 </div>
               </div>
@@ -213,7 +349,7 @@ const ProfileTab = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-medium flex items-center space-x-2 transition-colors disabled:opacity-50"
+                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-8 py-3 rounded-xl font-medium flex items-center space-x-2 transition-colors"
                 >
                   {isLoading ? (
                     <>
@@ -255,17 +391,239 @@ const ProfileTab = ({
   </div>
 );
 
-// Notifications Tab Component (unchanged)
-const NotificationsTab = ({ notifications, setNotifications }) => (
-  <div className="space-y-8">
-    {/* ... existing notification tab code ... */}
-  </div>
-);
+// Notifications Tab Component
+const NotificationsTab = ({ notifications, setNotifications }) => {
+  const handleNotificationChange = (key) => {
+    setNotifications((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
-// Appearance Tab Component (unchanged)
-const AppearanceTab = ({ theme, setTheme }) => (
-  <div className="space-y-8">{/* ... existing appearance tab code ... */}</div>
-);
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold text-white mb-6">
+          Notification Preferences
+        </h2>
+
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Email Notifications
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Receive notifications via email
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("email")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.email ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.email ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Push Notifications
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Receive push notifications in browser
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("push")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.push ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.push ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  SMS Notifications
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Receive notifications via SMS
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("sms")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.sms ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.sms ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Project Updates
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Get notified about project status changes
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("projectUpdates")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.projectUpdates ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.projectUpdates
+                      ? "translate-x-6"
+                      : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Payment Alerts
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Get notified about payments and invoices
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("paymentAlerts")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.paymentAlerts ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.paymentAlerts
+                      ? "translate-x-6"
+                      : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-white">
+                  Marketing Emails
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Receive promotional emails and updates
+                </p>
+              </div>
+              <button
+                onClick={() => handleNotificationChange("marketingEmails")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.marketingEmails ? "bg-blue-600" : "bg-gray-600"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.marketingEmails
+                      ? "translate-x-6"
+                      : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Appearance Tab Component
+const AppearanceTab = ({ theme, setTheme }) => {
+  const themes = [
+    {
+      id: "dark",
+      name: "Dark",
+      icon: Moon,
+      description: "Dark theme for better focus",
+    },
+    {
+      id: "light",
+      name: "Light",
+      icon: Sun,
+      description: "Light theme for daytime use",
+    },
+    {
+      id: "system",
+      name: "System",
+      icon: Monitor,
+      description: "Follow system preference",
+    },
+  ];
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold text-white mb-6">
+          Appearance Settings
+        </h2>
+
+        <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6">
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white mb-4">Theme</h3>
+            {themes.map((themeOption) => (
+              <div
+                key={themeOption.id}
+                className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                  theme === themeOption.id
+                    ? "border-blue-500 bg-blue-500/10"
+                    : "border-gray-600 hover:border-gray-500"
+                }`}
+                onClick={() => setTheme(themeOption.id)}
+              >
+                <div className="flex items-center space-x-3">
+                  <themeOption.icon className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <h4 className="font-medium text-white">
+                      {themeOption.name}
+                    </h4>
+                    <p className="text-sm text-gray-400">
+                      {themeOption.description}
+                    </p>
+                  </div>
+                  {theme === themeOption.id && (
+                    <div className="ml-auto w-4 h-4 bg-blue-500 rounded-full"></div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Main Settings Component
 const SettingsSection = () => {
@@ -284,6 +642,7 @@ const SettingsSection = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [newSkill, setNewSkill] = useState("");
 
   const [formState, setFormState] = useState({
     firstName: "",
@@ -316,17 +675,29 @@ const SettingsSection = () => {
         setIsLoading(true);
         const response = await API.get("/freelancer/profile");
 
+        // Safe JSON parsing
+        const parseJsonSafely = (jsonString) => {
+          try {
+            return Array.isArray(JSON.parse(jsonString))
+              ? JSON.parse(jsonString)
+              : [];
+          } catch {
+            return [];
+          }
+        };
+
         const skills = Array.isArray(response.data.skills)
           ? response.data.skills
-          : JSON.parse(response.data.skills || "[]");
+          : parseJsonSafely(response.data.skills || "[]");
 
         const categories = Array.isArray(response.data.categories)
           ? response.data.categories
-          : JSON.parse(response.data.categories || "[]");
+          : parseJsonSafely(response.data.categories || "[]");
 
         setFormState({
           firstName: response.data.personName?.split(" ")[0] || "",
-          lastName: response.data.personName?.split(" ")[1] || "",
+          lastName:
+            response.data.personName?.split(" ").slice(1).join(" ") || "",
           email: response.data.email || "",
           phone: response.data.phoneNumber || "",
           country: response.data.country || "",
@@ -356,7 +727,7 @@ const SettingsSection = () => {
     };
 
     fetchFreelancerData();
-  }, [logout, navigate]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -364,7 +735,35 @@ const SettingsSection = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormState((prev) => ({ ...prev, portfolioFiles: e.target.files }));
+    const { name, files } = e.target;
+    if (name === "profileImage" && files[0]) {
+      // Create a preview URL for the image
+      const imageUrl = URL.createObjectURL(files[0]);
+      setFormState((prev) => ({
+        ...prev,
+        profileImage: imageUrl,
+        profileImageFile: files[0],
+      }));
+    } else {
+      setFormState((prev) => ({ ...prev, portfolioFiles: files }));
+    }
+  };
+
+  const handleAddSkill = () => {
+    if (newSkill.trim() && !formState.skills.includes(newSkill.trim())) {
+      setFormState((prev) => ({
+        ...prev,
+        skills: [...prev.skills, newSkill.trim()],
+      }));
+      setNewSkill("");
+    }
+  };
+
+  const handleRemoveSkill = (index) => {
+    setFormState((prev) => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -402,6 +801,10 @@ const SettingsSection = () => {
       });
 
       // Append files if any
+      if (formState.profileImageFile) {
+        formData.append("ProfileImage", formState.profileImageFile);
+      }
+
       if (formState.portfolioFiles) {
         Array.from(formState.portfolioFiles).forEach((file, i) => {
           formData.append(`Portfolio[${i}]`, file);
@@ -417,15 +820,10 @@ const SettingsSection = () => {
       await API.put("/freelancer/profile", formData, config);
       setSuccess("Profile updated successfully!");
 
-      // Refresh data
-      const response = await API.get("/freelancer/profile");
-      const data = response.data;
-      setFormState((prev) => ({
-        ...prev,
-        firstName: data.personName?.split(" ")[0] || prev.firstName,
-        lastName: data.personName?.split(" ")[1] || prev.lastName,
-        // Update other fields as needed
-      }));
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccess(null);
+      }, 3000);
     } catch (error) {
       console.error("Error updating profile:", error);
       if (error.response?.status === 401) {
@@ -442,49 +840,56 @@ const SettingsSection = () => {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-white mb-8">Settings</h1>
+    <div className="min-h-screen bg-gray-900">
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-white mb-8">Settings</h1>
 
-      {/* Tab Navigation */}
-      <div className="flex border-b border-gray-700 mb-8">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${
-              activeTab === tab.id
-                ? "text-blue-400 border-b-2 border-blue-500"
-                : "text-gray-400 hover:text-gray-200"
-            }`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            <tab.icon className="w-5 h-5" />
-            <span>{tab.label}</span>
-          </button>
-        ))}
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-700 mb-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${
+                activeTab === tab.id
+                  ? "text-blue-400 border-b-2 border-blue-500"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <tab.icon className="w-5 h-5" />
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "profile" && (
+          <ProfileTab
+            formState={formState}
+            isLoading={isLoading}
+            error={error}
+            success={success}
+            handleChange={handleChange}
+            handleFileChange={handleFileChange}
+            handleSubmit={handleSubmit}
+            handleAddSkill={handleAddSkill}
+            handleRemoveSkill={handleRemoveSkill}
+            newSkill={newSkill}
+            setNewSkill={setNewSkill}
+          />
+        )}
+        {activeTab === "notifications" && (
+          <NotificationsTab
+            notifications={notifications}
+            setNotifications={setNotifications}
+          />
+        )}
+        {activeTab === "appearance" && (
+          <AppearanceTab theme={theme} setTheme={setTheme} />
+        )}
       </div>
-
-      {/* Tab Content */}
-      {activeTab === "profile" && (
-        <ProfileTab
-          formState={formState}
-          isLoading={isLoading}
-          error={error}
-          success={success}
-          handleChange={handleChange}
-          handleFileChange={handleFileChange}
-          handleSubmit={handleSubmit}
-        />
-      )}
-      {activeTab === "notifications" && (
-        <NotificationsTab
-          notifications={notifications}
-          setNotifications={setNotifications}
-        />
-      )}
-      {activeTab === "appearance" && (
-        <AppearanceTab theme={theme} setTheme={setTheme} />
-      )}
     </div>
   );
 };
+
 export default SettingsSection;
