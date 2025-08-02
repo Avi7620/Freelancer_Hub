@@ -54,7 +54,7 @@ function Login() {
               You are successfully logged in as {user.email}
             </p>
             <button
-              onClick={() => (window.location.href = "/freelancer-dashboard")}
+              onClick={() => (window.location.href = "/client-dashboard")}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
             >
               Continue to Dashboard

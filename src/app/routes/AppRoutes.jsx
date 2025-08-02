@@ -4,6 +4,7 @@ import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "../../components/Home";
 import FreelancerSignup from "../../components/signup/FreelancerSignup";
+import ClientDashboard from "../../components/client_dashboard/ClientDashboard";
 import ClientSignup from "../../components/signup/ClientSignup";
 import PathSelection from "../../components/signup/PathSelection";
 
@@ -25,7 +26,7 @@ function AppContent() {
     );
   }
 
-  return isAuthenticated ? <FreelancerDashboard /> : <Login />;
+  return isAuthenticated ? <ClientDashboard /> : <Login />;
 }
 
 const AppRoutes = () => {
@@ -39,9 +40,9 @@ const AppRoutes = () => {
       path: "/",
       element: <AuthLayout />,
       children: [
-        {path : "signup" , element:<PathSelection />},
+        { path: "signup", element: <PathSelection /> },
         { path: "freelancer-signup", element: <FreelancerSignup /> },
-        {path: "client-signup",element:<ClientSignup /> },
+        { path: "client-signup", element: <ClientSignup /> },
         { path: "forgot-password", element: <ForgotPassword /> },
       ],
     },
@@ -54,6 +55,17 @@ const AppRoutes = () => {
         <FreelancerDashboard />
       ),
     },
+
+    {
+      path: "/client-dashboard",
+      element: (
+        // <AuthProvider>
+        //   <AppContent />
+        // </AuthProvider>
+        <ClientDashboard />
+      ),
+    },
+
     {
       path: "/login",
       element: (
