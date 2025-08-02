@@ -15,7 +15,7 @@ import {
   DollarSign,
   Calendar,
 } from "lucide-react";
-import API from "../services/api";
+import API from "../../services/api";
 
 const categories = [
   "Web Development",
