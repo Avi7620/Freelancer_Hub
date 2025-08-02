@@ -16,6 +16,68 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FreelancerHub.Api.Client.Controllers.PostProjectController",
+    "Method": "CreateProject",
+    "RelativePath": "api/client/PostProject",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Budget",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Deadline",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "RequiredSkills",
+        "Type": "System.String[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Client.Controllers.PostProjectController",
+    "Method": "GetProject",
+    "RelativePath": "api/client/PostProject/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Client.Controllers.PostProjectController",
+    "Method": "GetClientProjects",
+    "RelativePath": "api/client/PostProject/my-projects",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.API.Controllers.ClientSignupController",
     "Method": "Register",
     "RelativePath": "api/ClientSignup/register",
@@ -30,6 +92,62 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerAvailableProjectsController",
+    "Method": "GetAvailableProjects",
+    "RelativePath": "api/freelancer/FreelancerAvailableProjects",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[FreelancerHub.Api.Freelancer.Controllers.FreelancerAvailableProjectsController\u002BProjectResponseDto, FreelancerHub.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerAvailableProjectsController",
+    "Method": "GetFilteredProjects",
+    "RelativePath": "api/freelancer/FreelancerAvailableProjects/filtered",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "skills",
+        "Type": "System.String[]",
+        "IsRequired": false
+      },
+      {
+        "Name": "minBudget",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "maxBudget",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[FreelancerHub.Api.Freelancer.Controllers.FreelancerAvailableProjectsController\u002BProjectResponseDto, FreelancerHub.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerProfileController",

@@ -33,6 +33,8 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddScoped<IFreelancerProfileData ,FreelancerProfileData>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+// Add this line where you register other services
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 builder.Services.AddAuthorization();
 
