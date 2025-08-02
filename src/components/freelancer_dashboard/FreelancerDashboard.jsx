@@ -40,6 +40,7 @@ import {
 } from "lucide-react";
 
 import ProjectsSection from "./ProjectSection";
+import ApplyProjectsSection from "./ApplyProjectSection";
 import InvoicesSection from "./InvoicesSection";
 import MessagesSection from "./MessagesSection";
 import SettingsSection from "./SettingsSection";
@@ -50,6 +51,7 @@ const FreelancerDashboard = () => {
 
   const navigationItems = [
     { icon: Home, label: "Dashboard", key: "dashboard", active: true },
+    { icon: Briefcase, label: "Apply to the Projects", key: "applyprojects", badge: "5" },
     { icon: Briefcase, label: "Projects", key: "projects", badge: "12" },
     { icon: Users, label: "Clients", key: "clients" },
     { icon: DollarSign, label: "Invoices", key: "invoices", badge: "3" },
@@ -145,6 +147,8 @@ const FreelancerDashboard = () => {
 
   const renderContent = () => {
     switch (activeSection) {
+      case "applyprojects":
+        return <ApplyProjectsSection />;
       case "projects":
         return <ProjectsSection />;
       case "invoices":

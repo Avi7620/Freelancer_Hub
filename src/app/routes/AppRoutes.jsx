@@ -48,9 +48,10 @@ const AppRoutes = () => {
     {
       path: "/freelancer-dashboard",
       element: (
-        <AuthProvider>
-          <AppContent />
-        </AuthProvider>
+        // <AuthProvider>
+        //   <AppContent />
+        // </AuthProvider>
+        <FreelancerDashboard />
       ),
     },
     {
