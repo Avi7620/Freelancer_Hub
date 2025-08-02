@@ -1,9 +1,11 @@
 
 using FreelancerHub.Core.Domain.RepositoryContracts;
 using FreelancerHub.Core.IdentityEntities;
+using FreelancerHub.Core.Interfaces;
 using FreelancerHub.Core.Services;
 using FreelancerHub.Core.ServicesContracts;
 using FreelancerHub.Infrastructure.DbContext;
+using FreelancerHub.Infrastructure.Repositories;
 using FreelancerHub.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +32,7 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddScoped<IFreelancerProfileData ,FreelancerProfileData>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 builder.Services.AddAuthorization();
 

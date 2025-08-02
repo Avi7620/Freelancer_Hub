@@ -16,6 +16,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FreelancerHub.API.Controllers.ClientSignupController",
+    "Method": "Register",
+    "RelativePath": "api/ClientSignup/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "clientDto",
+        "Type": "FreelancerHub.Core.DTO.ClientSignupDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerProfileController",
     "Method": "GetProfile",
     "RelativePath": "api/freelancer/profile",
@@ -34,9 +50,1989 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "profileUpdate",
+        "Name": "UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.CompanyName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile",
         "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
-        "IsRequired": true
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ClientProfile.Projects",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Project, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.CompanyName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.Projects",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Project, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.FreelancerProfile.Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AdminProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.CompanyName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AdminProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.FreelancerProfile.Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ClientProfile.Projects",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Project, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Country",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.City",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Experience",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.HourlyRate",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Availability",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Skills",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Categories",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.PortfolioFilePaths",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.CompanyName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.Projects",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Project, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.CompanyName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.UserId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PersonName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.CreatedAt",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AdminProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.AdminProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.ClientProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.ClientProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ClientProfile.Projects",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Project, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.FreelancerProfile",
+        "Type": "FreelancerHub.Core.Domain.Entities.FreelancerProfile",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.FreelancerProfile.Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.Id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.NormalizedUserName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.NormalizedEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.EmailConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.PasswordHash",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.SecurityStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.ConcurrencyStamp",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.PhoneNumberConfirmed",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.TwoFactorEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.LockoutEnd",
+        "Type": "System.Nullable\u00601[[System.DateTimeOffset, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.LockoutEnabled",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "User.AccessFailedCount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Bids",
+        "Type": "System.Collections.Generic.ICollection\u00601[[FreelancerHub.Core.Domain.Entities.Bid, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -15,7 +15,7 @@ namespace FreelancerHub.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IJwtService _jwtService;
+  
         private readonly ApplicationDbContext _dbContext;
 
         public FreelancerSignupController(
@@ -26,7 +26,7 @@ namespace FreelancerHub.API.Controllers
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _jwtService = jwtService;
+        
             _dbContext = dbContext;
         }
 
