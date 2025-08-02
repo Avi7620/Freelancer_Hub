@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  User,
-  Check,
-  Mail,
-  Lock,
-  Phone,
-  MapPin,
-  Globe,
-} from "lucide-react";
+import { User, Check, Mail, Lock, Phone, MapPin, Globe } from "lucide-react";
 import API from "../../services/api";
 
 const ClientSignup = () => {
@@ -38,8 +30,7 @@ const ClientSignup = () => {
 
     if (!formData.firstName.trim())
       newErrors.firstName = "First name is required";
-    if (!formData.lastName.trim())
-      newErrors.lastName = "Last name is required";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Email is invalid";
@@ -48,9 +39,9 @@ const ClientSignup = () => {
       newErrors.password = "Password must be at least 8 characters";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
-    if (!formData.phone.trim())
-      newErrors.phone = "Phone number is required";
-    if (!formData.companyName.trim()) newErrors.companyName = "Company Name is required";
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    if (!formData.companyName.trim())
+      newErrors.companyName = "Company Name is required";
     if (!formData.agreeToTerms)
       newErrors.agreeToTerms = "You must agree to the terms and conditions";
 
@@ -77,16 +68,23 @@ const ClientSignup = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    const requestData = {
+      contactPersonName: formData.firstName + " " + formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+      companyName: formData.companyName,
+    };
+
     setLoading(true);
     try {
-      await API.post("/clientsignup/register", formData, {
+      await API.post("/ClientSignup/register", requestData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
 
       setSuccess(true);
-      // For Check Only
       console.log("Client Account Created");
     } catch (error) {
       setErrors({ submit: "Failed to create account. Please try again." });
@@ -365,7 +363,9 @@ const ClientSignup = () => {
                       }
                       placeholder="Enter your company name"
                       className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
-                        errors.companyName ? "border-red-500" : "border-gray-300"
+                        errors.companyName
+                          ? "border-red-500"
+                          : "border-gray-300"
                       }`}
                       aria-invalid={!!errors.companyName}
                       aria-describedby={
