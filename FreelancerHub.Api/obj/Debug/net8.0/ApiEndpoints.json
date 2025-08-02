@@ -94,6 +94,48 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.BidSubmissionController",
+    "Method": "GetBidDetails",
+    "RelativePath": "api/freelancer/bids/{bidId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bidId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FreelancerHub.Core.DTO.BidDetailsDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.BidSubmissionController",
+    "Method": "SubmitBid",
+    "RelativePath": "api/freelancer/bids/submit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bidDto",
+        "Type": "FreelancerHub.Core.DTO.BidSubmissionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerAvailableProjectsController",
     "Method": "GetAvailableProjects",
     "RelativePath": "api/freelancer/FreelancerAvailableProjects",
@@ -2154,6 +2196,32 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.ProjectDetailsController",
+    "Method": "GetProjectDetails",
+    "RelativePath": "api/freelancer/projects/{projectId}/details",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "projectId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "FreelancerHub.Core.DTO.ProjectWithClientDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "FreelancerHub.API.Controllers.FreelancerSignupController",

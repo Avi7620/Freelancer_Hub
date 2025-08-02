@@ -7,6 +7,7 @@ using FreelancerHub.Core.ServicesContracts;
 using FreelancerHub.Infrastructure.DbContext;
 using FreelancerHub.Infrastructure.Repositories;
 using FreelancerHub.Infrastructure.Repository;
+using FreelancerHub.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -30,11 +31,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
 
-builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IFreelancerProfileData ,FreelancerProfileData>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 // Add this line where you register other services
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
+builder.Services.AddScoped<IBidRepository, BidRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
+// Register services
+builder.Services.AddScoped<IBidService, BidService>();
 
 builder.Services.AddAuthorization();
 
@@ -105,6 +113,28 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Seed database
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+
+        // Apply migrations
+        context.Database.Migrate();
+
+        // Seed data
+        await ApplicationDbContextSeed.SeedData(context, userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
 
 
 

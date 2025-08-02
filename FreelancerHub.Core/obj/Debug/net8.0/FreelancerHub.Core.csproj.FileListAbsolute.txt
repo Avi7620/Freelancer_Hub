@@ -36,3 +36,16 @@ C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\Freel
 C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
 C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
 C:\Users\Lenovo\Desktop\newFrelancerDB\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.deps.json
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\bin\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.AssemblyReference.cache
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfoInputs.cache
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.AssemblyInfo.cs
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.sourcelink.json
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\refint\FreelancerHub.Core.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\FreelancerHub.Core.pdb
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Core\obj\Debug\net8.0\ref\FreelancerHub.Core.dll

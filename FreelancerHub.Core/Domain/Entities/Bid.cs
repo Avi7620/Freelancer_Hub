@@ -1,28 +1,28 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.Text.Json.Serialization;
 
-namespace FreelancerHub.Core.Domain.Entities
-{
-    public class Bid
+    namespace FreelancerHub.Core.Domain.Entities
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public class Bid
+        {
+            [Key]
+            public Guid Id { get; set; } = Guid.NewGuid();
 
-        [Required] public string Proposal { get; set; }
-        [Required] public decimal Amount { get; set; }
-        public int DeliveryDays { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+            [Required] public string Proposal { get; set; }
+            [Required] public decimal Amount { get; set; }
+            public int DeliveryDays { get; set; }
+            public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Relationships
-        public Guid ProjectId { get; set; }
-        public Guid FreelancerId { get; set; }
+            // Relationships
+            public Guid ProjectId { get; set; }
+            public Guid FreelancerId { get; set; }
 
-        [JsonIgnore] public virtual Project Project { get; set; }
-        [JsonIgnore] public virtual FreelancerProfile Freelancer { get; set; }
+            [JsonIgnore] public virtual Project Project { get; set; }
+            [JsonIgnore] public virtual FreelancerProfile Freelancer { get; set; }
 
-        public BidStatus Status { get; set; } = BidStatus.Pending;
+            public BidStatus Status { get; set; } = BidStatus.Pending;
+        }
+
+        public enum BidStatus { Pending, Accepted, Rejected }
     }
-
-    public enum BidStatus { Pending, Accepted, Rejected }
-}
