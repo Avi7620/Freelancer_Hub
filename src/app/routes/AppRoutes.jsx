@@ -3,7 +3,10 @@ import { AuthProvider, useAuth } from "../../contexts/AuthContext";
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import Home from "../../components/Home";
-import Register from "../../components/signup/FreelancerSignup";
+import FreelancerSignup from "../../components/signup/FreelancerSignup";
+import ClientSignup from "../../components/signup/ClientSignup";
+import PathSelection from "../../components/signup/PathSelection";
+
 import Login from "../../components/Login";
 import ForgotPassword from "../../components/ForgotPassword";
 import FreelancerDashboard from "../../components/freelancer_dashboard/FreelancerDashboard";
@@ -36,8 +39,10 @@ const AppRoutes = () => {
       path: "/",
       element: <AuthLayout />,
       children: [
-        { path: "register", element: <Register /> },
-        { path: "forgotPassword", element: <ForgotPassword /> },
+        {path : "signup" , element:<PathSelection />},
+        { path: "freelancer-signup", element: <FreelancerSignup /> },
+        {path: "client-signup",element:<ClientSignup /> },
+        { path: "forgot-password", element: <ForgotPassword /> },
       ],
     },
     {
