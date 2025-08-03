@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   PlusCircle,
   Users,
-  Settings,
+  SettingsIcon,
   CheckCircle,
   Clock,
   DollarSign,
@@ -22,6 +22,14 @@ import {
   Phone,
   Award,
   TrendingUp,
+  LogOut,
+  HelpCircle,
+  ChevronDown,
+  X,
+  Camera,
+  Briefcase,
+  Heart,
+  MessageCircle,
 } from "lucide-react";
 import API from "../../services/api";
 import CalendarDatePicker from "../client_dashboard/CalenderDatePicker";
@@ -116,10 +124,26 @@ const mockBids = [
 
 function ClientDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showPostProject, setShowPostProject] = useState(false);
+  const [activeSettingsSection, setActiveSettingsSection] = useState("profile");
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [selectedBid, setSelectedBid] = useState(null);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const profileDropdownRef = useRef(null);
+
+  // Handle clicking outside of profile dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const Dashboard = () => (
     <div className="space-y-6">
@@ -199,7 +223,7 @@ function ClientDashboard() {
               Recent Projects
             </h2>
             <button
-              onClick={() => setShowPostProject(true)}
+              onClick={() => setActiveTab("post-project")}
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <PlusCircle className="h-4 w-4 mr-2" />
@@ -329,7 +353,6 @@ function ClientDashboard() {
         });
 
         setSubmitSuccess(true);
-        // Reset form after successful submission
         setFormData({
           title: "",
           description: "",
@@ -338,7 +361,6 @@ function ClientDashboard() {
           requiredSkills: [],
         });
 
-        // For demonstration
         console.log("Project created:", response.data);
       } catch (error) {
         console.error("Error creating project:", error);
@@ -362,12 +384,20 @@ function ClientDashboard() {
           <p className="text-gray-600 mb-6">
             Your project has been posted and is now visible to freelancers.
           </p>
-          <button
-            onClick={() => setSubmitSuccess(false)}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Post Another Project
-          </button>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => setSubmitSuccess(false)}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Post Another Project
+            </button>
+            <button
+              onClick={() => setActiveTab("dashboard")}
+              className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Back to Dashboard
+            </button>
+          </div>
         </div>
       );
     }
@@ -506,6 +536,13 @@ function ClientDashboard() {
           )}
 
           <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => setActiveTab("dashboard")}
+              className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -655,174 +692,334 @@ function ClientDashboard() {
     </div>
   );
 
-  const Settings = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900">
-            Account Settings
-          </h2>
-          <p className="text-gray-600 mt-1">
-            Manage your account preferences and security
-          </p>
+  const Settings = () => {
+    const [settingsData, setSettingsData] = useState({
+      firstName: "John",
+      lastName: "Anderson",
+      email: "john.anderson@example.com",
+      phone: "+1 (555) 123-4567",
+      company: "TechStart Inc.",
+      notifications: {
+        newBids: true,
+        projectUpdates: true,
+      },
+    });
+
+    const [isLoading, setSaveLoading] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+
+    const handleInputChange = (field, value) => {
+      if (field.startsWith('notifications.')) {
+        const notificationField = field.split('.')[1];
+        setSettingsData(prev => ({
+          ...prev,
+          notifications: {
+            ...prev.notifications,
+            [notificationField]: value
+          }
+        }));
+      } else {
+        setSettingsData(prev => ({
+          ...prev,
+          [field]: value
+        }));
+      }
+    };
+
+    const handleSaveSettings = async () => {
+      setSaveLoading(true);
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error('Error saving settings:', error);
+      } finally {
+        setSaveLoading(false);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        {/* Settings Navigation Tabs */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900">Settings</h2>
+            <p className="text-gray-600 mt-1">Manage your account and preferences</p>
+          </div>
+          <div className="px-6 py-4">
+            <nav className="flex space-x-8">
+              {[
+                { id: "profile", label: "Profile", icon: User },
+                { id: "notifications", label: "Notifications", icon: Bell },
+                { id: "security", label: "Security", icon: Shield },
+                { id: "billing", label: "Billing", icon: CreditCard },
+              ].map((section) => {
+                const Icon = section.icon;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSettingsSection(section.id)}
+                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      activeSettingsSection === section.id
+                        ? "bg-blue-100 text-blue-700"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 mr-2" />
+                    {section.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
         </div>
-        <div className="p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-1">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <User className="h-12 w-12 text-blue-600" />
+
+        {/* Profile Settings */}
+        {activeSettingsSection === "profile" && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900">Profile Settings</h3>
+            <p className="text-gray-600 mt-1">
+              Update your personal information and profile details
+            </p>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <div className="flex flex-col items-center text-center">
+                  <div className="relative">
+                    <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                      <User className="h-12 w-12 text-blue-600" />
+                    </div>
+                    <button className="absolute bottom-4 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                      <Camera className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <h3 className="font-semibold text-gray-900">{settingsData.firstName} {settingsData.lastName}</h3>
+                  <p className="text-gray-600">Premium Client</p>
+                  <div className="mt-4 flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm text-green-600">Online</span>
+                  </div>
                 </div>
-                <h3 className="font-semibold text-gray-900">John Anderson</h3>
-                <p className="text-gray-600">Premium Client</p>
-                <button className="mt-4 px-4 py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
-                  Change Photo
-                </button>
               </div>
-            </div>
-            <div className="lg:col-span-2 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      value={settingsData.firstName}
+                      onChange={(e) => handleInputChange("firstName", e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      value={settingsData.lastName}
+                      onChange={(e) => handleInputChange("lastName", e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name
+                    Email Address
                   </label>
                   <input
-                    type="text"
-                    defaultValue="John"
+                    type="email"
+                    value={settingsData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name
+                    Phone Number
                   </label>
                   <input
-                    type="text"
-                    defaultValue="Anderson"
+                    type="tel"
+                    value={settingsData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  defaultValue="john.anderson@example.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  defaultValue="+1 (555) 123-4567"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  defaultValue="TechStart Inc."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    value={settingsData.company}
+                    onChange={(e) => handleInputChange("company", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        )}
 
-      {/* Notification Settings */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Notification Preferences
-          </h3>
-        </div>
-        <div className="p-6 space-y-4">
-          {[
-            {
-              label: "New bid notifications",
-              description: "Get notified when freelancers submit bids",
-            },
-            {
-              label: "Project updates",
-              description: "Receive updates on your active projects",
-            },
-            {
-              label: "Message notifications",
-              description: "Get notified of new messages",
-            },
-            {
-              label: "Weekly summary",
-              description: "Receive a weekly summary of your activity",
-            },
-          ].map((item, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-gray-900">{item.label}</p>
-                <p className="text-sm text-gray-600">{item.description}</p>
+        {/* Notification Settings */}
+        {activeSettingsSection === "notifications" && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Notifications
+            </h3>
+            <p className="text-gray-600 mt-1">
+              Configure how and when you receive notifications
+            </p>
+          </div>
+          <div className="p-6 space-y-4">
+            {[
+              {
+                key: "newBids",
+                label: "New bid notifications",
+                description: "Get notified when freelancers submit bids on your projects",
+              },
+              {
+                key: "projectUpdates",
+                label: "Project updates",
+                description: "Receive updates on your active projects and milestones",
+              },
+            ].map((item) => (
+              <div key={item.key} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
+                <div>
+                  <p className="font-medium text-gray-900">{item.label}</p>
+                  <p className="text-sm text-gray-600">{item.description}</p>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={settingsData.notifications[item.key]}
+                    onChange={(e) => handleInputChange(`notifications.${item.key}`, e.target.checked)}
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                </label>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only peer"
-                  defaultChecked
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+        )}
 
-      {/* Security Settings */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Security & Privacy
-          </h3>
+        {/* Security Settings */}
+        {activeSettingsSection === "security" && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Security
+            </h3>
+            <p className="text-gray-600 mt-1">
+              Manage your account security and authentication settings
+            </p>
+          </div>
+          <div className="p-6 space-y-4">
+            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="flex items-center">
+                <Shield className="h-5 w-5 text-gray-400 mr-3" />
+                <div className="text-left">
+                  <span className="font-medium text-gray-900">Change Password</span>
+                  <p className="text-sm text-gray-600">Update your account password</p>
+                </div>
+              </div>
+              <span className="text-gray-400">›</span>
+            </button>
+          </div>
         </div>
-        <div className="p-6 space-y-4">
-          <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-            <div className="flex items-center">
-              <Shield className="h-5 w-5 text-gray-400 mr-3" />
-              <span className="font-medium text-gray-900">Change Password</span>
-            </div>
-            <span className="text-gray-400">›</span>
-          </button>
-          <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-            <div className="flex items-center">
-              <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
-              <span className="font-medium text-gray-900">Payment Methods</span>
-            </div>
-            <span className="text-gray-400">›</span>
-          </button>
-          <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-            <div className="flex items-center">
-              <Globe className="h-5 w-5 text-gray-400 mr-3" />
-              <span className="font-medium text-gray-900">
-                Privacy Settings
-              </span>
-            </div>
-            <span className="text-gray-400">›</span>
-          </button>
-        </div>
-      </div>
+        )}
 
-      <div className="flex justify-end">
-        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-          Save Changes
-        </button>
+        {/* Billing Settings */}
+        {activeSettingsSection === "billing" && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h3 className="text-lg font-semibold text-gray-900">Billing</h3>
+            <p className="text-gray-600 mt-1">
+              Manage your payment methods and billing information
+            </p>
+          </div>
+          <div className="p-6 space-y-4">
+            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="flex items-center">
+                <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
+                <div className="text-left">
+                  <span className="font-medium text-gray-900">Payment Methods</span>
+                  <p className="text-sm text-gray-600">Manage your payment options</p>
+                </div>
+              </div>
+              <span className="text-gray-400">›</span>
+            </button>
+            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              <div className="flex items-center">
+                <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                <div className="text-left">
+                  <span className="font-medium text-gray-900">Billing History</span>
+                  <p className="text-sm text-gray-600">View your payment history</p>
+                </div>
+              </div>
+              <span className="text-gray-400">›</span>
+            </button>
+            
+          </div>
+        </div>
+        )}
+
+        {/* Save Button */}
+        {(activeSettingsSection === "profile" || activeSettingsSection === "notifications") && (
+        <div className="flex justify-end space-x-4">
+          <button
+            onClick={() => {
+              setSettingsData({
+                firstName: "John",
+                lastName: "Anderson",
+                email: "john.anderson@example.com",
+                phone: "+1 (555) 123-4567",
+                company: "TechStart Inc.",
+                notifications: {
+                  newBids: true,
+                  projectUpdates: true,
+                },
+              });
+            }}
+            className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Reset to Default
+          </button>
+          <button
+            onClick={handleSaveSettings}
+            disabled={isLoading}
+            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+          >
+            {isLoading && (
+              <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+            )}
+            {isLoading ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
+        )}
+
+        {/* Success Message */}
+        {saveSuccess && (
+          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <CheckCircle className="h-5 w-5 mr-2" />
+              Settings saved successfully!
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const AssignmentModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -918,6 +1115,129 @@ function ClientDashboard() {
     </div>
   );
 
+  const ProfileDropdown = () => (
+    <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 transform opacity-100 scale-100 transition-all duration-200">
+      {/* User Info Header */}
+      <div className="p-6 border-b border-gray-100">
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <User className="h-6 w-6 text-blue-600" />
+            </div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-gray-900">John Anderson</h3>
+            <p className="text-sm text-gray-600">john.anderson@example.com</p>
+            <div className="flex items-center mt-1">
+              <div className="flex items-center text-xs text-yellow-600">
+                <Star className="h-3 w-3 fill-current mr-1" />
+                <span>Premium Member</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Menu Items */}
+      <div className="py-2">
+        {/* Account Section */}
+        <div className="px-3 py-2">
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</p>
+        </div>
+        
+        <button
+          onClick={() => {
+            setActiveTab("settings");
+            setActiveSettingsSection("profile");
+            setShowProfileDropdown(false);
+          }}
+          className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          <User className="h-4 w-4 mr-3 text-gray-400" />
+          Profile Settings
+        </button>
+        
+        <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+        onClick={()=>{setActiveTab("dashboard")}}>
+          <Briefcase className="h-4 w-4 mr-3 text-gray-400" />
+          My Projects
+        </button>
+
+        {/* Billing Section */}
+        <div className="border-t border-gray-100 mt-2">
+          <div className="px-3 py-2">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Billing</p>
+          </div>
+          
+          <button
+            onClick={() => {
+              setActiveTab("settings");
+              setActiveSettingsSection("billing");
+              setShowProfileDropdown(false);
+            }}
+            className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <CreditCard className="h-4 w-4 mr-3 text-gray-400" />
+            Payment Methods
+          </button>
+          
+          <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <FileText className="h-4 w-4 mr-3 text-gray-400" />
+            Billing History
+          </button>
+        </div>
+
+        {/* Settings Section */}
+        <div className="border-t border-gray-100 mt-2">
+          <div className="px-3 py-2">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Settings</p>
+          </div>
+          
+          <button
+            onClick={() => {
+              setActiveTab("settings");
+              setActiveSettingsSection("notifications");
+              setShowProfileDropdown(false);
+            }}
+            className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <Bell className="h-4 w-4 mr-3 text-gray-400" />
+            Notifications
+          </button>
+          
+          <button
+            onClick={() => {
+              setActiveTab("settings");
+              setActiveSettingsSection("security");
+              setShowProfileDropdown(false);
+            }}
+            className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <Shield className="h-4 w-4 mr-3 text-gray-400" />
+            Security
+          </button>
+        </div>
+
+        {/* Help Section */}
+        <div className="border-t border-gray-100 mt-2">
+          <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+            <HelpCircle className="h-4 w-4 mr-3 text-gray-400" />
+            Help & Support
+          </button>
+        </div>
+
+        {/* Logout */}
+        <div className="border-t border-gray-100 mt-2">
+          <button className="w-full flex items-center px-6 py-3 text-sm text-red-700 hover:bg-red-50 transition-colors">
+            <LogOut className="h-4 w-4 mr-3 text-red-400" />
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -929,15 +1249,28 @@ function ClientDashboard() {
                 <Users className="h-5 w-5 text-white" />
               </div>
               <h1 className="ml-3 text-xl font-semibold text-gray-900">
-                FreelanceHub
+                Freelance Hub
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+              <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
                 <Bell className="h-5 w-5" />
+                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
               </button>
-              <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="h-5 w-5 text-blue-600" />
+              
+              {/* Profile Dropdown */}
+              <div className="relative" ref={profileDropdownRef}>
+                <button
+                  onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    <User className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                </button>
+                
+                {showProfileDropdown && <ProfileDropdown />}
               </div>
             </div>
           </div>
@@ -958,7 +1291,7 @@ function ClientDashboard() {
                     icon: PlusCircle,
                   },
                   { id: "bids", label: "View Bids", icon: Users },
-                  { id: "settings", label: "Settings", icon: Settings },
+                  { id: "settings", label: "Settings", icon: SettingsIcon },
                 ].map((item) => {
                   const Icon = item.icon;
                   return (
