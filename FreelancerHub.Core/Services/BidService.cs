@@ -1,5 +1,6 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
 using FreelancerHub.Core.DTO;
+using FreelancerHub.Core.Enums;
 using FreelancerHub.Core.Interfaces;
 using FreelancerHub.Core.Services;
 using System;

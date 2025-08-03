@@ -1,10 +1,7 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
 using FreelancerHub.Core.IdentityEntities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using FreelancerHub.Core.Enums;
 
 namespace FreelancerHub.Infrastructure.DbContext
 {

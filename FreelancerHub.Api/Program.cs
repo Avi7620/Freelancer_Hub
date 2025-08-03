@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
@@ -30,8 +31,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
 
-
-builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddSingleton<IJwtService, JwtService>();
 builder.Services.AddScoped<IFreelancerProfileData ,FreelancerProfileData>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 // Add this line where you register other services
@@ -41,6 +41,10 @@ builder.Services.AddScoped<IBidRepository, BidRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
+// Add this with your other service registrations
+builder.Services.AddScoped<IClientProjectService, ClientProjectService>();
+builder.Services.AddScoped<IProjectBidRepository, ProjectBidRepository>();
+builder.Services.AddScoped<IClientBidService, ClientBidService>();
 // Register services
 builder.Services.AddScoped<IBidService, BidService>();
 
@@ -89,7 +93,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost5173", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5174")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -102,6 +106,7 @@ builder.Services.AddControllers()
     {
         opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 

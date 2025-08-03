@@ -1,4 +1,5 @@
-﻿    using System;
+﻿using FreelancerHub.Core.Enums;
+using System;
     using System.ComponentModel.DataAnnotations;
     using System.Text.Json.Serialization;
 
@@ -24,5 +25,5 @@
             public BidStatus Status { get; set; } = BidStatus.Pending;
         }
 
-        public enum BidStatus { Pending, Accepted, Rejected }
+
     }

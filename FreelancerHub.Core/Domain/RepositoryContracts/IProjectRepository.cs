@@ -1,4 +1,5 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

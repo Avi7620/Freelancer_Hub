@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreelancerHub.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -29,5 +30,5 @@ namespace FreelancerHub.Core.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
-    public enum ProjectStatus { Open, InProgress, Completed, Cancelled }
+
 }

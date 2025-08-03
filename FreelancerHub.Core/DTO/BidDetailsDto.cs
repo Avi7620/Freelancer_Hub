@@ -1,5 +1,6 @@
 ﻿// BidDetailsDto.cs
 using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.Enums;
 
 
 namespace FreelancerHub.Core.DTO

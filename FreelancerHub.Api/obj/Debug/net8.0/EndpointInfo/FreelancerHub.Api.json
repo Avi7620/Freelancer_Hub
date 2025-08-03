@@ -107,6 +107,75 @@
         }
       }
     },
+    "/api/client/projects/{projectId}/bids": {
+      "get": {
+        "tags": [
+          "ClientBidFreelancers"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/projects/with-status": {
+      "get": {
+        "tags": [
+          "ClientProjects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/ClientSignup/register": {
       "post": {
         "tags": [
@@ -2976,58 +3045,19 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
               "schema": {
-                "required": [
-                  "Budget",
-                  "Deadline",
-                  "Description",
-                  "RequiredSkills",
-                  "Title"
-                ],
-                "type": "object",
-                "properties": {
-                  "Title": {
-                    "maxLength": 200,
-                    "minLength": 0,
-                    "type": "string"
-                  },
-                  "Description": {
-                    "type": "string"
-                  },
-                  "Budget": {
-                    "minimum": 0.01,
-                    "type": "number",
-                    "format": "double"
-                  },
-                  "Deadline": {
-                    "type": "string",
-                    "format": "date-time"
-                  },
-                  "RequiredSkills": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              "encoding": {
-                "Title": {
-                  "style": "form"
-                },
-                "Description": {
-                  "style": "form"
-                },
-                "Budget": {
-                  "style": "form"
-                },
-                "Deadline": {
-                  "style": "form"
-                },
-                "RequiredSkills": {
-                  "style": "form"
-                }
+                "$ref": "#/components/schemas/CreateProjectDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectDto"
               }
             }
           }
@@ -3096,17 +3126,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectWithClientDto"
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectWithClientDto"
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectWithClientDto"
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
                 }
               }
             }
@@ -3295,12 +3325,11 @@
       },
       "BidStatus": {
         "enum": [
-          0,
-          1,
-          2
+          "Pending",
+          "Accepted",
+          "Rejected"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "BidSubmissionDto": {
         "required": [
@@ -3380,6 +3409,104 @@
           "companyName": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateProjectDto": {
+        "required": [
+          "budget",
+          "deadline",
+          "description",
+          "requiredSkills",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "budget": {
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBidDto": {
+        "type": "object",
+        "properties": {
+          "bidId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proposal": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BidStatus"
+          },
+          "freelancerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "freelancerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "hourlyRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3513,6 +3640,76 @@
         },
         "additionalProperties": false
       },
+      "ProjectBidsResponseDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectStatus": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "hasBids": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FreelancerBidDto"
+            },
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "projectDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isAcceptingBids": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "daysActive": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectBidsResponseDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProjectBidsResponseDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ProjectResponseDto": {
         "type": "object",
         "properties": {
@@ -3556,13 +3753,13 @@
       },
       "ProjectStatus": {
         "enum": [
-          0,
-          1,
-          2,
-          3
+          "Open",
+          "Assigned",
+          "Review",
+          "Completed",
+          "InProgress"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "ProjectWithClientDto": {
         "type": "object",
@@ -3602,6 +3799,111 @@
           "bidCount": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithClientDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProjectWithClientDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithStatusDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "bidCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "acceptedFreelancerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithStatusDtoIEnumerableApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectWithStatusDto"
+            },
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

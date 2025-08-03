@@ -1,4 +1,5 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.Enums;
 using FreelancerHub.Core.Interfaces;
 using FreelancerHub.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
