@@ -14,7 +14,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FreelancerHub.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< Updated upstream
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+010376dd659d337393a691894ac6a24a31a19a40")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc66796c18ba38c94653bf799ea517c27903127d")]
+>>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("FreelancerHub.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FreelancerHub.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
