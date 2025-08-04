@@ -62,24 +62,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BidApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BidApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BidApiResponse"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -106,17 +89,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                  "$ref": "#/components/schemas/BidDetailsDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                  "$ref": "#/components/schemas/BidDetailsDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                  "$ref": "#/components/schemas/BidDetailsDto"
                 }
               }
             }
@@ -321,75 +304,6 @@
                   "items": {
                     "$ref": "#/components/schemas/ProjectResponseDto"
                   }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/freelancer/bid-status": {
-      "get": {
-        "tags": [
-          "FreelancerBidStatus"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/freelancer/bid-status/{bidId}": {
-      "get": {
-        "tags": [
-          "FreelancerBidStatus"
-        ],
-        "parameters": [
-          {
-            "name": "bidId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
                 }
               }
             }
@@ -3190,54 +3104,6 @@
         }
       }
     },
-    "/api/client/projects/assign": {
-      "post": {
-        "tags": [
-          "ProjectAssignment"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectAssignmentDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectAssignmentDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProjectAssignmentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/BooleanApiResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BooleanApiResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BooleanApiResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/freelancer/projects/{projectId}/details": {
       "get": {
         "tags": [
@@ -3274,18 +3140,6 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/api/User/client-id": {
-      "get": {
-        "tags": [
-          "User"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -3424,30 +3278,6 @@
         },
         "additionalProperties": false
       },
-      "BidApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "$ref": "#/components/schemas/Bid"
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "BidDetailsDto": {
         "type": "object",
         "properties": {
@@ -3493,30 +3323,6 @@
         },
         "additionalProperties": false
       },
-      "BidDetailsDtoApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "$ref": "#/components/schemas/BidDetailsDto"
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "BidStatus": {
         "enum": [
           "Pending",
@@ -3554,30 +3360,6 @@
             "minimum": 1,
             "type": "integer",
             "format": "int32"
-          }
-        },
-        "additionalProperties": false
-      },
-      "BooleanApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "type": "boolean"
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3729,115 +3511,6 @@
         },
         "additionalProperties": false
       },
-      "FreelancerBidStatusDto": {
-        "type": "object",
-        "properties": {
-          "bidId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "projectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "projectTitle": {
-            "type": "string",
-            "nullable": true
-          },
-          "projectDescription": {
-            "type": "string",
-            "nullable": true
-          },
-          "projectBudget": {
-            "type": "number",
-            "format": "double"
-          },
-          "projectDeadline": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "clientName": {
-            "type": "string",
-            "nullable": true
-          },
-          "companyName": {
-            "type": "string",
-            "nullable": true
-          },
-          "proposal": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number",
-            "format": "double"
-          },
-          "deliveryDays": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "$ref": "#/components/schemas/BidStatus"
-          }
-        },
-        "additionalProperties": false
-      },
-      "FreelancerBidStatusDtoApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "$ref": "#/components/schemas/FreelancerBidStatusDto"
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "FreelancerBidStatusDtoIEnumerableApiResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "status": {
-            "type": "string",
-            "nullable": true
-          },
-          "message": {
-            "type": "string",
-            "nullable": true
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/FreelancerBidStatusDto"
-            },
-            "nullable": true
-          },
-          "details": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "FreelancerProfile": {
         "type": "object",
         "properties": {
@@ -3963,29 +3636,6 @@
           "createdAt": {
             "type": "string",
             "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      },
-      "ProjectAssignmentDto": {
-        "required": [
-          "clientId",
-          "freelancerId",
-          "projectId"
-        ],
-        "type": "object",
-        "properties": {
-          "projectId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "freelancerId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "clientId": {
-            "type": "string",
-            "format": "uuid"
           }
         },
         "additionalProperties": false
