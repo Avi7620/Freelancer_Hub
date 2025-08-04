@@ -9,6 +9,7 @@ namespace FreelancerHub.Core.Domain.Entities
 {
     public class Project
     {
+
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 

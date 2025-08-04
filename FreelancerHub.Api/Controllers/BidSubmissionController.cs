@@ -1,10 +1,11 @@
-﻿using FreelancerHub.Core.DTO;
+﻿using FreelancerHub.Api.Extensions;
+using FreelancerHub.Core.Domain.Entities;
+using FreelancerHub.Core.DTO;
 using FreelancerHub.Core.Enums;
 using FreelancerHub.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FreelancerHub.Api.Freelancer.Controllers
@@ -22,75 +23,128 @@ namespace FreelancerHub.Api.Freelancer.Controllers
         }
 
         [HttpPost("submit")]
-        public async Task<ActionResult> SubmitBid([FromBody] BidSubmissionDto bidDto)
+        public async Task<ActionResult<ApiResponse<Bid>>> SubmitBid([FromBody] BidSubmissionDto bidDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Status = "VALIDATION_ERROR",
+                    Message = "Invalid request data",
+                    Details = ModelState.GetValidationErrors()
+                });
             }
 
             try
             {
-                var freelancerId = GetCurrentFreelancerId();
+                var freelancerId = User.GetUserId();
                 var bid = await _bidService.SubmitBidAsync(bidDto, freelancerId);
 
                 return CreatedAtAction(
                     nameof(GetBidDetails),
                     new { bidId = bid.Id },
-                    new
+                    new ApiResponse<Bid>
                     {
-                        bid.Id,
-                        bid.Proposal,
-                        bid.Amount,
-                        bid.DeliveryDays,
-                        bid.Status
+                        Success = true,
+                        Status = "CREATED",
+                        Message = "Bid submitted successfully",
+                        Data = bid
                     });
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(new { Error = ex.Message });
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Status = "NOT_FOUND",
+                    Message = ex.Message
+                });
+            }
+            catch (InvalidOperationException ex) when (ex.Message.Contains("already placed a bid"))
+            {
+                return Conflict(new ApiResponse
+                {
+                    Success = false,
+                    Status = "DUPLICATE_BID",
+                    Message = "You have already placed a bid on this project",
+                    Details = "Freelancers can only submit one bid per project"
+                });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(new { Error = ex.Message });
+                return BadRequest(new ApiResponse
+                {
+                    Success = false,
+                    Status = "INVALID_OPERATION",
+                    Message = ex.Message
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new ApiResponse
+                {
+                    Success = false,
+                    Status = "UNAUTHORIZED",
+                    Message = ex.Message
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Error = "Failed to submit bid", Details = ex.Message });
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Status = "SERVER_ERROR",
+                    Message = "Failed to submit bid",
+                    Details = ex.Message
+                });
             }
         }
 
         [HttpGet("{bidId}")]
-        public async Task<ActionResult<BidDetailsDto>> GetBidDetails(Guid bidId)
+        public async Task<ActionResult<ApiResponse<BidDetailsDto>>> GetBidDetails(Guid bidId)
         {
             try
             {
-                var freelancerId = GetCurrentFreelancerId();
+                var freelancerId = User.GetUserId();
                 var bidDetails = await _bidService.GetBidDetailsAsync(bidId, freelancerId);
-                return Ok(bidDetails);
+
+                return Ok(new ApiResponse<BidDetailsDto>
+                {
+                    Success = true,
+                    Status = "FOUND",
+                    Message = "Bid details retrieved successfully",
+                    Data = bidDetails
+                });
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(new { Error = ex.Message });
+                return NotFound(new ApiResponse
+                {
+                    Success = false,
+                    Status = "NOT_FOUND",
+                    Message = ex.Message
+                });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid();
+                return Unauthorized(new ApiResponse
+                {
+                    Success = false,
+                    Status = "UNAUTHORIZED",
+                    Message = ex.Message
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Error = "Failed to get bid details", Details = ex.Message });
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Status = "SERVER_ERROR",
+                    Message = "Failed to get bid details",
+                    Details = ex.Message
+                });
             }
-        }
-
-        private Guid GetCurrentFreelancerId()
-        {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out Guid freelancerId))
-            {
-                throw new UnauthorizedAccessException("Invalid user ID");
-            }
-            return freelancerId;
         }
     }
 }

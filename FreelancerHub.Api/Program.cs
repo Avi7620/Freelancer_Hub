@@ -45,6 +45,14 @@ builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IClientProjectService, ClientProjectService>();
 builder.Services.AddScoped<IProjectBidRepository, ProjectBidRepository>();
 builder.Services.AddScoped<IClientBidService, ClientBidService>();
+
+builder.Services.AddScoped<IFreelancerBidRepository, FreelancerBidRepository>();
+builder.Services.AddScoped<IFreelancerBidStatusService, FreelancerBidStatusService>();
+
+builder.Services.AddScoped<IProjectAssignmentRepository, ProjectAssignmentRepository>();
+
+builder.Services.AddScoped<IProjectAssignmentService, ProjectAssignmentService>();
+
 // Register services
 builder.Services.AddScoped<IBidService, BidService>();
 
@@ -93,7 +101,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost5173", policy =>
     {
-        policy.WithOrigins("http://localhost:5174")
+        policy.WithOrigins("http://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();

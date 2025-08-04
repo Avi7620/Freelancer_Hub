@@ -49,7 +49,7 @@ namespace FreelancerHub.Api.Client.Controllers
                         Success = true,
                         Status = "SUCCESS",
                         Message = "Client has no projects yet",
-                        Data = projects // Empty list
+                        Data = projects 
                     });
                 }
 
