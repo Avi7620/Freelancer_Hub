@@ -47,6 +47,8 @@ builder.Services.AddScoped<IProjectBidRepository, ProjectBidRepository>();
 builder.Services.AddScoped<IClientBidService, ClientBidService>();
 
 builder.Services.AddScoped<IFreelancerBidRepository, FreelancerBidRepository>();
+
+
 builder.Services.AddScoped<IFreelancerBidStatusService, FreelancerBidStatusService>();
 
 builder.Services.AddScoped<IProjectAssignmentRepository, ProjectAssignmentRepository>();
