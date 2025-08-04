@@ -6,11 +6,5 @@ using System.Threading.Tasks;
 
 namespace FreelancerHub.Core.Enums
 {
-    public enum BidStatus { 
-        
-        Pending,
-        Accepted,
-        Rejected 
-    
-    }
+    public enum BidStatus { Pending, Accepted, Rejected }
 }

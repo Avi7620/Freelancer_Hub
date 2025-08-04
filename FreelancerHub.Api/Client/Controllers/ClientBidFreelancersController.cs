@@ -76,6 +76,6 @@ namespace FreelancerHub.Api.Client.Controllers
                     Message = "An error occurred while processing your request"
                 });
             }
-        }   
+        }
     }
 }
