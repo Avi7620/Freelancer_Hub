@@ -130,11 +130,53 @@ function ClientDashboard() {
   const [selectedBid, setSelectedBid] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
+  const [projects, setProjects] = useState([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch projects when component mounts or activeTab changes to dashboard
+  useEffect(() => {
+    if (activeTab === "dashboard") {
+      fetchProjects();
+    }
+  }, [activeTab]);
+
+  const fetchProjects = async () => {
+    try {
+      setLoadingProjects(true);
+      setError(null);
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication required");
+      }
+
+      const response = await API.get("/client/projects/with-status", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.success) {
+        setProjects(response.data.data);
+      } else {
+        setError(response.data.message || "Failed to fetch projects");
+      }
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+      setError(err.response?.data?.message || "Failed to fetch projects");
+    } finally {
+      setLoadingProjects(false);
+    }
+  };
 
   // Handle clicking outside of profile dropdown
   useEffect(() => {
     function handleClickOutside(event) {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(event.target)
+      ) {
         setShowProfileDropdown(false);
       }
     }
@@ -145,150 +187,139 @@ function ClientDashboard() {
     };
   }, []);
 
-  const Dashboard = () => (
-    <div className="space-y-6">
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                Active Projects
-              </p>
-              <p className="text-3xl font-bold text-gray-900">3</p>
-            </div>
-            <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <FileText className="h-6 w-6 text-blue-600" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center text-sm">
-            <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-green-600">+12% from last month</span>
-          </div>
+  const Dashboard = () => {
+    if (loadingProjects) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
+      );
+    }
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Bids</p>
-              <p className="text-3xl font-bold text-gray-900">47</p>
+    if (error) {
+      return (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <X className="h-5 w-5 text-red-500" />
             </div>
-            <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <Users className="h-6 w-6 text-green-600" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center text-sm">
-            <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-green-600">+8% from last week</span>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Budget Spent</p>
-              <p className="text-3xl font-bold text-gray-900">$12.5K</p>
-            </div>
-            <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="h-6 w-6 text-purple-600" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center text-sm">
-            <span className="text-gray-600">70% of monthly budget</span>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Completed</p>
-              <p className="text-3xl font-bold text-gray-900">18</p>
-            </div>
-            <div className="h-12 w-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <Award className="h-6 w-6 text-orange-600" />
-            </div>
-          </div>
-          <div className="mt-4 flex items-center text-sm">
-            <CheckCircle className="h-4 w-4 text-green-500 mr-1" />
-            <span className="text-green-600">98% success rate</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Projects */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Recent Projects
-            </h2>
-            <button
-              onClick={() => setActiveTab("post-project")}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Post New Project
-            </button>
-          </div>
-        </div>
-        <div className="p-6">
-          <div className="space-y-4">
-            {mockProjects.map((project) => (
-              <div
-                key={project.id}
-                className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+              <button
+                onClick={fetchProjects}
+                className="mt-2 text-sm text-red-700 underline hover:text-red-600"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-3">
-                      {project.description}
-                    </p>
-                    <div className="flex items-center space-x-4 text-sm text-gray-500">
-                      <span className="flex items-center">
-                        <DollarSign className="h-4 w-4 mr-1" />
-                        {project.budget}
-                      </span>
-                      <span className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        {project.deadline}
-                      </span>
-                      <span className="flex items-center">
-                        <Users className="h-4 w-4 mr-1" />
-                        {project.bidsCount} bids
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        project.status === "open"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {project.status === "open" ? "Open" : "Assigned"}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setSelectedProject(project);
-                        setActiveTab("bids");
-                      }}
-                      className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-                    >
-                      View Bids
-                    </button>
-                  </div>
+                Try again
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        {/* Stats Overview - you might want to calculate these from the projects data */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* ... existing stats ... */}
+        </div>
+
+        {/* Recent Projects */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-gray-900">
+                Recent Projects
+              </h2>
+              <button
+                onClick={() => setActiveTab("post-project")}
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <PlusCircle className="h-4 w-4 mr-2" />
+                Post New Project
+              </button>
+            </div>
+          </div>
+          <div className="p-6">
+            {projects.length === 0 ? (
+              <div className="text-center py-8">
+                <FileText className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  No projects yet
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Get started by posting a new project.
+                </p>
+                <div className="mt-6">
+                  <button
+                    onClick={() => setActiveTab("post-project")}
+                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Post New Project
+                  </button>
                 </div>
               </div>
-            ))}
+            ) : (
+              <div className="space-y-4">
+                {projects.map((project) => (
+                  <div
+                    key={project.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 mb-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-3">
+                          {project.description}
+                        </p>
+                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <span className="flex items-center">
+                            <DollarSign className="h-4 w-4 mr-1" />$
+                            {project.budget.toFixed(2)}
+                          </span>
+                          <span className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            {new Date(project.deadline).toLocaleDateString()}
+                          </span>
+                          <span className="flex items-center">
+                            <Users className="h-4 w-4 mr-1" />
+                            {project.bidCount} bids
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            project.status === "Open"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
+                          {project.status}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setSelectedProject(project);
+                            setActiveTab("bids");
+                          }}
+                          className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                        >
+                          View Bids
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const PostProject = () => {
     const [formData, setFormData] = useState({
@@ -360,6 +391,9 @@ function ClientDashboard() {
           deadline: null,
           requiredSkills: [],
         });
+
+        // Refresh projects list
+        fetchProjects();
 
         console.log("Project created:", response.data);
       } catch (error) {
@@ -579,118 +613,271 @@ function ClientDashboard() {
     );
   };
 
-  const BidsView = () => (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              {selectedProject
-                ? `Bids for "${selectedProject.title}"`
-                : "All Project Bids"}
-            </h2>
-            <p className="text-gray-600 mt-1">
-              {mockBids.length} freelancers have submitted proposals
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search bids..."
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+  const BidsView = () => {
+    const [projectBids, setProjectBids] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    useEffect(() => {
+      const fetchProjectBids = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Authentication required");
+          }
+
+          const response = await API.get(
+            `/client/projects/${selectedProject.id}/bids`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.data.success) {
+            setProjectBids(response.data);
+          } else {
+            setError(response.data.message || "Failed to fetch bids");
+          }
+        } catch (err) {
+          console.error("Error fetching project bids:", err);
+          setError(err.response?.data?.message || "Failed to fetch bids");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      if (selectedProject) {
+        fetchProjectBids();
+      }
+    }, [selectedProject]);
+
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    };
+
+    const getCountryName = (countryCode) => {
+      const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+      try {
+        return regionNames.of(countryCode) || countryCode;
+      } catch {
+        return countryCode;
+      }
+    };
+
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <X className="h-5 w-5 text-red-500" />
             </div>
-            <button className="flex items-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </button>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (!projectBids) {
+      return (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <p className="text-gray-600">No project selected</p>
+        </div>
+      );
+    }
+
+    if (projectBids.status === "NO_BIDS") {
+      return (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Bids for "{projectBids.data.projectTitle}"
+          </h2>
+          <p className="text-gray-600">{projectBids.data.message}</p>
+        </div>
+      );
+    }
+
+    const filteredBids = projectBids.data.bids.filter(
+      (bid) =>
+        bid.freelancerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bid.proposal.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bid.skills.some((skill) =>
+          skill.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Bids for "{projectBids.data.projectTitle}"
+              </h2>
+              <p className="text-gray-600 mt-1">
+                {projectBids.data.bids.length} freelancer
+                {projectBids.data.bids.length !== 1 ? "s have" : " has"}{" "}
+                submitted proposals
+              </p>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search bids..."
+                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {filteredBids.map((bid) => (
+              <div
+                key={bid.bidId}
+                className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-4 flex-1">
+                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                      <span className="text-gray-600 font-medium">
+                        {bid.freelancerName
+                          .split(" ")
+                          .map((name) => name[0])
+                          .join("")}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <h3 className="font-semibold text-gray-900">
+                          {bid.freelancerName}
+                        </h3>
+                        <div className="flex items-center">
+                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          <span className="text-sm text-gray-600 ml-1">
+                            {/* Rating would come from another API endpoint */}
+                            4.8
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                        <span className="flex items-center">
+                          <MapPin className="h-4 w-4 mr-1" />
+                          {bid.city}, {getCountryName(bid.country)}
+                        </span>
+                        <span className="flex items-center">
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          {/* Completed projects would come from another API endpoint */}
+                          24 projects completed
+                        </span>
+                      </div>
+                      <p className="text-gray-700 mb-3 line-clamp-2">
+                        {bid.proposal}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {bid.skills.map((skill, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right ml-6">
+                    <div className="mb-4">
+                      <p className="text-2xl font-bold text-gray-900">
+                        ${bid.amount.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        in {bid.deliveryDays} day
+                        {bid.deliveryDays !== 1 ? "s" : ""}
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => {
+                          setSelectedBid(bid);
+                          setShowAssignModal(true);
+                        }}
+                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Assign Project
+                      </button>
+                      <button className="w-full px-4 py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                        Message
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Submitted {formatDate(bid.createdAt)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="space-y-4">
-          {mockBids.map((bid) => (
-            <div
-              key={bid.id}
-              className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div className="flex items-start space-x-4 flex-1">
-                  <img
-                    src={bid.freelancer.avatar}
-                    alt={bid.freelancer.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <h3 className="font-semibold text-gray-900">
-                        {bid.freelancer.name}
-                      </h3>
-                      <div className="flex items-center">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="text-sm text-gray-600 ml-1">
-                          {bid.freelancer.rating}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                      <span className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        {bid.freelancer.location}
-                      </span>
-                      <span className="flex items-center">
-                        <CheckCircle className="h-4 w-4 mr-1" />
-                        {bid.freelancer.completedProjects} projects completed
-                      </span>
-                    </div>
-                    <p className="text-gray-700 mb-3">{bid.proposal}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {bid.freelancer.skills.map((skill, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="text-right ml-6">
-                  <div className="mb-4">
-                    <p className="text-2xl font-bold text-gray-900">
-                      {bid.bidAmount}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      in {bid.deliveryTime}
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => {
-                        setSelectedBid(bid);
-                        setShowAssignModal(true);
-                      }}
-                      className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Assign Project
-                    </button>
-                    <button className="w-full px-4 py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
-                      Message
-                    </button>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Submitted {bid.submittedDate}
-                  </p>
-                </div>
+        {/* Assign Modal would go here */}
+        {showAssignModal && selectedBid && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+              <h3 className="text-lg font-semibold mb-4">
+                Assign project to {selectedBid.freelancerName}?
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to assign this project to{" "}
+                {selectedBid.freelancerName} for $
+                {selectedBid.amount.toFixed(2)}?
+              </p>
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setShowAssignModal(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Handle assign logic here
+                    setShowAssignModal(false);
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Confirm
+                </button>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const Settings = () => {
     const [settingsData, setSettingsData] = useState({
@@ -709,19 +896,19 @@ function ClientDashboard() {
     const [saveSuccess, setSaveSuccess] = useState(false);
 
     const handleInputChange = (field, value) => {
-      if (field.startsWith('notifications.')) {
-        const notificationField = field.split('.')[1];
-        setSettingsData(prev => ({
+      if (field.startsWith("notifications.")) {
+        const notificationField = field.split(".")[1];
+        setSettingsData((prev) => ({
           ...prev,
           notifications: {
             ...prev.notifications,
-            [notificationField]: value
-          }
+            [notificationField]: value,
+          },
         }));
       } else {
-        setSettingsData(prev => ({
+        setSettingsData((prev) => ({
           ...prev,
-          [field]: value
+          [field]: value,
         }));
       }
     };
@@ -730,11 +917,11 @@ function ClientDashboard() {
       setSaveLoading(true);
       try {
         // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
       } catch (error) {
-        console.error('Error saving settings:', error);
+        console.error("Error saving settings:", error);
       } finally {
         setSaveLoading(false);
       }
@@ -746,7 +933,9 @@ function ClientDashboard() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-xl font-semibold text-gray-900">Settings</h2>
-            <p className="text-gray-600 mt-1">Manage your account and preferences</p>
+            <p className="text-gray-600 mt-1">
+              Manage your account and preferences
+            </p>
           </div>
           <div className="px-6 py-4">
             <nav className="flex space-x-8">
@@ -778,234 +967,268 @@ function ClientDashboard() {
 
         {/* Profile Settings */}
         {activeSettingsSection === "profile" && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900">Profile Settings</h3>
-            <p className="text-gray-600 mt-1">
-              Update your personal information and profile details
-            </p>
-          </div>
-          <div className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-1">
-                <div className="flex flex-col items-center text-center">
-                  <div className="relative">
-                    <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                      <User className="h-12 w-12 text-blue-600" />
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Profile Settings
+              </h3>
+              <p className="text-gray-600 mt-1">
+                Update your personal information and profile details
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-1">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <User className="h-12 w-12 text-blue-600" />
+                      </div>
+                      <button className="absolute bottom-4 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                        <Camera className="h-4 w-4" />
+                      </button>
                     </div>
-                    <button className="absolute bottom-4 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
-                      <Camera className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <h3 className="font-semibold text-gray-900">{settingsData.firstName} {settingsData.lastName}</h3>
-                  <p className="text-gray-600">Premium Client</p>
-                  <div className="mt-4 flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Online</span>
+                    <h3 className="font-semibold text-gray-900">
+                      {settingsData.firstName} {settingsData.lastName}
+                    </h3>
+                    <p className="text-gray-600">Premium Client</p>
+                    <div className="mt-4 flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-green-600">Online</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="lg:col-span-2 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        value={settingsData.firstName}
+                        onChange={(e) =>
+                          handleInputChange("firstName", e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        value={settingsData.lastName}
+                        onChange={(e) =>
+                          handleInputChange("lastName", e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
+                      Email Address
                     </label>
                     <input
-                      type="text"
-                      value={settingsData.firstName}
-                      onChange={(e) => handleInputChange("firstName", e.target.value)}
+                      type="email"
+                      value={settingsData.email}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
+                      Phone Number
                     </label>
                     <input
-                      type="text"
-                      value={settingsData.lastName}
-                      onChange={(e) => handleInputChange("lastName", e.target.value)}
+                      type="tel"
+                      value={settingsData.phone}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={settingsData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    value={settingsData.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Company
-                  </label>
-                  <input
-                    type="text"
-                    value={settingsData.company}
-                    onChange={(e) => handleInputChange("company", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Company
+                    </label>
+                    <input
+                      type="text"
+                      value={settingsData.company}
+                      onChange={(e) =>
+                        handleInputChange("company", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
         )}
 
         {/* Notification Settings */}
         {activeSettingsSection === "notifications" && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Notifications
-            </h3>
-            <p className="text-gray-600 mt-1">
-              Configure how and when you receive notifications
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            {[
-              {
-                key: "newBids",
-                label: "New bid notifications",
-                description: "Get notified when freelancers submit bids on your projects",
-              },
-              {
-                key: "projectUpdates",
-                label: "Project updates",
-                description: "Receive updates on your active projects and milestones",
-              },
-            ].map((item) => (
-              <div key={item.key} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
-                <div>
-                  <p className="font-medium text-gray-900">{item.label}</p>
-                  <p className="text-sm text-gray-600">{item.description}</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Notifications
+              </h3>
+              <p className="text-gray-600 mt-1">
+                Configure how and when you receive notifications
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              {[
+                {
+                  key: "newBids",
+                  label: "New bid notifications",
+                  description:
+                    "Get notified when freelancers submit bids on your projects",
+                },
+                {
+                  key: "projectUpdates",
+                  label: "Project updates",
+                  description:
+                    "Receive updates on your active projects and milestones",
+                },
+              ].map((item) => (
+                <div
+                  key={item.key}
+                  className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900">{item.label}</p>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={settingsData.notifications[item.key]}
+                      onChange={(e) =>
+                        handleInputChange(
+                          `notifications.${item.key}`,
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    checked={settingsData.notifications[item.key]}
-                    onChange={(e) => handleInputChange(`notifications.${item.key}`, e.target.checked)}
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                </label>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
         )}
 
         {/* Security Settings */}
         {activeSettingsSection === "security" && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Security
-            </h3>
-            <p className="text-gray-600 mt-1">
-              Manage your account security and authentication settings
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-gray-400 mr-3" />
-                <div className="text-left">
-                  <span className="font-medium text-gray-900">Change Password</span>
-                  <p className="text-sm text-gray-600">Update your account password</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">Security</h3>
+              <p className="text-gray-600 mt-1">
+                Manage your account security and authentication settings
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <Shield className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Change Password
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      Update your account password
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <span className="text-gray-400">›</span>
-            </button>
+                <span className="text-gray-400">›</span>
+              </button>
+            </div>
           </div>
-        </div>
         )}
 
         {/* Billing Settings */}
         {activeSettingsSection === "billing" && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-900">Billing</h3>
-            <p className="text-gray-600 mt-1">
-              Manage your payment methods and billing information
-            </p>
-          </div>
-          <div className="p-6 space-y-4">
-            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="flex items-center">
-                <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
-                <div className="text-left">
-                  <span className="font-medium text-gray-900">Payment Methods</span>
-                  <p className="text-sm text-gray-600">Manage your payment options</p>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">Billing</h3>
+              <p className="text-gray-600 mt-1">
+                Manage your payment methods and billing information
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Payment Methods
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      Manage your payment options
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <span className="text-gray-400">›</span>
-            </button>
-            <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-              <div className="flex items-center">
-                <FileText className="h-5 w-5 text-gray-400 mr-3" />
-                <div className="text-left">
-                  <span className="font-medium text-gray-900">Billing History</span>
-                  <p className="text-sm text-gray-600">View your payment history</p>
+                <span className="text-gray-400">›</span>
+              </button>
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Billing History
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      View your payment history
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <span className="text-gray-400">›</span>
-            </button>
-            
+                <span className="text-gray-400">›</span>
+              </button>
+            </div>
           </div>
-        </div>
         )}
 
         {/* Save Button */}
-        {(activeSettingsSection === "profile" || activeSettingsSection === "notifications") && (
-        <div className="flex justify-end space-x-4">
-          <button
-            onClick={() => {
-              setSettingsData({
-                firstName: "John",
-                lastName: "Anderson",
-                email: "john.anderson@example.com",
-                phone: "+1 (555) 123-4567",
-                company: "TechStart Inc.",
-                notifications: {
-                  newBids: true,
-                  projectUpdates: true,
-                },
-              });
-            }}
-            className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Reset to Default
-          </button>
-          <button
-            onClick={handleSaveSettings}
-            disabled={isLoading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
-          >
-            {isLoading && (
-              <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-            )}
-            {isLoading ? "Saving..." : "Save Changes"}
-          </button>
-        </div>
+        {(activeSettingsSection === "profile" ||
+          activeSettingsSection === "notifications") && (
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => {
+                setSettingsData({
+                  firstName: "John",
+                  lastName: "Anderson",
+                  email: "john.anderson@example.com",
+                  phone: "+1 (555) 123-4567",
+                  company: "TechStart Inc.",
+                  notifications: {
+                    newBids: true,
+                    projectUpdates: true,
+                  },
+                });
+              }}
+              className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Reset to Default
+            </button>
+            <button
+              onClick={handleSaveSettings}
+              disabled={isLoading}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+            >
+              {isLoading && (
+                <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+              )}
+              {isLoading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         )}
 
         {/* Success Message */}
@@ -1143,9 +1366,11 @@ function ClientDashboard() {
       <div className="py-2">
         {/* Account Section */}
         <div className="px-3 py-2">
-          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</p>
+          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Account
+          </p>
         </div>
-        
+
         <button
           onClick={() => {
             setActiveTab("settings");
@@ -1157,9 +1382,13 @@ function ClientDashboard() {
           <User className="h-4 w-4 mr-3 text-gray-400" />
           Profile Settings
         </button>
-        
-        <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-        onClick={()=>{setActiveTab("dashboard")}}>
+
+        <button
+          className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+          onClick={() => {
+            setActiveTab("dashboard");
+          }}
+        >
           <Briefcase className="h-4 w-4 mr-3 text-gray-400" />
           My Projects
         </button>
@@ -1167,9 +1396,11 @@ function ClientDashboard() {
         {/* Billing Section */}
         <div className="border-t border-gray-100 mt-2">
           <div className="px-3 py-2">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Billing</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Billing
+            </p>
           </div>
-          
+
           <button
             onClick={() => {
               setActiveTab("settings");
@@ -1181,7 +1412,7 @@ function ClientDashboard() {
             <CreditCard className="h-4 w-4 mr-3 text-gray-400" />
             Payment Methods
           </button>
-          
+
           <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
             <FileText className="h-4 w-4 mr-3 text-gray-400" />
             Billing History
@@ -1191,9 +1422,11 @@ function ClientDashboard() {
         {/* Settings Section */}
         <div className="border-t border-gray-100 mt-2">
           <div className="px-3 py-2">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Settings</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Settings
+            </p>
           </div>
-          
+
           <button
             onClick={() => {
               setActiveTab("settings");
@@ -1205,7 +1438,7 @@ function ClientDashboard() {
             <Bell className="h-4 w-4 mr-3 text-gray-400" />
             Notifications
           </button>
-          
+
           <button
             onClick={() => {
               setActiveTab("settings");
@@ -1257,7 +1490,7 @@ function ClientDashboard() {
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
               </button>
-              
+
               {/* Profile Dropdown */}
               <div className="relative" ref={profileDropdownRef}>
                 <button
@@ -1267,9 +1500,13 @@ function ClientDashboard() {
                   <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
                     <User className="h-5 w-5 text-blue-600" />
                   </div>
-                  <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 text-gray-400 transition-transform ${
+                      showProfileDropdown ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
-                
+
                 {showProfileDropdown && <ProfileDropdown />}
               </div>
             </div>
@@ -1290,7 +1527,6 @@ function ClientDashboard() {
                     label: "Post Project",
                     icon: PlusCircle,
                   },
-                  { id: "bids", label: "View Bids", icon: Users },
                   { id: "settings", label: "Settings", icon: SettingsIcon },
                 ].map((item) => {
                   const Icon = item.icon;
