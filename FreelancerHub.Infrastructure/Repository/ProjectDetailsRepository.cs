@@ -4,14 +4,8 @@ using FreelancerHub.Infrastructure.DbContext;
 using Microsoft.EntityFrameworkCore;
 
 
-// IProjectDetailsRepository.cs
-namespace FreelancerHub.Core.Domain.RepositoryContracts
-{
-    public interface IProjectDetailsRepository
-    {
-        Task<ProjectWithFreelancerDto> GetProjectWithFreelancerAsync(Guid projectId, Guid clientId);
-    }
-}
+
+
 
 // ProjectDetailsRepository.cs
 namespace FreelancerHub.Infrastructure.Repositories

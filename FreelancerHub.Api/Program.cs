@@ -47,8 +47,14 @@
     builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
     builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
-    // Add this with your other service registrations
-    builder.Services.AddScoped<IClientProjectService, ClientProjectService>();
+
+// Register services
+builder.Services.AddScoped<IProjectDetailsService, ProjectDetailsService>();
+
+builder.Services.AddScoped<IProjectDetailsRepository, ProjectDetailsRepository>();
+
+// Add this with your other service registrations
+builder.Services.AddScoped<IClientProjectService, ClientProjectService>();
     builder.Services.AddScoped<IProjectBidRepository, ProjectBidRepository>();
     builder.Services.AddScoped<IClientBidService, ClientBidService>();
 
