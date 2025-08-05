@@ -1610,163 +1610,211 @@ function ClientDashboard() {
   };
 
   const AssignedProjectDetails = ({ project, onClose }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+    const [assignedProject, setAssignedProject] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  const getCountryName = (countryCode) => {
-    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-    try {
-      return regionNames.of(countryCode) || countryCode;
-    } catch {
-      return countryCode;
+    useEffect(() => {
+      const fetchAssignedProject = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Authentication required");
+          }
+
+          const response = await API.get(`/client/project-details/${project.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data.success) {
+            setAssignedProject(response.data.data);
+          } else {
+            setError(response.data.message || "Failed to fetch assigned project");
+          }
+        } catch (err) {
+          console.error("Error fetching assigned project:", err);
+          setError(err.response?.data?.message || err.message || "Failed to fetch assigned project");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAssignedProject();
+    }, [project.id]);
+
+    if (loading) {
+        return <div>Loading project details...</div>;
     }
-  };
 
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-2xl w-full">
-      <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-gray-900">
-          {project.title} - Freelancer Details
-  
-        </h2>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          <X className="h-6 w-6" />
-        </button>
-      </div>
-      
-      <div className="p-6 space-y-6">
-        {/* Project Summary */}
-        <div className="bg-blue-50 rounded-lg p-4">
-          <h3 className="font-semibold text-blue-900 mb-2">Project Summary</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-blue-700">Status</p>
-              <p className="font-medium">
-                <span className={`px-2 py-1 rounded text-xs ${
-                  project.status === "Assigned" 
-                    ? "bg-blue-100 text-blue-800" 
-                    : "bg-green-100 text-green-800"
-                }`}>
-                  {project.status}
-                </span>
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-blue-700">Budget</p>
-              <p className="font-medium">${project.budget?.toFixed(2)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-blue-700">Deadline</p>
-              <p className="font-medium">{formatDate(project.deadline)}</p>
-            </div>
-          </div>
-        </div>
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
 
-        {/* Freelancer Details Section */}
-        {
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Freelancer Information
-          </h3>
-          
-          <div className="flex items-start space-x-6">
-            {/* Freelancer Avatar */}
-            <div className="flex-shrink-0">
-              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
-                {project.freelancerName ? (
-                  <span className="text-2xl font-medium text-gray-600">
-                    {project.freelancerName
-                      .split(" ")
-                      .map((name) => name[0])
-                      .join("")}
-                  </span>
-                ) : (
-                  <User className="h-10 w-10 text-gray-400" />
-                )}
-              </div>
-            </div>
+    if (!assignedProject) {
+        return <div>No project data available</div>;
+    }
 
-            {/* Freelancer Info */}
-            <div className="flex-1 space-y-4">
-              <div>
-                <h4 className="font-semibold text-gray-900 text-lg">
-                  {project.freelancerName || "No name provided"}
-                </h4>
-                {project.freelancerTitle && (
-                  <p className="text-gray-600">{project.freelancerTitle}</p>
-                )}
-              </div>
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    };
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.freelancerEmail && (
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="flex items-center text-gray-900">
-                      <Mail className="h-4 w-4 mr-2 text-gray-400" />
-                      {project.freelancerEmail}
-                    </p>
-                  </div>
-                )}
+    const getCountryName = (countryCode) => {
+      const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+      try {
+        return regionNames.of(countryCode) || countryCode;
+      } catch {
+        return countryCode;
+      }
+    };
 
-                {project.freelancerPhone && (
-                  <div>
-                    <p className="text-sm text-gray-500">Phone</p>
-                    <p className="flex items-center text-gray-900">
-                      <Phone className="h-4 w-4 mr-2 text-gray-400" />
-                      {project.freelancerPhone}
-                    </p>
-                  </div>
-                )}
+    return (
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-2xl w-full">
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Project Name - {project.title}
 
-                {(project.freelancerCity || project.freelancerCountry) && (
-                  <div>
-                    <p className="text-sm text-gray-500">Location</p>
-                    <p className="flex items-center text-gray-900">
-                      <MapPin className="h-4 w-4 mr-2 text-gray-400" />
-                      {[project.freelancerCity, getCountryName(project.freelancerCountry)]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </p>
-                  </div>
-                )}
-
-                {project.bidAmount && (
-                  <div>
-                    <p className="text-sm text-gray-500">Bid Amount</p>
-                    <p className="flex items-center text-gray-900">
-                      <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
-                      ${project.bidAmount.toFixed(2)}
-                    </p>
-                  </div>
-                )}
-              </div>
-
-            </div>
-          </div>
-        </div>
-  }
-        {/* Action Buttons */}
-        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+          </h2>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors"
           >
-            Close
+            <X className="h-6 w-6" />
           </button>
         </div>
+
+        <div className="p-6 space-y-6">
+          {/* Project Summary */}
+          <div className="bg-blue-50 rounded-lg p-4">
+            <h3 className="font-semibold text-blue-900 mb-2">Project Summary</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-blue-700">Status</p>
+                <p className="font-medium">
+                  <span className={`px-2 py-1 rounded text-xs ${project.status === "Assigned"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-green-100 text-green-800"
+                    }`}>
+                    {project.status}
+                  </span>
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-blue-700">Budget</p>
+                <p className="font-medium">${project.budget?.toFixed(2)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-blue-700">Deadline</p>
+                <p className="font-medium">{formatDate(project.deadline)}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Freelancer Details Section */}
+          {
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Freelancer Information
+              </h3>
+
+              <div className="flex items-start space-x-6">
+                {/* Freelancer Avatar */}
+                <div className="flex-shrink-0">
+                  <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                    {assignedProject.freelancer.name ? (
+                      <span className="text-2xl font-medium text-gray-600">
+                        {assignedProject.freelancer.name
+                          .split(" ")
+                          .map((name) => name[0])
+                          .join("")}
+                      </span>
+                    ) : (
+                      <User className="h-10 w-10 text-gray-400" />
+                    )}
+                  </div>
+                </div>
+
+                {/* Freelancer Info */}
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 text-lg">
+                      {assignedProject.freelancer.name || "No name provided"}
+                    </h4>
+                    {assignedProject.freelancer.title && (
+                      <p className="text-gray-600">{assignedProject.freelancer.title}</p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {assignedProject.freelancer.email && (
+                      <div>
+                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="flex items-center text-gray-900">
+                          <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                          {assignedProject.freelancer.email}
+                        </p>
+                      </div>
+                    )}
+
+                    {assignedProject.freelancer.phone && (
+                      <div>
+                        <p className="text-sm text-gray-500">Phone</p>
+                        <p className="flex items-center text-gray-900">
+                          <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                          {assignedProject.freelancer.phone}
+                        </p>
+                      </div>
+                    )}
+
+                    {(project.freelancerCity || project.freelancerCountry) && (
+                      <div>
+                        <p className="text-sm text-gray-500">Location</p>
+                        <p className="flex items-center text-gray-900">
+                          <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                          {[project.freelancerCity, getCountryName(project.freelancerCountry)]
+                            .filter(Boolean)
+                            .join(", ")}
+                        </p>
+                      </div>
+                    )}
+
+                    {project.bidAmount && (
+                      <div>
+                        <p className="text-sm text-gray-500">Bid Amount</p>
+                        <p className="flex items-center text-gray-900">
+                          <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
+                          ${project.bidAmount.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          }
+          {/* Action Buttons */}
+          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
   const ProfileDropdown = () => (
     <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 transform opacity-100 scale-100 transition-all duration-200">
       {/* User Info Header */}
@@ -1911,7 +1959,7 @@ function ClientDashboard() {
                 <Users className="h-5 w-5 text-white" />
               </div>
               <h1 className="ml-3 text-xl font-semibold text-gray-900">
-                Freelance Hub
+                Freelancer Hub
               </h1>
             </div>
             <div className="flex items-center space-x-4">
