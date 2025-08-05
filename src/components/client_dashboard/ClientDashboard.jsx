@@ -174,56 +174,60 @@ function ClientDashboard() {
               </div>
             ) : (
               <div className="space-y-4">
-                {projects.map((project) => (
-                  <div
-                    key={project.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-2">
-                          {project.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-3">
-                          {project.description}
-                        </p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <span className="flex items-center">
-                            <DollarSign className="h-4 w-4 mr-1" />$
-                            {project.budget.toFixed(2)}
+                {projects
+                  .filter((project => {
+                    return project.status === "Open"
+                  }))
+                  .map((project) => (
+                    <div
+                      key={project.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            {project.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-3">
+                            {project.description}
+                          </p>
+                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                            <span className="flex items-center">
+                              <DollarSign className="h-4 w-4 mr-1" />$
+                              {project.budget.toFixed(2)}
+                            </span>
+                            <span className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              {new Date(project.deadline).toLocaleDateString()}
+                            </span>
+                            <span className="flex items-center">
+                              <Users className="h-4 w-4 mr-1" />
+                              {project.bidCount} bids
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === "Open"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-blue-100 text-blue-800"
+                              }`}
+                          >
+                            {project.status}
                           </span>
-                          <span className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1" />
-                            {new Date(project.deadline).toLocaleDateString()}
-                          </span>
-                          <span className="flex items-center">
-                            <Users className="h-4 w-4 mr-1" />
-                            {project.bidCount} bids
-                          </span>
+                          <button
+                            onClick={() => {
+                              setSelectedProject(project);
+                              setActiveTab("bids");
+                            }}
+                            className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                          >
+                            View Bids
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === "Open"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-blue-100 text-blue-800"
-                            }`}
-                        >
-                          {project.status}
-                        </span>
-                        <button
-                          onClick={() => {
-                            setSelectedProject(project);
-                            setActiveTab("bids");
-                          }}
-                          className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-                        >
-                          View Bids
-                        </button>
-                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
@@ -590,7 +594,7 @@ function ClientDashboard() {
 
     const handleAssignProject = async () => {
       if (!agreeTerms) {
-        setAssignError("You must agree to the terms to assign the project");
+        setAssignError("You must agree to the terms before assigning the project");
         return;
       }
 
@@ -600,21 +604,21 @@ function ClientDashboard() {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          throw new Error("Authentication required");
+          throw new Error("Authentication token not found");
         }
 
-        const response = await API.post(
-          `/client/projects/${selectedProject.id}/assign`,
-          {
-            bidId: selectedBid.bidId,
-            freelancerId: selectedBid.freelancerId,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const requestBody = {
+          projectId: selectedProject.id,
+          freelancerId: selectedBid.freelancerId,
+          clientId: selectedProject.clientId,
+        };
+
+        const response = await API.post('/client/projects/assign', requestBody, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           }
-        );
+        });
 
         if (response.data.success) {
           setAssignSuccess(true);
@@ -630,16 +634,19 @@ function ClientDashboard() {
             setAssignSuccess(false);
             setAgreeTerms(false);
             setSelectedBid(null);
+            // Refresh assigned projects if on that tab
+            if (activeTab === "assigned-projects") {
+              window.location.reload();
+            }
           }, 2000);
         } else {
-          setAssignError(response.data.message || "Failed to assign project");
+          throw new Error(response.data.message || "Failed to assign project");
         }
-      } catch (err) {
-        console.error("Error assigning project:", err);
-        setAssignError(
-          err.response?.data?.message ||
-          "Failed to assign project. Please try again."
-        );
+      } catch (error) {
+        const errorMessage = error.response?.data?.message ||
+          error.message ||
+          "An error occurred while assigning the project";
+        setAssignError(errorMessage);
       } finally {
         setAssigning(false);
       }
@@ -813,12 +820,169 @@ function ClientDashboard() {
           agreeTerms={agreeTerms}
           setAgreeTerms={setAgreeTerms}
           assigning={assigning}
-          setAssigning={setAssigning} 
+          setAssigning={setAssigning}
           assignError={assignError}
           setAssignError={setAssignError}
           assignSuccess={assignSuccess}
           setAssignSuccess={setAssignSuccess}
         />
+      </div>
+    );
+  };
+
+  const AssignedProjects = () => {
+    const [assignedProjects, setAssignedProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      const fetchAssignedProjects = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const token = localStorage.getItem("token");
+          if (!token) {
+            throw new Error("Authentication required");
+          }
+
+          const response = await API.get("/client/projects/with-status", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data.success) {
+            const filteredProjects = response.data.data.filter(
+              (project) => project.status !== "Open"
+            );
+            setAssignedProjects(filteredProjects);
+          } else {
+            setError(response.data.message || "Failed to fetch assigned projects");
+          }
+        } catch (err) {
+          console.error("Error fetching assigned projects:", err);
+          setError(err.response?.data?.message || "Failed to fetch assigned projects");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAssignedProjects();
+    }, []);
+
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    };
+
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <X className="h-5 w-5 text-red-500" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-2 text-sm text-red-700 underline hover:text-red-600"
+              >
+                Try again
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Assigned Projects
+            </h2>
+            <p className="text-gray-600 mt-1">
+              Projects you've assigned to freelancers
+            </p>
+          </div>
+          <div className="p-6">
+
+            {assignedProjects.length === 0 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="mx-auto h-12 w-12 text-gray-400" />
+                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                  No assigned projects yet
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Assign a project to a freelancer to see it here.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {assignedProjects
+                  .map((project) => (
+                    <div
+                      key={project.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            {project.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-3">
+                            {project.description}
+                          </p>
+                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                            <span className="flex items-center">
+                              <DollarSign className="h-4 w-4 mr-1" />$
+                              {project.budget.toFixed(2)}
+                            </span>
+                            <span className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1" />
+                              Due: {formatDate(project.deadline)}
+                            </span>
+                            <span className="flex items-center">
+                              <User className="h-4 w-4 mr-1" />
+                              {project.freelancerName}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                            {project.status}
+                          </span>
+                          <button className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                      {project.assignedAt && (
+                        <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                          Assigned on: {formatDate(project.assignedAt)}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   };
@@ -1634,6 +1798,7 @@ function ClientDashboard() {
                     label: "Post Project",
                     icon: PlusCircle,
                   },
+                  { id: "assigned-projects", label: "Assigned Projects", icon: CheckCircle },
                   { id: "settings", label: "Settings", icon: SettingsIcon },
                 ].map((item) => {
                   const Icon = item.icon;
@@ -1660,6 +1825,7 @@ function ClientDashboard() {
             {activeTab === "dashboard" && <Dashboard />}
             {activeTab === "post-project" && <PostProject />}
             {activeTab === "bids" && <BidsView />}
+            {activeTab === "assigned-projects" && <AssignedProjects />}
             {activeTab === "settings" && <Settings />}
           </div>
         </div>
