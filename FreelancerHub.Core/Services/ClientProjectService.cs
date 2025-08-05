@@ -26,7 +26,7 @@ namespace FreelancerHub.Infrastructure.Services
 
         public async Task<IEnumerable<ProjectWithStatusDto>> GetClientProjectsWithStatusAsync(Guid clientId)
         {
-            // Verify client exists
+         
             var client = await _clientRepository.GetClientById(clientId);
             if (client == null)
             {

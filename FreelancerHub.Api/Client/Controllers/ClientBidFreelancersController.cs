@@ -36,7 +36,7 @@ namespace FreelancerHub.Api.Client.Controllers
                     ProjectId = projectBidsDto.ProjectId,
                     ProjectTitle = projectBidsDto.ProjectTitle,
                     Bids = projectBidsDto.Bids,
-                    // Add any additional properties needed
+          
                     ProjectStatus = ProjectStatus.Open, // Set actual status
                     ProjectDeadline = DateTime.UtcNow.AddDays(30) // Set actual deadline
                 };
