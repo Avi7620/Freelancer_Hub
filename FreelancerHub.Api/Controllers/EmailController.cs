@@ -1,4 +1,5 @@
-﻿using FreelancerHub.Core.ServicesContracts;
+﻿using FreelancerHub.Core.DTO;
+using FreelancerHub.Core.ServicesContracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -34,9 +35,4 @@ public class EmailController : ControllerBase
     }
 }
 
-public class EmailRequest
-{
-    public string? ToEmail { get; set; }
-    public string? Subject { get; set; }
-    public string? Body { get; set; }
-}
+

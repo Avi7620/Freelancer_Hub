@@ -155,7 +155,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "EmailRequest",
+        "Type": "FreelancerHub.Core.DTO.EmailRequest",
         "IsRequired": true
       }
     ],

@@ -2,7 +2,9 @@
 using FreelancerHub.Core.Domain.Entities;
 using FreelancerHub.Core.DTO;
 using FreelancerHub.Core.Enums;
+using FreelancerHub.Core.Interfaces;
 using FreelancerHub.Core.Services;
+using FreelancerHub.Core.ServicesContracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,10 +18,17 @@ namespace FreelancerHub.Api.Freelancer.Controllers
     public class BidSubmissionController : ControllerBase
     {
         private readonly IBidService _bidService;
+        private readonly IEmailService _emailService;
+        private readonly IProjectRepository _projectRepository;
 
-        public BidSubmissionController(IBidService bidService)
+        public BidSubmissionController(
+            IBidService bidService,
+            IEmailService emailService,
+            IProjectRepository projectRepository)
         {
             _bidService = bidService;
+            _emailService = emailService;
+            _projectRepository = projectRepository;
         }
 
         [HttpPost("submit")]
@@ -40,6 +49,29 @@ namespace FreelancerHub.Api.Freelancer.Controllers
             {
                 var freelancerId = User.GetUserId();
                 var bid = await _bidService.SubmitBidAsync(bidDto, freelancerId);
+
+                // Get project details for email notification
+                var project = await _projectRepository.GetProjectById(bidDto.ProjectId);
+                if (project != null && project.Client != null && project.Client.User != null)
+                {
+ 
+                    var emailSubject = $"New Bid Received on Your Project: {project.Title}";
+                    var emailBody = $@"
+                        <h2>New Bid Notification</h2>
+                        <p>You have received a new bid on your project <strong>{project.Title}</strong>.</p>
+                        <p><strong>Bid Amount:</strong> {bidDto.Amount:C}</p>
+                        <p><strong>Proposed Delivery Time:</strong> {bidDto.DeliveryDays} days</p>
+                        <p>Please log in to your account to view and manage all bids on your project.</p>
+                        <p>Thank you for using our platform!</p>
+                    ";
+
+                    await _emailService.SendEmailAsync(
+                        project.Client.User.Email,
+                        emailSubject,
+                        emailBody,
+                        isHtml: true
+                    );
+                }
 
                 return CreatedAtAction(
                     nameof(GetBidDetails),
@@ -148,3 +180,4 @@ namespace FreelancerHub.Api.Freelancer.Controllers
         }
     }
 }
+
