@@ -525,7 +525,6 @@ function ClientDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [additionalInstructions, setAdditionalInstructions] = useState("");
     const [agreeTerms, setAgreeTerms] = useState(false);
     const [assigning, setAssigning] = useState(false);
     const [assignError, setAssignError] = useState(null);
@@ -609,7 +608,6 @@ function ClientDashboard() {
           {
             bidId: selectedBid.bidId,
             freelancerId: selectedBid.freelancerId,
-            additionalInstructions,
           },
           {
             headers: {
@@ -630,7 +628,6 @@ function ClientDashboard() {
           setTimeout(() => {
             setShowAssignModal(false);
             setAssignSuccess(false);
-            setAdditionalInstructions("");
             setAgreeTerms(false);
             setSelectedBid(null);
           }, 2000);
@@ -1204,11 +1201,9 @@ function ClientDashboard() {
     assignSuccess,
     setAssignSuccess,
   }) => {
-    const [additionalInstructions, setAdditionalInstructions] = useState("");
 
     const closeAssignModal = () => {
       setShowAssignModal(false);
-      setAdditionalInstructions("");
       setAgreeTerms(false);
       setAssignError(null);
       setAssignSuccess(false);
