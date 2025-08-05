@@ -146,6 +146,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "EmailController",
+    "Method": "SendEmail",
+    "RelativePath": "api/email/send",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "EmailRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerBidStatusController",
     "Method": "GetBidStatuses",
     "RelativePath": "api/freelancer/bid-status",

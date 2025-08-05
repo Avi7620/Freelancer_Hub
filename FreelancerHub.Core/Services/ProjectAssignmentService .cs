@@ -13,6 +13,7 @@ namespace FreelancerHub.Core.Services
         private readonly IProjectAssignmentRepository _assignmentRepository;
         private readonly IProjectRepository _projectRepository;
 
+
         public ProjectAssignmentService(
             IProjectAssignmentRepository assignmentRepository,
             IProjectRepository projectRepository)

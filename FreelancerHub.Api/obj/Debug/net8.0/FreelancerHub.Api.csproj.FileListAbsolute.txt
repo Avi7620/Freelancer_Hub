@@ -1103,3 +1103,8 @@ C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\obj\Deb
 C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\obj\Debug\net8.0\FreelancerHub.Api.pdb
 C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\obj\Debug\net8.0\FreelancerHub.Api.genruntimeconfig.cache
 C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\obj\Debug\net8.0\ref\FreelancerHub.Api.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\bin\Debug\net8.0\MailKit.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\bin\Debug\net8.0\MimeKit.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\admin\source\repos\Freelancer_Hub\freelancer1\FreelancerHub.Api\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

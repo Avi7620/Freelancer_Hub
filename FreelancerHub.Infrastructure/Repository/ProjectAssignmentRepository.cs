@@ -32,7 +32,7 @@ namespace FreelancerHub.Infrastructure.Repositories
 
                 // Update project status
                 project.AcceptedFreelancerId = freelancerId;
-                project.Status = ProjectStatus.InProgress;
+                project.Status = ProjectStatus.Assigned;
 
                 // Update all bids
                 foreach (var bid in project.Bids)
