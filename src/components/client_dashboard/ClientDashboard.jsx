@@ -39,7 +39,7 @@ function ClientDashboard() {
   const [activeSettingsSection, setActiveSettingsSection] = useState("profile");
   const [selectedProject, setSelectedProject] = useState(null);
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [selectedBid, setSelectedBid] = useState(null);
+  const [selectedAssignedProject, setSelectedAssignedProject] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
   const [projects, setProjects] = useState([]);
@@ -957,17 +957,16 @@ function ClientDashboard() {
                               <Calendar className="h-4 w-4 mr-1" />
                               Due: {formatDate(project.deadline)}
                             </span>
-                            <span className="flex items-center">
-                              <User className="h-4 w-4 mr-1" />
-                              {project.freelancerName}
-                            </span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                             {project.status}
                           </span>
-                          <button className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">
+                          <button
+                            onClick={() => setSelectedAssignedProject(project)}
+                            className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                          >
                             View Details
                           </button>
                         </div>
@@ -1610,6 +1609,164 @@ function ClientDashboard() {
     );
   };
 
+  const AssignedProjectDetails = ({ project, onClose }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const getCountryName = (countryCode) => {
+    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+    try {
+      return regionNames.of(countryCode) || countryCode;
+    } catch {
+      return countryCode;
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-2xl w-full">
+      <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+        <h2 className="text-xl font-semibold text-gray-900">
+          {project.title} - Freelancer Details
+  
+        </h2>
+        <button
+          onClick={onClose}
+          className="text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <X className="h-6 w-6" />
+        </button>
+      </div>
+      
+      <div className="p-6 space-y-6">
+        {/* Project Summary */}
+        <div className="bg-blue-50 rounded-lg p-4">
+          <h3 className="font-semibold text-blue-900 mb-2">Project Summary</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-blue-700">Status</p>
+              <p className="font-medium">
+                <span className={`px-2 py-1 rounded text-xs ${
+                  project.status === "Assigned" 
+                    ? "bg-blue-100 text-blue-800" 
+                    : "bg-green-100 text-green-800"
+                }`}>
+                  {project.status}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p className="text-sm text-blue-700">Budget</p>
+              <p className="font-medium">${project.budget?.toFixed(2)}</p>
+            </div>
+            <div>
+              <p className="text-sm text-blue-700">Deadline</p>
+              <p className="font-medium">{formatDate(project.deadline)}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Freelancer Details Section */}
+        {
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-gray-900">
+            Freelancer Information
+          </h3>
+          
+          <div className="flex items-start space-x-6">
+            {/* Freelancer Avatar */}
+            <div className="flex-shrink-0">
+              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                {project.freelancerName ? (
+                  <span className="text-2xl font-medium text-gray-600">
+                    {project.freelancerName
+                      .split(" ")
+                      .map((name) => name[0])
+                      .join("")}
+                  </span>
+                ) : (
+                  <User className="h-10 w-10 text-gray-400" />
+                )}
+              </div>
+            </div>
+
+            {/* Freelancer Info */}
+            <div className="flex-1 space-y-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 text-lg">
+                  {project.freelancerName || "No name provided"}
+                </h4>
+                {project.freelancerTitle && (
+                  <p className="text-gray-600">{project.freelancerTitle}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {project.freelancerEmail && (
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="flex items-center text-gray-900">
+                      <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                      {project.freelancerEmail}
+                    </p>
+                  </div>
+                )}
+
+                {project.freelancerPhone && (
+                  <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="flex items-center text-gray-900">
+                      <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                      {project.freelancerPhone}
+                    </p>
+                  </div>
+                )}
+
+                {(project.freelancerCity || project.freelancerCountry) && (
+                  <div>
+                    <p className="text-sm text-gray-500">Location</p>
+                    <p className="flex items-center text-gray-900">
+                      <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                      {[project.freelancerCity, getCountryName(project.freelancerCountry)]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </p>
+                  </div>
+                )}
+
+                {project.bidAmount && (
+                  <div>
+                    <p className="text-sm text-gray-500">Bid Amount</p>
+                    <p className="flex items-center text-gray-900">
+                      <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
+                      ${project.bidAmount.toFixed(2)}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </div>
+  }
+        {/* Action Buttons */}
+        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
   const ProfileDropdown = () => (
     <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 transform opacity-100 scale-100 transition-all duration-200">
       {/* User Info Header */}
@@ -1833,7 +1990,18 @@ function ClientDashboard() {
 
       {/* Modals */}
       {showAssignModal && <AssignmentModal />}
+
+      {/* Show Assigned Project Details */}
+      {selectedAssignedProject && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <AssignedProjectDetails
+            project={selectedAssignedProject}
+            onClose={() => setSelectedAssignedProject(null)}
+          />
+        </div>
+      )}
     </div>
+
   );
 }
 
