@@ -17,10 +17,9 @@ import {
   Upload,
 } from "lucide-react";
 
-// Mock API service since the original API import might not be available
+// Mock API service
 const API = {
   get: async (url) => {
-    // Simulate API call
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -31,8 +30,7 @@ const API = {
             country: "United States",
             city: "New York",
             title: "Full Stack Developer",
-            description:
-              "Experienced developer with 5+ years in web development",
+            description: "Experienced developer with 5+ years in web development",
             experience: "5 years",
             hourlyRate: "50",
             availability: "Full-time",
@@ -46,7 +44,6 @@ const API = {
     });
   },
   put: async (url, data, config) => {
-    // Simulate API call
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ data: { message: "Profile updated successfully" } });
@@ -59,7 +56,6 @@ const API = {
 const useAuth = () => ({
   logout: () => {
     console.log("Logging out...");
-    // Simulate logout
   },
 });
 
@@ -94,10 +90,7 @@ const ProfileTab = ({
       </div>
     )}
     <div>
-      <h2 className="text-2xl font-bold text-white mb-6">
-        Profile Information
-      </h2>
-
+      <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
       <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
@@ -105,6 +98,7 @@ const ProfileTab = ({
           </div>
         ) : (
           <>
+
             <div className="flex items-center space-x-6 mb-8">
               <div className="relative">
                 {formState.profileImage ? (
@@ -256,14 +250,20 @@ const ProfileTab = ({
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Experience
                   </label>
-                  <input
-                    type="text"
-                    name="experience"
-                    value={formState.experience}
-                    onChange={handleChange}
-                    placeholder="e.g., 5 years"
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+                  <div>
+
+                    <select
+                      name="experience"
+                      value={formState.experience}
+                      onChange={handleChange}
+                      className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="">Select experience level</option>
+                      <option value="entry">Entry Level (0-2 years)</option>
+                      <option value="intermediate">Intermediate (2-5 years)</option>
+                      <option value="expert">Expert (5+ years)</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -274,6 +274,7 @@ const ProfileTab = ({
                     name="hourlyRate"
                     value={formState.hourlyRate}
                     onChange={handleChange}
+
                     placeholder="50"
                     min="0"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -292,10 +293,10 @@ const ProfileTab = ({
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select availability</option>
-                  <option value="Full-time">Full-time</option>
-                  <option value="Part-time">Part-time</option>
-                  <option value="Contract">Contract</option>
-                  <option value="Freelance">Freelance</option>
+                  <option value="full-time">Full-time</option>
+                  <option value="part-time">Part-time</option>
+                  <option value="contract">Contract</option>
+                  <option value="freelance">Freelance</option>
                 </select>
               </div>
 
@@ -420,14 +421,12 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("email")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.email ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.email ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.email ? "translate-x-6" : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.email ? "translate-x-6" : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -443,14 +442,12 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("push")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.push ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.push ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.push ? "translate-x-6" : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.push ? "translate-x-6" : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -466,14 +463,12 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("sms")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.sms ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.sms ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.sms ? "translate-x-6" : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.sms ? "translate-x-6" : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -489,16 +484,14 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("projectUpdates")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.projectUpdates ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.projectUpdates ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.projectUpdates
-                      ? "translate-x-6"
-                      : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.projectUpdates
+                    ? "translate-x-6"
+                    : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -514,16 +507,14 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("paymentAlerts")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.paymentAlerts ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.paymentAlerts ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.paymentAlerts
-                      ? "translate-x-6"
-                      : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.paymentAlerts
+                    ? "translate-x-6"
+                    : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -539,16 +530,14 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("marketingEmails")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  notifications.marketingEmails ? "bg-blue-600" : "bg-gray-600"
-                }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.marketingEmails ? "bg-blue-600" : "bg-gray-600"
+                  }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications.marketingEmails
-                      ? "translate-x-6"
-                      : "translate-x-1"
-                  }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.marketingEmails
+                    ? "translate-x-6"
+                    : "translate-x-1"
+                    }`}
                 />
               </button>
             </div>
@@ -595,11 +584,10 @@ const AppearanceTab = ({ theme, setTheme }) => {
             {themes.map((themeOption) => (
               <div
                 key={themeOption.id}
-                className={`p-4 rounded-lg border cursor-pointer transition-colors ${
-                  theme === themeOption.id
-                    ? "border-blue-500 bg-blue-500/10"
-                    : "border-gray-600 hover:border-gray-500"
-                }`}
+                className={`p-4 rounded-lg border cursor-pointer transition-colors ${theme === themeOption.id
+                  ? "border-blue-500 bg-blue-500/10"
+                  : "border-gray-600 hover:border-gray-500"
+                  }`}
                 onClick={() => setTheme(themeOption.id)}
               >
                 <div className="flex items-center space-x-3">
@@ -626,7 +614,7 @@ const AppearanceTab = ({ theme, setTheme }) => {
 };
 
 // Main Settings Component
-const SettingsSection = () => {
+const SettingsSection = ({ freelancerData, onProfileUpdate }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("profile");
@@ -639,11 +627,12 @@ const SettingsSection = () => {
     marketingEmails: false,
   });
   const [theme, setTheme] = useState("dark");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Changed to false initially
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [newSkill, setNewSkill] = useState("");
 
+  // Initialize form state with default values
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -658,76 +647,42 @@ const SettingsSection = () => {
     availability: "",
     skills: [],
     categories: [],
-    portfolioFiles: null,
     profileImage: "",
-    joinDate: "",
+    joinDate: "January 2023",
   });
+
+  // Update form state when freelancerData changes
+  useEffect(() => {
+    if (freelancerData) {
+      setFormState({
+        firstName: freelancerData.personName?.split(" ")[0] || "",
+        lastName: freelancerData.personName?.split(" ").slice(1).join(" ") || "",
+        email: freelancerData.email || "",
+        phone: freelancerData.phoneNumber || "",
+        country: freelancerData.country || "",
+        city: freelancerData.city || "",
+        title: freelancerData.title || "",
+        description: freelancerData.description || "",
+        experience: freelancerData.experience || "",
+        hourlyRate: freelancerData.hourlyRate || "",
+        availability: freelancerData.availability || "",
+        skills: Array.isArray(freelancerData.skills)
+          ? freelancerData.skills
+          : JSON.parse(freelancerData.skills || "[]"),
+        categories: Array.isArray(freelancerData.categories)
+          ? freelancerData.categories
+          : JSON.parse(freelancerData.categories || "[]"),
+        profileImage: freelancerData.profileImage || "",
+        joinDate: freelancerData.joinDate || "January 2023",
+      });
+    }
+  }, [freelancerData]);
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
     { id: "notifications", label: "Notifications", icon: Bell },
     { id: "appearance", label: "Appearance", icon: Palette },
   ];
-
-  useEffect(() => {
-    const fetchFreelancerData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await API.get("/freelancer/profile");
-
-        // Safe JSON parsing
-        const parseJsonSafely = (jsonString) => {
-          try {
-            return Array.isArray(JSON.parse(jsonString))
-              ? JSON.parse(jsonString)
-              : [];
-          } catch {
-            return [];
-          }
-        };
-
-        const skills = Array.isArray(response.data.skills)
-          ? response.data.skills
-          : parseJsonSafely(response.data.skills || "[]");
-
-        const categories = Array.isArray(response.data.categories)
-          ? response.data.categories
-          : parseJsonSafely(response.data.categories || "[]");
-
-        setFormState({
-          firstName: response.data.personName?.split(" ")[0] || "",
-          lastName:
-            response.data.personName?.split(" ").slice(1).join(" ") || "",
-          email: response.data.email || "",
-          phone: response.data.phoneNumber || "",
-          country: response.data.country || "",
-          city: response.data.city || "",
-          title: response.data.title || "",
-          description: response.data.description || "",
-          experience: response.data.experience || "",
-          hourlyRate: response.data.hourlyRate || "",
-          availability: response.data.availability || "",
-          skills: skills,
-          categories: categories,
-          portfolioFiles: null,
-          profileImage: response.data.profileImage || "",
-          joinDate: response.data.joinDate || "January 2023",
-        });
-        setError(null);
-      } catch (error) {
-        console.error("Error fetching freelancer data:", error);
-        if (error.response?.status === 401) {
-          logout();
-          navigate("/login");
-        }
-        setError("Failed to load profile data. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFreelancerData();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -737,7 +692,6 @@ const SettingsSection = () => {
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (name === "profileImage" && files[0]) {
-      // Create a preview URL for the image
       const imageUrl = URL.createObjectURL(files[0]);
       setFormState((prev) => ({
         ...prev,
@@ -811,29 +765,34 @@ const SettingsSection = () => {
         });
       }
 
-      const config = {
+      await API.put("/freelancer/profile", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      };
+      });
 
-      await API.put("/freelancer/profile", formData, config);
+      // Call parent with updated data
+      onProfileUpdate({
+        personName: `${formState.firstName} ${formState.lastName}`,
+        email: formState.email,
+        phoneNumber: formState.phone,
+        country: formState.country,
+        city: formState.city,
+        title: formState.title,
+        description: formState.description,
+        experience: formState.experience,
+        hourlyRate: formState.hourlyRate,
+        availability: formState.availability,
+        skills: formState.skills,
+        categories: formState.categories,
+        profileImage: formState.profileImage,
+      });
+
       setSuccess("Profile updated successfully!");
-
-      // Clear success message after 3 seconds
-      setTimeout(() => {
-        setSuccess(null);
-      }, 3000);
+      setTimeout(() => setSuccess(null), 3000);
     } catch (error) {
       console.error("Error updating profile:", error);
-      if (error.response?.status === 401) {
-        logout();
-        navigate("/login");
-      }
-      setError(
-        error.response?.data?.message ||
-          "Failed to update profile. Please try again."
-      );
+      setError(error.response?.data?.message || "Failed to update profile. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -849,11 +808,10 @@ const SettingsSection = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${
-                activeTab === tab.id
-                  ? "text-blue-400 border-b-2 border-blue-500"
-                  : "text-gray-400 hover:text-gray-200"
-              }`}
+              className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${activeTab === tab.id
+                ? "text-blue-400 border-b-2 border-blue-500"
+                : "text-gray-400 hover:text-gray-200"
+                }`}
               onClick={() => setActiveTab(tab.id)}
             >
               <tab.icon className="w-5 h-5" />
@@ -862,30 +820,38 @@ const SettingsSection = () => {
           ))}
         </div>
 
-        {/* Tab Content */}
-        {activeTab === "profile" && (
-          <ProfileTab
-            formState={formState}
-            isLoading={isLoading}
-            error={error}
-            success={success}
-            handleChange={handleChange}
-            handleFileChange={handleFileChange}
-            handleSubmit={handleSubmit}
-            handleAddSkill={handleAddSkill}
-            handleRemoveSkill={handleRemoveSkill}
-            newSkill={newSkill}
-            setNewSkill={setNewSkill}
-          />
-        )}
-        {activeTab === "notifications" && (
-          <NotificationsTab
-            notifications={notifications}
-            setNotifications={setNotifications}
-          />
-        )}
-        {activeTab === "appearance" && (
-          <AppearanceTab theme={theme} setTheme={setTheme} />
+        {/* Show loading state only when submitting form */}
+        {isLoading && activeTab === "profile" ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <>
+            {activeTab === "profile" && (
+              <ProfileTab
+                formState={formState}
+                isLoading={isLoading}
+                error={error}
+                success={success}
+                handleChange={handleChange}
+                handleFileChange={handleFileChange}
+                handleSubmit={handleSubmit}
+                handleAddSkill={handleAddSkill}
+                handleRemoveSkill={handleRemoveSkill}
+                newSkill={newSkill}
+                setNewSkill={setNewSkill}
+              />
+            )}
+            {activeTab === "notifications" && (
+              <NotificationsTab
+                notifications={notifications}
+                setNotifications={setNotifications}
+              />
+            )}
+            {activeTab === "appearance" && (
+              <AppearanceTab theme={theme} setTheme={setTheme} />
+            )}
+          </>
         )}
       </div>
     </div>

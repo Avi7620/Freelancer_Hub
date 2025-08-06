@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import API from "../../services/api";
 import {
   Activity,
   Bell,
@@ -37,6 +38,7 @@ import {
   ArrowDownRight,
   Timer,
   Wallet,
+  LogOut,
 } from "lucide-react";
 
 import ProjectsSection from "./ProjectSection";
@@ -48,15 +50,77 @@ import SettingsSection from "./SettingsSection";
 const FreelancerDashboard = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const [timeFilter, setTimeFilter] = useState("week");
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [freelancerData, setFreelancerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch freelancer data on component mount
+  useEffect(() => {
+    const fetchFreelancerData = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Authentication required");
+        }
+        const response = await API.get("/freelancer/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log(response ? response : "Hii");
+        // Transform the data as needed
+        const transformedData = {
+          ...response.data,
+          skills: Array.isArray(response.data.skills)
+            ? response.data.skills
+            : JSON.parse(response.data.skills || "[]"),
+          categories: Array.isArray(response.data.categories)
+            ? response.data.categories
+            : JSON.parse(response.data.categories || "[]")
+        };
+
+        setFreelancerData(transformedData);
+      } catch (err) {
+        console.error("Error fetching freelancer data:", err);
+        setError("Failed to load freelancer data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFreelancerData();
+  }, []);
+
+  // Function to update data from child component
+  const handleProfileUpdate = (updatedData) => {
+    setFreelancerData(prev => ({
+      ...prev,
+      ...updatedData
+    }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.location.href = "/login";
+  };
 
   const navigationItems = [
     { icon: Home, label: "Dashboard", key: "dashboard", active: true },
-    { icon: Briefcase, label: "Apply to the Projects", key: "applyprojects", badge: "5" },
-    { icon: Briefcase, label: "Projects", key: "projects", badge: "12" },
-    { icon: Users, label: "Clients", key: "clients" },
-    { icon: DollarSign, label: "Invoices", key: "invoices", badge: "3" },
-    { icon: MessageCircle, label: "Messages", key: "messages", badge: "5" },
-    { icon: Settings, label: "Settings", key: "settings" },
+    { icon: Briefcase, label: "Find Work", key: "applyprojects", badge: "5" },
+    { icon: Briefcase, label: "My Projects", key: "projects", badge: "12" },
+    { icon: DollarSign, label: "Billing", key: "invoices", badge: "3" },
+    { icon: MessageCircle, label: "Inbox", key: "messages", badge: "5" },
+    { icon: Settings, label: "Account Settings", key: "settings" },
+    {
+      icon: LogOut,
+      label: "Log Out",
+      key: "logout",
+      action: () => setShowLogoutModal(true),
+    },
   ];
 
   const statsCards = [
@@ -146,21 +210,43 @@ const FreelancerDashboard = () => {
   ];
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-full">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex justify-center items-center h-full">
+          <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        </div>
+      );
+    }
+
     switch (activeSection) {
       case "applyprojects":
-        return <ApplyProjectsSection />;
+        return <ApplyProjectsSection freelancerData={freelancerData} />;
       case "projects":
-        return <ProjectsSection />;
+        return <ProjectsSection freelancerData={freelancerData} />;
       case "invoices":
-        return <InvoicesSection />;
+        return <InvoicesSection freelancerData={freelancerData} />;
       case "messages":
-        return <MessagesSection />;
+        return <MessagesSection freelancerData={freelancerData} />;
       case "settings":
-        return <SettingsSection />;
+        return <SettingsSection
+          freelancerData={freelancerData}
+          onProfileUpdate={handleProfileUpdate}
+        />;
       default:
-        return renderDashboard();
+        return renderDashboard(freelancerData);
     }
   };
+
 
   const renderDashboard = () => (
     <>
@@ -170,7 +256,7 @@ const FreelancerDashboard = () => {
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
             <p className="text-gray-400 mt-1">
-              Welcome back! Here's your freelance overview.
+              Welcome back, {freelancerData.name} ! Here's your freelance overview.
             </p>
           </div>
 
@@ -309,6 +395,30 @@ const FreelancerDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <div className="flex">
+        {/* Logout Confirmation Modal */}
+        {showLogoutModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-gray-700">
+              <h3 className="text-xl font-bold mb-4">Confirm Logout</h3>
+              <p className="text-gray-300 mb-6">Are you sure you want to log out?</p>
+              <div className="flex justify-end space-x-4">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Sidebar */}
         <div className="w-72 bg-gray-800 border-r border-gray-700 min-h-screen">
           {/* Profile Section */}
@@ -319,24 +429,12 @@ const FreelancerDashboard = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">John Doe</h3>
-                <p className="text-gray-400 text-sm">Senior Designer</p>
-              </div>
-            </div>
-            <div className="mt-4 flex items-center justify-between">
-              <div className="text-center">
-                <div className="text-xl font-bold text-emerald-400">$24.5K</div>
-                <div className="text-xs text-gray-400">This Month</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-blue-400">4.95</div>
-                <div className="text-xs text-gray-400">Rating</div>
-              </div>
-              <div className="text-center">
-                <div className="text-xl font-bold text-purple-400">12</div>
-                <div className="text-xs text-gray-400">Projects</div>
+                <p className="text-gray-400 text-sm">{freelancerData?.title || "loading"}</p>
               </div>
             </div>
           </div>
+
+
 
           {/* Navigation */}
           <nav className="p-4">
@@ -344,12 +442,17 @@ const FreelancerDashboard = () => {
               {navigationItems.map((item) => (
                 <button
                   key={item.key}
-                  onClick={() => setActiveSection(item.key)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${
-                    activeSection === item.key
+                  onClick={() => {
+                    if (item.action) {
+                      item.action(); 
+                    } else {
+                      setActiveSection(item.key); 
+                    }
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${activeSection === item.key
                       ? "bg-blue-600 text-white shadow-lg"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center space-x-3">
                     <item.icon className="w-5 h-5" />
@@ -365,6 +468,7 @@ const FreelancerDashboard = () => {
             </div>
           </nav>
         </div>
+
 
         {/* Main Content */}
         <div className="flex-1 overflow-hidden">{renderContent()}</div>

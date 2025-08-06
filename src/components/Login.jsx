@@ -14,6 +14,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
   const { login, isAuthenticated, user } = useAuth();
+  const {userRole, setUserRole} = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +29,8 @@ function Login() {
     setIsLoading(true);
 
     try {
-      await login({ email, password });
+      const response = await login({ email, password });
+      setUserRole(response.role);
       setSuccess("Login successful! Welcome back.");
     } catch (error) {
       setError(error.message || "Login failed. Please try again.");
@@ -54,7 +56,9 @@ function Login() {
               You are successfully logged in as {user.email}
             </p>
             <button
-              onClick={() => (window.location.href = "/client-dashboard")}
+              onClick={() => userRole === "Client" ? (window.location.href = "/client-dashboard") :
+                (window.location.href = "/freelancer-dashboard")
+              }
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200"
             >
               Continue to Dashboard

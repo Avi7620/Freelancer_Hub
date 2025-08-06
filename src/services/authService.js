@@ -59,10 +59,10 @@ class AuthService {
     }
   }
 
-  logout() {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-  }
+logout() {
+  localStorage.removeItem(this.TOKEN_KEY);
+  localStorage.removeItem(this.USER_KEY);
+}
 
   getToken() {
     return localStorage.getItem(this.TOKEN_KEY);

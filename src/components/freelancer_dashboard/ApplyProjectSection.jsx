@@ -28,11 +28,7 @@ const ApplyProjectsSection = () => {
 
       // Get token from localStorage - check multiple possible keys
       const token =
-        localStorage.getItem("token") ||
-        localStorage.getItem("authToken") ||
-        localStorage.getItem("accessToken") ||
-        localStorage.getItem("jwt") ||
-        localStorage.getItem("bearerToken");
+        localStorage.getItem("token");
 
       if (!token) {
         throw new Error("No authentication token found. Please login first.");
@@ -44,11 +40,6 @@ const ApplyProjectsSection = () => {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
       };
-
-      console.log(
-        "Making API request with token:",
-        token ? "Token present" : "No token"
-      );
 
       const response = await fetch(
         "https://localhost:7039/api/freelancer/FreelancerAvailableProjects",
@@ -65,10 +56,7 @@ const ApplyProjectsSection = () => {
         if (response.status === 401) {
           // Clear invalid token
           localStorage.removeItem("token");
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("jwt");
-          localStorage.removeItem("bearerToken");
+
           throw new Error("Session expired. Please login again.");
         }
         if (response.status === 403) {
@@ -212,19 +200,10 @@ const ApplyProjectsSection = () => {
                 ${project.budget ? project.budget.toLocaleString() : "TBD"}
               </div>
             </div>
-            <div>
+            <div className="ms-9">
               <div className="text-gray-400">Due Date</div>
-              <div className="font-semibold text-white">
+              <div className="font-semibold text-white w-120">
                 {project.deadline || project.endDate || "TBD"}
-              </div>
-            </div>
-            <div>
-              <div className="text-gray-400">Client Rating</div>
-              <div className="flex items-center space-x-1">
-                <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                <span className="font-semibold text-white">
-                  {project.clientRating || "N/A"}
-                </span>
               </div>
             </div>
           </div>

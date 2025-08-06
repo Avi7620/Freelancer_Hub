@@ -42,6 +42,7 @@ function ClientDashboard() {
   const [selectedAssignedProject, setSelectedAssignedProject] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
   const [error, setError] = useState(null);
@@ -1648,15 +1649,15 @@ function ClientDashboard() {
     }, [project.id]);
 
     if (loading) {
-        return <div>Loading project details...</div>;
+      return <div>Loading project details...</div>;
     }
 
     if (error) {
-        return <div className="error-message">{error}</div>;
+      return <div className="error-message">{error}</div>;
     }
 
     if (!assignedProject) {
-        return <div>No project data available</div>;
+      return <div>No project data available</div>;
     }
 
     const formatDate = (dateString) => {
@@ -1701,8 +1702,8 @@ function ClientDashboard() {
                 <p className="text-sm text-blue-700">Status</p>
                 <p className="font-medium">
                   <span className={`px-2 py-1 rounded text-xs ${project.status === "Assigned"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-green-100 text-green-800"
+                    ? "bg-blue-100 text-blue-800"
+                    : "bg-green-100 text-green-800"
                     }`}>
                     {project.status}
                   </span>
@@ -1939,7 +1940,13 @@ function ClientDashboard() {
 
         {/* Logout */}
         <div className="border-t border-gray-100 mt-2">
-          <button className="w-full flex items-center px-6 py-3 text-sm text-red-700 hover:bg-red-50 transition-colors">
+          <button
+            onClick={() => {
+              setShowProfileDropdown(false);
+              setShowLogoutModal(true);
+            }}
+            className="w-full flex items-center px-6 py-3 text-sm text-red-700 hover:bg-red-50 transition-colors"
+          >
             <LogOut className="h-4 w-4 mr-3 text-red-400" />
             Sign Out
           </button>
@@ -1947,6 +1954,49 @@ function ClientDashboard() {
       </div>
     </div>
   );
+
+  const LogoutConfirmationModal = () => {
+    if (!showLogoutModal) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-semibold text-gray-900">Confirm Logout</h3>
+            <button
+              onClick={() => setShowLogoutModal(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+
+          <p className="text-gray-600 mb-6">
+            Are you sure you want to log out? You'll need to sign in again to access your account.
+          </p>
+
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => setShowLogoutModal(false)}
+              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = '/login';
+              }}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -1963,10 +2013,6 @@ function ClientDashboard() {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
 
               {/* Profile Dropdown */}
               <div className="relative" ref={profileDropdownRef}>
@@ -2037,6 +2083,8 @@ function ClientDashboard() {
       </div>
 
       {/* Modals */}
+          {showLogoutModal && <LogoutConfirmationModal />}
+
       {showAssignModal && <AssignmentModal />}
 
       {/* Show Assigned Project Details */}
