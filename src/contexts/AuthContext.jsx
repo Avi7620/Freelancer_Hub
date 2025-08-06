@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       });
       setIsAuthenticated(true);
 
-      return response;
+      return response.data.role;
     } catch (error) {
       throw error;
     }

@@ -17,9 +17,7 @@ import {
   Heart,
   Home,
   Layers,
-  Mail,
-  MessageCircle,
-  MoreHorizontal,
+  Mail,  MoreHorizontal,
   PieChart,
   Plus,
   Search,
@@ -44,7 +42,6 @@ import {
 import ProjectsSection from "./ProjectSection";
 import ApplyProjectsSection from "./ApplyProjectSection";
 import InvoicesSection from "./InvoicesSection";
-import MessagesSection from "./MessagesSection";
 import SettingsSection from "./SettingsSection";
 
 const FreelancerDashboard = () => {
@@ -70,7 +67,6 @@ const FreelancerDashboard = () => {
           },
         });
 
-        console.log(response ? response : "Hii");
         // Transform the data as needed
         const transformedData = {
           ...response.data,
@@ -113,7 +109,6 @@ const FreelancerDashboard = () => {
     { icon: Briefcase, label: "Find Work", key: "applyprojects", badge: "5" },
     { icon: Briefcase, label: "My Projects", key: "projects", badge: "12" },
     { icon: DollarSign, label: "Billing", key: "invoices", badge: "3" },
-    { icon: MessageCircle, label: "Inbox", key: "messages", badge: "5" },
     { icon: Settings, label: "Account Settings", key: "settings" },
     {
       icon: LogOut,
@@ -235,8 +230,6 @@ const FreelancerDashboard = () => {
         return <ProjectsSection freelancerData={freelancerData} />;
       case "invoices":
         return <InvoicesSection freelancerData={freelancerData} />;
-      case "messages":
-        return <MessagesSection freelancerData={freelancerData} />;
       case "settings":
         return <SettingsSection
           freelancerData={freelancerData}
@@ -256,7 +249,7 @@ const FreelancerDashboard = () => {
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
             <p className="text-gray-400 mt-1">
-              Welcome back, {freelancerData.name} ! Here's your freelance overview.
+              Welcome back, {freelancerData.data.personName.split(" ")[0]} ! Here's your freelance overview.
             </p>
           </div>
 
@@ -425,11 +418,13 @@ const FreelancerDashboard = () => {
           <div className="p-6 border-b border-gray-700">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <span className="text-lg font-bold">JD</span>
+                <span className="text-lg font-bold">{freelancerData?.data.personName.split(" ").map((data)=>{
+                  return data.charAt(0).toUpperCase()
+                }) || "John Doe"}</span>
               </div>
               <div>
-                <h3 className="font-semibold text-lg">John Doe</h3>
-                <p className="text-gray-400 text-sm">{freelancerData?.title || "loading"}</p>
+                <h3 className="font-semibold text-lg">{freelancerData?.data.personName || "John Doe"}</h3>
+                <p className="text-gray-400 text-sm">{freelancerData?.data.title || "loading"}</p>
               </div>
             </div>
           </div>

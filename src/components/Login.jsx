@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import {
   Eye,
   EyeOff,
@@ -12,15 +12,18 @@ import {
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
+
 function Login() {
   const { login, isAuthenticated, user } = useAuth();
-  const {userRole, setUserRole} = useState("");
+  const [userRole, setUserRole] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+    const navigate = useNavigate(); 
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +33,7 @@ function Login() {
 
     try {
       const response = await login({ email, password });
-      setUserRole(response.role);
+      setUserRole(response);
       setSuccess("Login successful! Welcome back.");
     } catch (error) {
       setError(error.message || "Login failed. Please try again.");

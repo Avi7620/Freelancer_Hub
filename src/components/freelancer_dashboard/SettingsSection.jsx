@@ -16,41 +16,7 @@ import {
   X,
   Upload,
 } from "lucide-react";
-
-// Mock API service
-const API = {
-  get: async (url) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          data: {
-            personName: "John Doe",
-            email: "john.doe@example.com",
-            phoneNumber: "+1234567890",
-            country: "United States",
-            city: "New York",
-            title: "Full Stack Developer",
-            description: "Experienced developer with 5+ years in web development",
-            experience: "5 years",
-            hourlyRate: "50",
-            availability: "Full-time",
-            skills: '["JavaScript", "React", "Node.js", "Python"]',
-            categories: '["Web Development", "Mobile Development"]',
-            profileImage: "",
-            joinDate: "January 2023",
-          },
-        });
-      }, 1000);
-    });
-  },
-  put: async (url, data, config) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ data: { message: "Profile updated successfully" } });
-      }, 1500);
-    });
-  },
-};
+import API from "../../services/api";
 
 // Mock Auth Context
 const useAuth = () => ({
@@ -434,48 +400,6 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-white">
-                  Push Notifications
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Receive push notifications in browser
-                </p>
-              </div>
-              <button
-                onClick={() => handleNotificationChange("push")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.push ? "bg-blue-600" : "bg-gray-600"
-                  }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.push ? "translate-x-6" : "translate-x-1"
-                    }`}
-                />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-white">
-                  SMS Notifications
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Receive notifications via SMS
-                </p>
-              </div>
-              <button
-                onClick={() => handleNotificationChange("sms")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.sms ? "bg-blue-600" : "bg-gray-600"
-                  }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.sms ? "translate-x-6" : "translate-x-1"
-                    }`}
-                />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-white">
                   Project Updates
                 </h3>
                 <p className="text-gray-400 text-sm">
@@ -519,28 +443,6 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </button>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-white">
-                  Marketing Emails
-                </h3>
-                <p className="text-gray-400 text-sm">
-                  Receive promotional emails and updates
-                </p>
-              </div>
-              <button
-                onClick={() => handleNotificationChange("marketingEmails")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.marketingEmails ? "bg-blue-600" : "bg-gray-600"
-                  }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.marketingEmails
-                    ? "translate-x-6"
-                    : "translate-x-1"
-                    }`}
-                />
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -647,36 +549,32 @@ const SettingsSection = ({ freelancerData, onProfileUpdate }) => {
     availability: "",
     skills: [],
     categories: [],
-    profileImage: "",
-    joinDate: "January 2023",
   });
 
   // Update form state when freelancerData changes
   useEffect(() => {
     if (freelancerData) {
       setFormState({
-        firstName: freelancerData.personName?.split(" ")[0] || "",
-        lastName: freelancerData.personName?.split(" ").slice(1).join(" ") || "",
-        email: freelancerData.email || "",
-        phone: freelancerData.phoneNumber || "",
-        country: freelancerData.country || "",
-        city: freelancerData.city || "",
-        title: freelancerData.title || "",
-        description: freelancerData.description || "",
-        experience: freelancerData.experience || "",
-        hourlyRate: freelancerData.hourlyRate || "",
-        availability: freelancerData.availability || "",
-        skills: Array.isArray(freelancerData.skills)
-          ? freelancerData.skills
-          : JSON.parse(freelancerData.skills || "[]"),
-        categories: Array.isArray(freelancerData.categories)
-          ? freelancerData.categories
-          : JSON.parse(freelancerData.categories || "[]"),
-        profileImage: freelancerData.profileImage || "",
-        joinDate: freelancerData.joinDate || "January 2023",
+        firstName: freelancerData?.data.personName?.split(" ")[0] || "",
+        lastName: freelancerData?.data.personName?.split(" ").slice(1).join(" ") || "",
+        email: freelancerData?.data.email || "",
+        phone: freelancerData?.data.phoneNumber || "",
+        country: freelancerData?.data.country || "",
+        city: freelancerData?.data.city || "",
+        title: freelancerData?.data.title || "",
+        description: freelancerData?.data.description || "",
+        experience: freelancerData?.data.experience || "",
+        hourlyRate: freelancerData?.data.hourlyRate || "",
+        availability: freelancerData?.data.availability || "",
+        skills: Array.isArray(freelancerData?.data.skills)
+          ? freelancerData?.data.skills
+          : JSON.parse(freelancerData?.data.skills || "[]"),
+        categories: Array.isArray(freelancerData?.data.categories)
+          ? freelancerData?.data.categories
+          : JSON.parse(freelancerData?.data.categories || "[]"),
       });
     }
-  }, [freelancerData]);
+  }, [freelancerData.data]);
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
@@ -720,83 +618,74 @@ const SettingsSection = ({ freelancerData, onProfileUpdate }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      setError(null);
-      setSuccess(null);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    setIsLoading(true);
+    setError(null);
+    setSuccess(null);
 
-      const formData = new FormData();
+    const formData = new FormData();
 
-      // Append all fields
-      formData.append("FirstName", formState.firstName);
-      formData.append("LastName", formState.lastName);
-      if (formState.phone) formData.append("Phone", formState.phone);
-      if (formState.country) formData.append("Country", formState.country);
-      if (formState.city) formData.append("City", formState.city);
-      if (formState.title) formData.append("Title", formState.title);
-      if (formState.description)
-        formData.append("Description", formState.description);
-      if (formState.experience)
-        formData.append("Experience", formState.experience);
-      if (formState.hourlyRate)
-        formData.append("HourlyRate", formState.hourlyRate);
-      if (formState.availability)
-        formData.append("Availability", formState.availability);
+    // Append all fields
+    formData.append("FirstName", formState.firstName);
+    formData.append("LastName", formState.lastName);
+    formData.append("Email", formState.email);
+    formData.append("Phone", formState.phone);
+    formData.append("Country", formState.country);
+    formData.append("City", formState.city);
+    formData.append("Title", formState.title);
+    formData.append("Description", formState.description);
+    formData.append("Experience", formState.experience);
+    formData.append("HourlyRate", formState.hourlyRate);
+    formData.append("Availability", formState.availability);
 
-      // Append arrays
-      formState.skills.forEach((skill, i) => {
-        formData.append(`Skills[${i}]`, skill);
-      });
+    // Append arrays as JSON strings
+    formData.append("Skills", JSON.stringify(formState.skills));
+    formData.append("Categories", JSON.stringify(formState.categories));
 
-      formState.categories.forEach((category, i) => {
-        formData.append(`Categories[${i}]`, category);
-      });
-
-      // Append files if any
-      if (formState.profileImageFile) {
-        formData.append("ProfileImage", formState.profileImageFile);
-      }
-
-      if (formState.portfolioFiles) {
-        Array.from(formState.portfolioFiles).forEach((file, i) => {
-          formData.append(`Portfolio[${i}]`, file);
-        });
-      }
-
-      await API.put("/freelancer/profile", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      // Call parent with updated data
-      onProfileUpdate({
-        personName: `${formState.firstName} ${formState.lastName}`,
-        email: formState.email,
-        phoneNumber: formState.phone,
-        country: formState.country,
-        city: formState.city,
-        title: formState.title,
-        description: formState.description,
-        experience: formState.experience,
-        hourlyRate: formState.hourlyRate,
-        availability: formState.availability,
-        skills: formState.skills,
-        categories: formState.categories,
-        profileImage: formState.profileImage,
-      });
-
-      setSuccess("Profile updated successfully!");
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      setError(error.response?.data?.message || "Failed to update profile. Please try again.");
-    } finally {
-      setIsLoading(false);
+    // Append profile image if it exists
+    if (formState.profileImageFile) {
+      formData.append("ProfileImage", formState.profileImageFile);
     }
-  };
+
+    console.log('Submitting form data:'); // Debug log
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    // Make the actual API call
+    const response = await API.put("/freelancer/profile", formData, {
+
+    });
+
+    console.log('API response:', response.data); // Debug log
+
+    // Call parent with updated data
+    onProfileUpdate({
+      personName: `${formState.firstName} ${formState.lastName}`,
+      email: formState.email,
+      phoneNumber: formState.phone,
+      country: formState.country,
+      city: formState.city,
+      title: formState.title,
+      description: formState.description,
+      experience: formState.experience,
+      hourlyRate: formState.hourlyRate,
+      availability: formState.availability,
+      skills: formState.skills,
+      categories: formState.categories,
+      profileImage: formState.profileImage,
+    });
+
+    setSuccess("Profile updated successfully!");
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    setError(error.response?.data?.message || error.message || "Failed to update profile. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-900">
