@@ -12,8 +12,10 @@ namespace FreelancerHub.Core.Domain.RepositoryContracts
     {
         Task<FreelancerProfile?> GetProfileAsync(Guid userId);
 
-        Task<FreelancerProfile> UpdateProfileAsync(Guid userId, FreelancerProfile profile); 
-  
+        Task<FreelancerProfile> UpdateProfileAsync(Guid userId, FreelancerProfile profile);
+
+        Task<string> GetFreelancerEmailAsync(Guid freelancerId);
+
 
     }
 }

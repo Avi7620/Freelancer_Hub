@@ -1,5 +1,6 @@
 ﻿using FreelancerHub.Core.Domain.Entities;
 using FreelancerHub.Core.Domain.RepositoryContracts;
+using FreelancerHub.Core.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -33,7 +34,7 @@ namespace FreelancerHub.Api.Freelancer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProfile()
+        public async Task<ActionResult<ApiResponse<FreelancerProfileResponseDto>>> GetProfile()
         {
             try
             {
@@ -42,19 +43,43 @@ namespace FreelancerHub.Api.Freelancer.Controllers
 
                 if (profile == null)
                 {
-                    return NotFound("Profile not found");
+                    return NotFound(new ApiResponse
+                    {
+                        Success = false,
+                        Status = "NOT_FOUND",
+                        Message = "Freelancer profile not found"
+                    });
                 }
 
-                return Ok(profile);
+                var responseDto = new FreelancerProfileResponseDto(profile);
+
+                return Ok(new ApiResponse<FreelancerProfileResponseDto>
+                {
+                    Success = true,
+                    Status = "SUCCESS",
+                    Message = "Profile retrieved successfully",
+                    Data = responseDto
+                });
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(new ApiResponse
+                {
+                    Success = false,
+                    Status = "UNAUTHORIZED",
+                    Message = ex.Message
+                });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting profile");
-                return StatusCode(500, "Error retrieving profile");
+                return StatusCode(500, new ApiResponse
+                {
+                    Success = false,
+                    Status = "SERVER_ERROR",
+                    Message = "Error retrieving profile",
+                    Details = ex.Message
+                });
             }
         }
 
@@ -83,7 +108,5 @@ namespace FreelancerHub.Api.Freelancer.Controllers
                 return StatusCode(500, "Error updating profile");
             }
         }
-
-     
     }
 }

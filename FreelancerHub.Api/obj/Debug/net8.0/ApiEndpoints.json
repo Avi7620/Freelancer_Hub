@@ -58,6 +58,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "FreelancerHub.Api.Client.Controllers.ClientProfileController",
+    "Method": "GetProfile",
+    "RelativePath": "api/client/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FreelancerHub.Api.Client.Controllers.ClientProfileController",
+    "Method": "UpdateProfile",
+    "RelativePath": "api/client/profile",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "updateDto",
+        "Type": "FreelancerHub.Core.DTO.ClientProfileUpdateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "FreelancerHub.Api.Client.Controllers.ProjectDetailsController",
     "Method": "GetProjectDetails",
     "RelativePath": "api/client/project-details/{projectId}",
@@ -349,7 +375,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "FreelancerHub.Core.DTO.ApiResponse\u00601[[FreelancerHub.Core.DTO.FreelancerProfileResponseDto, FreelancerHub.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "FreelancerHub.Api.Freelancer.Controllers.FreelancerProfileController",

@@ -5,6 +5,9 @@ using FreelancerHub.Core.IdentityEntities;
 using FreelancerHub.Core.ServicesContracts;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using Azure;
+using FreelancerHub.Core.Enums;
+using System.Data;
 
 namespace FreelancerHub.WebAPI.Controllers
 {
@@ -63,7 +66,15 @@ namespace FreelancerHub.WebAPI.Controllers
             var userRoles = await _userManager.GetRolesAsync(user);
             var authResponse = _jwtService.CreateJwtToken(user, userRoles);
 
+            // Add the single role to the response
+            if (userRoles.Count > 0 && Enum.TryParse<UserRole>(userRoles[0], out var role))
+            {
+                authResponse.Role = role;
+            }
+        
+
             return Ok(authResponse);
+
         }
 
      

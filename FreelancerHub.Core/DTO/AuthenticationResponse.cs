@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using FreelancerHub.Core.Enums;
 
 namespace FreelancerHub.Core.DTO
 {
@@ -12,6 +10,7 @@ namespace FreelancerHub.Core.DTO
         public string? Email { get; set; } = string.Empty;
         public string? Token { get; set; } = string.Empty;
         public DateTime Expiration { get; set; }
-        // REMOVED: RefreshToken properties
+
+        public UserRole Role { get; set; }
     }
 }

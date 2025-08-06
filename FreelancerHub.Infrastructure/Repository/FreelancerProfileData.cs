@@ -32,7 +32,7 @@ namespace FreelancerHub.Infrastructure.Repository
                 throw new ArgumentException("Freelancer profile not found", nameof(userId));
             }
 
-            // Update only the fields that should be updatable
+
             existingProfile.Country = profile.Country ?? existingProfile.Country;
             existingProfile.City = profile.City ?? existingProfile.City;
             existingProfile.Title = profile.Title ?? existingProfile.Title;
@@ -47,5 +47,15 @@ namespace FreelancerHub.Infrastructure.Repository
             return existingProfile;
         }
 
+
+        public async Task<string> GetFreelancerEmailAsync(Guid freelancerId)
+        {
+            var freelancer = await _dbContext.FreelancerProfiles
+                .Include(fp => fp.User)
+                .FirstOrDefaultAsync(fp => fp.UserId == freelancerId);
+
+            return freelancer?.User?.Email
+                ?? throw new KeyNotFoundException("Freelancer email not found");
+        }
     }
 }

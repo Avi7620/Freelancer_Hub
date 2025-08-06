@@ -60,11 +60,12 @@ namespace FreelancerHub.Core.Services
                 Email = user.Email,
                 PersonName = user.PersonName,
                 Expiration = expiration,
-                // REMOVED: Refresh token generation
+
+             
             };
         }
 
-        // REMOVED: GenerateRefreshToken() method
+
 
 
 
