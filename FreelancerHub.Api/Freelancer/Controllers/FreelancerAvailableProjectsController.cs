@@ -28,6 +28,7 @@ namespace FreelancerHub.Api.Freelancer.Controllers
         {
             try
             {
+                // Explicitly get only Open projects
                 var projects = await _projectRepository.GetProjectsByStatus(ProjectStatus.Open);
 
                 var result = projects
@@ -43,7 +44,7 @@ namespace FreelancerHub.Api.Freelancer.Controllers
                             ? p.RequiredSkills.Split(',', StringSplitOptions.RemoveEmptyEntries)
                             : Array.Empty<string>(),
                         CreatedAt = p.CreatedAt,
-                        CompanyName = p.Client != null ? p.Client.CompanyName : "Unknown Company"
+                        CompanyName = p.Client?.CompanyName ?? "Unknown Company"
                     })
                     .ToList();
 
