@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   PlusCircle,
   Users,
@@ -11,25 +11,19 @@ import {
   Calendar,
   FileText,
   Search,
-  Filter,
   Edit3,
   User,
   Bell,
   CreditCard,
   Shield,
-  Globe,
   Mail,
   Phone,
-  Award,
-  TrendingUp,
   LogOut,
   HelpCircle,
   ChevronDown,
   X,
   Camera,
   Briefcase,
-  Heart,
-  MessageCircle,
 } from "lucide-react";
 import API from "../../services/api";
 import CalendarDatePicker from "../client_dashboard/CalenderDatePicker";
@@ -42,19 +36,49 @@ function ClientDashboard() {
   const [selectedAssignedProject, setSelectedAssignedProject] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
+  const [clientData, setClientData] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch projects when component mounts or activeTab changes to dashboard
-  useEffect(() => {
-    if (activeTab === "dashboard") {
-      fetchProjects();
-    }
-  }, [activeTab]);
+  const fetchClientData = async () => {
+    let isMounted = true;
+    
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication required");
+      }
 
-  const fetchProjects = async () => {
+      const response = await API.get("/client/profile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (isMounted) {
+        if (response.data && response.data.success) {
+          setClientData(response.data.data);
+        } else {
+          setError(response.data?.message || "Invalid response structure");
+        }
+      }
+    } catch (err) {
+      if (isMounted) {
+        console.error("Profile fetch error:", err);
+        setError(err.response?.data?.message || "Failed to load profile data");
+      }
+    } finally {
+      if (isMounted) {
+        setLoading(false);
+      }
+    }
+  };
+
+  const fetchProjects = useCallback(async () => {
     try {
       setLoadingProjects(true);
       setError(null);
@@ -81,9 +105,18 @@ function ClientDashboard() {
     } finally {
       setLoadingProjects(false);
     }
-  };
+  }, []);
 
-  // Handle clicking outside of profile dropdown
+  useEffect(() => {
+    fetchClientData();
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "dashboard") {
+      fetchProjects();
+    }
+  }, [activeTab, fetchProjects]);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -132,12 +165,61 @@ function ClientDashboard() {
 
     return (
       <div className="space-y-6">
-        {/* Stats Overview - you might want to calculate these from the projects data */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* ... existing stats ... */}
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-blue-100 rounded-lg">
+                <Briefcase className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Projects</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {projects.length}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-green-100 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Completed</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {projects.filter(p => p.status === "Completed").length}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-yellow-100 rounded-lg">
+                <Clock className="h-6 w-6 text-yellow-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">In Progress</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {projects.filter(p => p.status === "In Progress").length}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-purple-100 rounded-lg">
+                <DollarSign className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Spent</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  ${projects.reduce((sum, p) => sum + (p.budget || 0), 0).toFixed(2)}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Recent Projects */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100">
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center justify-between">
@@ -176,9 +258,7 @@ function ClientDashboard() {
             ) : (
               <div className="space-y-4">
                 {projects
-                  .filter((project => {
-                    return project.status === "Open"
-                  }))
+                  .filter(project => project.status === "Open")
                   .map((project) => (
                     <div
                       key={project.id}
@@ -209,10 +289,11 @@ function ClientDashboard() {
                         </div>
                         <div className="flex items-center space-x-2">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${project.status === "Open"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-blue-100 text-blue-800"
-                              }`}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              project.status === "Open"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-blue-100 text-blue-800"
+                            }`}
                           >
                             {project.status}
                           </span>
@@ -250,23 +331,19 @@ function ClientDashboard() {
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
     const handleInputChange = (field, value) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+      setFormData(prev => ({ ...prev, [field]: value }));
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: "" }));
+        setErrors(prev => ({ ...prev, [field]: "" }));
       }
     };
 
     const validateForm = () => {
       const newErrors = {};
-
       if (!formData.title.trim()) newErrors.title = "Title is required";
-      if (!formData.description.trim())
-        newErrors.description = "Description is required";
-      if (!formData.budget || isNaN(formData.budget))
-        newErrors.budget = "Valid budget is required";
+      if (!formData.description.trim()) newErrors.description = "Description is required";
+      if (!formData.budget || isNaN(formData.budget)) newErrors.budget = "Valid budget is required";
       if (!formData.deadline) newErrors.deadline = "Deadline is required";
-      if (!formData.requiredSkills.length)
-        newErrors.requiredSkills = "At least one skill is required";
+      if (!formData.requiredSkills.length) newErrors.requiredSkills = "At least one skill is required";
 
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
@@ -307,11 +384,7 @@ function ClientDashboard() {
           deadline: null,
           requiredSkills: [],
         });
-
-        // Refresh projects list
         fetchProjects();
-
-        console.log("Project created:", response.data);
       } catch (error) {
         console.error("Error creating project:", error);
         setErrors({
@@ -371,8 +444,9 @@ function ClientDashboard() {
               type="text"
               value={formData.title}
               onChange={(e) => handleInputChange("title", e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.title ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                errors.title ? "border-red-500" : "border-gray-300"
+              }`}
               placeholder="Enter a descriptive project title"
             />
             {errors.title && (
@@ -388,8 +462,9 @@ function ClientDashboard() {
               rows={6}
               value={formData.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.description ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                errors.description ? "border-red-500" : "border-gray-300"
+              }`}
               placeholder="Describe your project in detail..."
             />
             {errors.description && (
@@ -408,8 +483,9 @@ function ClientDashboard() {
                 onChange={(e) => handleInputChange("budget", e.target.value)}
                 step="0.01"
                 min="0.01"
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.budget ? "border-red-500" : "border-gray-300"
-                  }`}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.budget ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="Enter project budget"
               />
               {errors.budget && (
@@ -446,14 +522,15 @@ function ClientDashboard() {
               onChange={(e) => {
                 const skills = e.target.value
                   .split(",")
-                  .map((skill) => skill.trim());
+                  .map(skill => skill.trim());
                 handleInputChange(
                   "requiredSkills",
-                  skills.filter((skill) => skill)
+                  skills.filter(skill => skill)
                 );
               }}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.requiredSkills ? "border-red-500" : "border-gray-300"
-                }`}
+              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                errors.requiredSkills ? "border-red-500" : "border-gray-300"
+              }`}
               placeholder="e.g., React, Node.js, MongoDB (separate with commas)"
             />
             {errors.requiredSkills && (
@@ -463,7 +540,7 @@ function ClientDashboard() {
             )}
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.requiredSkills
-                .filter((skill) => skill)
+                .filter(skill => skill)
                 .map((skill, index) => (
                   <span
                     key={index}
@@ -534,7 +611,6 @@ function ClientDashboard() {
     const [assigning, setAssigning] = useState(false);
     const [assignError, setAssignError] = useState(null);
     const [assignSuccess, setAssignSuccess] = useState(false);
-    const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedBid, setSelectedBid] = useState(null);
 
     useEffect(() => {
@@ -623,19 +699,16 @@ function ClientDashboard() {
 
         if (response.data.success) {
           setAssignSuccess(true);
-          // Update the project status in the local state
           setProjects(projects.map(project =>
             project.id === selectedProject.id
               ? { ...project, status: "Assigned" }
               : project
           ));
-          // Close modal after 2 seconds
           setTimeout(() => {
             setShowAssignModal(false);
             setAssignSuccess(false);
             setAgreeTerms(false);
             setSelectedBid(null);
-            // Refresh assigned projects if on that tab
             if (activeTab === "assigned-projects") {
               window.location.reload();
             }
@@ -696,10 +769,10 @@ function ClientDashboard() {
     }
 
     const filteredBids = projectBids.data.bids.filter(
-      (bid) =>
+      bid =>
         bid.freelancerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bid.proposal.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bid.skills.some((skill) =>
+        bid.skills.some(skill =>
           skill.toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
@@ -732,7 +805,7 @@ function ClientDashboard() {
           </div>
 
           <div className="space-y-4">
-            {filteredBids.map((bid) => (
+            {filteredBids.map(bid => (
               <div
                 key={bid.bidId}
                 className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors"
@@ -743,7 +816,7 @@ function ClientDashboard() {
                       <span className="text-gray-600 font-medium">
                         {bid.freelancerName
                           .split(" ")
-                          .map((name) => name[0])
+                          .map(name => name[0])
                           .join("")}
                       </span>
                     </div>
@@ -812,21 +885,188 @@ function ClientDashboard() {
           </div>
         </div>
 
-        {/* Assignment Modal */}
-        <AssignmentModal
-          selectedBid={selectedBid}
-          selectedProject={selectedProject}
-          showAssignModal={showAssignModal}
-          setShowAssignModal={setShowAssignModal}
-          agreeTerms={agreeTerms}
-          setAgreeTerms={setAgreeTerms}
-          assigning={assigning}
-          setAssigning={setAssigning}
-          assignError={assignError}
-          setAssignError={setAssignError}
-          assignSuccess={assignSuccess}
-          setAssignSuccess={setAssignSuccess}
-        />
+        {showAssignModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    Assign Project
+                  </h3>
+                  <button
+                    onClick={() => {
+                      setShowAssignModal(false);
+                      setAgreeTerms(false);
+                      setAssignError(null);
+                      setAssignSuccess(false);
+                    }}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    <X className="h-6 w-6" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 space-y-6">
+                {assignSuccess ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                    <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                    <h4 className="text-lg font-semibold text-green-900 mb-1">
+                      Project Assigned Successfully!
+                    </h4>
+                    <p className="text-green-700">
+                      The freelancer has been notified and can now start working on your project.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setShowAssignModal(false);
+                        setAssignSuccess(false);
+                      }}
+                      className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      Close
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="bg-blue-50 rounded-lg p-4">
+                      <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                        <FileText className="h-5 w-5 mr-2" />
+                        Project: {selectedProject?.title}
+                      </h4>
+                      <p className="text-blue-800 text-sm">
+                        {selectedProject?.description}
+                      </p>
+                      <div className="flex items-center space-x-4 mt-3 text-sm text-blue-700">
+                        <span className="flex items-center">
+                          <DollarSign className="h-4 w-4 mr-1" />
+                          Budget: ${selectedProject?.budget?.toFixed(2)}
+                        </span>
+                        <span className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          Due: {selectedProject?.deadline ? new Date(selectedProject.deadline).toLocaleDateString() : 'N/A'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+                        <User className="h-5 w-5 mr-2" />
+                        Selected Freelancer
+                      </h4>
+                      <div className="flex items-start space-x-4">
+                        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                          <span className="text-gray-600 font-medium text-lg">
+                            {selectedBid.freelancerName
+                              .split(" ")
+                              .map(name => name[0])
+                              .join("")}
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <h5 className="font-semibold text-gray-900 mb-1">
+                            {selectedBid.freelancerName}
+                          </h5>
+                          <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
+                            <span className="flex items-center">
+                              <MapPin className="h-4 w-4 mr-1" />
+                              {selectedBid.city}, {getCountryName(selectedBid.country)}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4 mt-3">
+                            <div className="bg-white rounded-lg p-3 border">
+                              <p className="text-sm text-gray-600">Bid Amount</p>
+                              <p className="text-xl font-bold text-gray-900">
+                                ${selectedBid.amount.toFixed(2)}
+                              </p>
+                            </div>
+                            <div className="bg-white rounded-lg p-3 border">
+                              <p className="text-sm text-gray-600">Delivery Time</p>
+                              <p className="text-xl font-bold text-gray-900">
+                                {selectedBid.deliveryDays} day{selectedBid.deliveryDays !== 1 ? 's' : ''}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <p className="text-sm text-gray-600 mb-2">Proposal:</p>
+                            <p className="text-gray-700 text-sm bg-white p-3 rounded border">
+                              {selectedBid.proposal}
+                            </p>
+                          </div>
+                          <div className="mt-3">
+                            <p className="text-sm text-gray-600 mb-2">Skills:</p>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedBid.skills.map((skill, index) => (
+                                <span
+                                  key={index}
+                                  className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3">
+                      <input
+                        type="checkbox"
+                        id="terms"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                        className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <label htmlFor="terms" className="text-sm text-gray-600">
+                        I agree to assign this project to the selected freelancer and understand that payment will be processed according to the agreed terms and project milestones.
+                      </label>
+                    </div>
+
+                    {assignError && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex">
+                          <X className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
+                          <p className="text-red-700 text-sm">{assignError}</p>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {!assignSuccess && (
+                <div className="p-6 border-t border-gray-100 flex items-center justify-end space-x-4">
+                  <button
+                    onClick={() => {
+                      setShowAssignModal(false);
+                      setAgreeTerms(false);
+                      setAssignError(null);
+                    }}
+                    disabled={assigning}
+                    className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAssignProject}
+                    disabled={assigning || !agreeTerms}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+                  >
+                    {assigning ? (
+                      <>
+                        <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                        Assigning...
+                      </>
+                    ) : (
+                      'Assign Project'
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -855,7 +1095,7 @@ function ClientDashboard() {
 
           if (response.data.success) {
             const filteredProjects = response.data.data.filter(
-              (project) => project.status !== "Open"
+              project => project.status !== "Open"
             );
             setAssignedProjects(filteredProjects);
           } else {
@@ -922,7 +1162,6 @@ function ClientDashboard() {
             </p>
           </div>
           <div className="p-6">
-
             {assignedProjects.length === 0 ? (
               <div className="text-center py-8">
                 <CheckCircle className="mx-auto h-12 w-12 text-gray-400" />
@@ -935,676 +1174,52 @@ function ClientDashboard() {
               </div>
             ) : (
               <div className="space-y-4">
-                {assignedProjects
-                  .map((project) => (
-                    <div
-                      key={project.id}
-                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-2">
-                            {project.title}
-                          </h3>
-                          <p className="text-gray-600 text-sm mb-3">
-                            {project.description}
-                          </p>
-                          <div className="flex items-center space-x-4 text-sm text-gray-500">
-                            <span className="flex items-center">
-                              <DollarSign className="h-4 w-4 mr-1" />$
-                              {project.budget.toFixed(2)}
-                            </span>
-                            <span className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-1" />
-                              Due: {formatDate(project.deadline)}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                            {project.status}
-                          </span>
-                          <button
-                            onClick={() => setSelectedAssignedProject(project)}
-                            className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-                          >
-                            View Details
-                          </button>
-                        </div>
-                      </div>
-                      {project.assignedAt && (
-                        <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
-                          Assigned on: {formatDate(project.assignedAt)}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const Settings = () => {
-    const [settingsData, setSettingsData] = useState({
-      firstName: "John",
-      lastName: "Anderson",
-      email: "john.anderson@example.com",
-      phone: "+1 (555) 123-4567",
-      company: "TechStart Inc.",
-      notifications: {
-        newBids: true,
-        projectUpdates: true,
-      },
-    });
-
-    const [isLoading, setSaveLoading] = useState(false);
-    const [saveSuccess, setSaveSuccess] = useState(false);
-
-    const handleInputChange = (field, value) => {
-      if (field.startsWith("notifications.")) {
-        const notificationField = field.split(".")[1];
-        setSettingsData((prev) => ({
-          ...prev,
-          notifications: {
-            ...prev.notifications,
-            [notificationField]: value,
-          },
-        }));
-      } else {
-        setSettingsData((prev) => ({
-          ...prev,
-          [field]: value,
-        }));
-      }
-    };
-
-    const handleSaveSettings = async () => {
-      setSaveLoading(true);
-      try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
-      } catch (error) {
-        console.error("Error saving settings:", error);
-      } finally {
-        setSaveLoading(false);
-      }
-    };
-
-    return (
-      <div className="space-y-6">
-        {/* Settings Navigation Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-900">Settings</h2>
-            <p className="text-gray-600 mt-1">
-              Manage your account and preferences
-            </p>
-          </div>
-          <div className="px-6 py-4">
-            <nav className="flex space-x-8">
-              {[
-                { id: "profile", label: "Profile", icon: User },
-                { id: "notifications", label: "Notifications", icon: Bell },
-                { id: "security", label: "Security", icon: Shield },
-                { id: "billing", label: "Billing", icon: CreditCard },
-              ].map((section) => {
-                const Icon = section.icon;
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSettingsSection(section.id)}
-                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSettingsSection === section.id
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                      }`}
+                {assignedProjects.map(project => (
+                  <div
+                    key={project.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
                   >
-                    <Icon className="h-4 w-4 mr-2" />
-                    {section.label}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-
-        {/* Profile Settings */}
-        {activeSettingsSection === "profile" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Profile Settings
-              </h3>
-              <p className="text-gray-600 mt-1">
-                Update your personal information and profile details
-              </p>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-1">
-                  <div className="flex flex-col items-center text-center">
-                    <div className="relative">
-                      <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                        <User className="h-12 w-12 text-blue-600" />
-                      </div>
-                      <button className="absolute bottom-4 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
-                        <Camera className="h-4 w-4" />
-                      </button>
-                    </div>
-                    <h3 className="font-semibold text-gray-900">
-                      {settingsData.firstName} {settingsData.lastName}
-                    </h3>
-                    <p className="text-gray-600">Premium Client</p>
-                    <div className="mt-4 flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-green-600">Online</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="lg:col-span-2 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        value={settingsData.firstName}
-                        onChange={(e) =>
-                          handleInputChange("firstName", e.target.value)
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        value={settingsData.lastName}
-                        onChange={(e) =>
-                          handleInputChange("lastName", e.target.value)
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={settingsData.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      value={settingsData.phone}
-                      onChange={(e) =>
-                        handleInputChange("phone", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Company
-                    </label>
-                    <input
-                      type="text"
-                      value={settingsData.company}
-                      onChange={(e) =>
-                        handleInputChange("company", e.target.value)
-                      }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Notification Settings */}
-        {activeSettingsSection === "notifications" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Notifications
-              </h3>
-              <p className="text-gray-600 mt-1">
-                Configure how and when you receive notifications
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              {[
-                {
-                  key: "newBids",
-                  label: "New bid notifications",
-                  description:
-                    "Get notified when freelancers submit bids on your projects",
-                },
-                {
-                  key: "projectUpdates",
-                  label: "Project updates",
-                  description:
-                    "Receive updates on your active projects and milestones",
-                },
-              ].map((item) => (
-                <div
-                  key={item.key}
-                  className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">{item.label}</p>
-                    <p className="text-sm text-gray-600">{item.description}</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={settingsData.notifications[item.key]}
-                      onChange={(e) =>
-                        handleInputChange(
-                          `notifications.${item.key}`,
-                          e.target.checked
-                        )
-                      }
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Security Settings */}
-        {activeSettingsSection === "security" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">Security</h3>
-              <p className="text-gray-600 mt-1">
-                Manage your account security and authentication settings
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center">
-                  <Shield className="h-5 w-5 text-gray-400 mr-3" />
-                  <div className="text-left">
-                    <span className="font-medium text-gray-900">
-                      Change Password
-                    </span>
-                    <p className="text-sm text-gray-600">
-                      Update your account password
-                    </p>
-                  </div>
-                </div>
-                <span className="text-gray-400">›</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Billing Settings */}
-        {activeSettingsSection === "billing" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">Billing</h3>
-              <p className="text-gray-600 mt-1">
-                Manage your payment methods and billing information
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center">
-                  <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
-                  <div className="text-left">
-                    <span className="font-medium text-gray-900">
-                      Payment Methods
-                    </span>
-                    <p className="text-sm text-gray-600">
-                      Manage your payment options
-                    </p>
-                  </div>
-                </div>
-                <span className="text-gray-400">›</span>
-              </button>
-              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex items-center">
-                  <FileText className="h-5 w-5 text-gray-400 mr-3" />
-                  <div className="text-left">
-                    <span className="font-medium text-gray-900">
-                      Billing History
-                    </span>
-                    <p className="text-sm text-gray-600">
-                      View your payment history
-                    </p>
-                  </div>
-                </div>
-                <span className="text-gray-400">›</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Save Button */}
-        {(activeSettingsSection === "profile" ||
-          activeSettingsSection === "notifications") && (
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => {
-                  setSettingsData({
-                    firstName: "John",
-                    lastName: "Anderson",
-                    email: "john.anderson@example.com",
-                    phone: "+1 (555) 123-4567",
-                    company: "TechStart Inc.",
-                    notifications: {
-                      newBids: true,
-                      projectUpdates: true,
-                    },
-                  });
-                }}
-                className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Reset to Default
-              </button>
-              <button
-                onClick={handleSaveSettings}
-                disabled={isLoading}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
-              >
-                {isLoading && (
-                  <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                )}
-                {isLoading ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          )}
-
-        {/* Success Message */}
-        {saveSuccess && (
-          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
-            <div className="flex items-center">
-              <CheckCircle className="h-5 w-5 mr-2" />
-              Settings saved successfully!
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const AssignmentModal = ({
-    selectedBid,
-    selectedProject,
-    showAssignModal,
-    setShowAssignModal,
-    agreeTerms,
-    setAgreeTerms,
-    assigning,
-    setAssigning,
-    assignError,
-    setAssignError,
-    assignSuccess,
-    setAssignSuccess,
-  }) => {
-
-    const closeAssignModal = () => {
-      setShowAssignModal(false);
-      setAgreeTerms(false);
-      setAssignError(null);
-      setAssignSuccess(false);
-    };
-
-    const getCountryName = (countryCode) => {
-      const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-      try {
-        return regionNames.of(countryCode) || countryCode;
-      } catch {
-        return countryCode;
-      }
-    };
-
-    const handleAssignProject = async () => {
-      if (!agreeTerms) {
-        setAssignError("You must agree to the terms before assigning the project");
-        return;
-      }
-
-      setAssigning(true);
-      setAssignError(null);
-
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("Authentication token not found");
-        }
-
-        const requestBody = {
-          projectId: selectedProject.id,
-          freelancerId: selectedBid.freelancerId,
-          clientId: selectedProject.clientId,
-        };
-
-        const response = await API.post('/client/projects/assign', requestBody, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.data.success) {
-          setAssignSuccess(true);
-        } else {
-          throw new Error(response.data.message || "Failed to assign project");
-        }
-      } catch (error) {
-        const errorMessage = error.response?.data?.message ||
-          error.message ||
-          "An error occurred while assigning the project";
-        setAssignError(errorMessage);
-      } finally {
-        setAssigning(false);
-      }
-    };
-
-    if (!showAssignModal) return null;
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          {/* Modal Header */}
-          <div className="p-6 border-b border-gray-100">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-gray-900">
-                Assign Project
-              </h3>
-              <button
-                onClick={closeAssignModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <X className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-
-          {/* Modal Content */}
-          <div className="p-6 space-y-6">
-            {/* Success Message */}
-            {assignSuccess && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <h4 className="text-lg font-semibold text-green-900 mb-1">
-                  Project Assigned Successfully!
-                </h4>
-                <p className="text-green-700">
-                  The freelancer has been notified and can now start working on your project.
-                </p>
-                <button
-                  onClick={closeAssignModal}
-                  className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  Close
-                </button>
-              </div>
-            )}
-
-            {!assignSuccess && (
-              <>
-                {/* Project Information */}
-                <div className="bg-blue-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
-                    <FileText className="h-5 w-5 mr-2" />
-                    Project: {selectedProject?.title}
-                  </h4>
-                  <p className="text-blue-800 text-sm">
-                    {selectedProject?.description}
-                  </p>
-                  <div className="flex items-center space-x-4 mt-3 text-sm text-blue-700">
-                    <span className="flex items-center">
-                      <DollarSign className="h-4 w-4 mr-1" />
-                      Budget: ${selectedProject?.budget?.toFixed(2)}
-                    </span>
-                    <span className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      Due: {selectedProject?.deadline ? new Date(selectedProject.deadline).toLocaleDateString() : 'N/A'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Freelancer Details */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                    <User className="h-5 w-5 mr-2" />
-                    Selected Freelancer
-                  </h4>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                      <span className="text-gray-600 font-medium text-lg">
-                        {selectedBid.freelancerName
-                          .split(" ")
-                          .map((name) => name[0])
-                          .join("")}
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <h5 className="font-semibold text-gray-900 mb-1">
-                        {selectedBid.freelancerName}
-                      </h5>
-                      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
-                        <span className="flex items-center">
-                          <MapPin className="h-4 w-4 mr-1" />
-                          {selectedBid.city}, {getCountryName(selectedBid.country)}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4 mt-3">
-                        <div className="bg-white rounded-lg p-3 border">
-                          <p className="text-sm text-gray-600">Bid Amount</p>
-                          <p className="text-xl font-bold text-gray-900">
-                            ${selectedBid.amount.toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="bg-white rounded-lg p-3 border">
-                          <p className="text-sm text-gray-600">Delivery Time</p>
-                          <p className="text-xl font-bold text-gray-900">
-                            {selectedBid.deliveryDays} day{selectedBid.deliveryDays !== 1 ? 's' : ''}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-3">
-                        <p className="text-sm text-gray-600 mb-2">Proposal:</p>
-                        <p className="text-gray-700 text-sm bg-white p-3 rounded border">
-                          {selectedBid.proposal}
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 mb-2">
+                          {project.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-3">
+                          {project.description}
                         </p>
-                      </div>
-                      <div className="mt-3">
-                        <p className="text-sm text-gray-600 mb-2">Skills:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {selectedBid.skills.map((skill, index) => (
-                            <span
-                              key={index}
-                              className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
-                            >
-                              {skill}
-                            </span>
-                          ))}
+                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <span className="flex items-center">
+                            <DollarSign className="h-4 w-4 mr-1" />$
+                            {project.budget.toFixed(2)}
+                          </span>
+                          <span className="flex items-center">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            Due: {formatDate(project.deadline)}
+                          </span>
                         </div>
                       </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                          {project.status}
+                        </span>
+                        <button
+                          onClick={() => setSelectedAssignedProject(project)}
+                          className="px-3 py-1 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
+                    {project.assignedAt && (
+                      <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                        Assigned on: {formatDate(project.assignedAt)}
+                      </div>
+                    )}
                   </div>
-                </div>
-
-
-                {/* Terms Agreement */}
-                <div className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    id="terms"
-                    checked={agreeTerms}
-                    onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <label htmlFor="terms" className="text-sm text-gray-600">
-                    I agree to assign this project to the selected freelancer and understand that payment will be processed according to the agreed terms and project milestones.
-                  </label>
-                </div>
-
-                {/* Error Message */}
-                {assignError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex">
-                      <X className="h-5 w-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
-                      <p className="text-red-700 text-sm">{assignError}</p>
-                    </div>
-                  </div>
-                )}
-              </>
+                ))}
+              </div>
             )}
           </div>
-
-          {/* Modal Footer */}
-          {!assignSuccess && (
-            <div className="p-6 border-t border-gray-100 flex items-center justify-end space-x-4">
-              <button
-                onClick={closeAssignModal}
-                disabled={assigning}
-                className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAssignProject}
-                disabled={assigning || !agreeTerms}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
-              >
-                {assigning ? (
-                  <>
-                    <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                    Assigning...
-                  </>
-                ) : (
-                  'Assign Project'
-                )}
-              </button>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -1648,18 +1263,6 @@ function ClientDashboard() {
       fetchAssignedProject();
     }, [project.id]);
 
-    if (loading) {
-      return <div>Loading project details...</div>;
-    }
-
-    if (error) {
-      return <div className="error-message">{error}</div>;
-    }
-
-    if (!assignedProject) {
-      return <div>No project data available</div>;
-    }
-
     const formatDate = (dateString) => {
       const date = new Date(dateString);
       return date.toLocaleDateString("en-US", {
@@ -1678,12 +1281,38 @@ function ClientDashboard() {
       }
     };
 
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="bg-red-50 border-l-4 border-red-500 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <X className="h-5 w-5 text-red-500" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (!assignedProject) {
+      return <div>No project data available</div>;
+    }
+
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 max-w-2xl w-full">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-900">
-            Project Name - {project.title}
-
+            {project.title}
           </h2>
           <button
             onClick={onClose}
@@ -1694,17 +1323,17 @@ function ClientDashboard() {
         </div>
 
         <div className="p-6 space-y-6">
-          {/* Project Summary */}
           <div className="bg-blue-50 rounded-lg p-4">
             <h3 className="font-semibold text-blue-900 mb-2">Project Summary</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-blue-700">Status</p>
                 <p className="font-medium">
-                  <span className={`px-2 py-1 rounded text-xs ${project.status === "Assigned"
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-green-100 text-green-800"
-                    }`}>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    project.status === "Assigned"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-green-100 text-green-800"
+                  }`}>
                     {project.status}
                   </span>
                 </p>
@@ -1720,90 +1349,84 @@ function ClientDashboard() {
             </div>
           </div>
 
-          {/* Freelancer Details Section */}
-          {
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Freelancer Information
-              </h3>
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Freelancer Information
+            </h3>
 
-              <div className="flex items-start space-x-6">
-                {/* Freelancer Avatar */}
-                <div className="flex-shrink-0">
-                  <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
-                    {assignedProject.freelancer.name ? (
-                      <span className="text-2xl font-medium text-gray-600">
-                        {assignedProject.freelancer.name
-                          .split(" ")
-                          .map((name) => name[0])
-                          .join("")}
-                      </span>
-                    ) : (
-                      <User className="h-10 w-10 text-gray-400" />
-                    )}
-                  </div>
+            <div className="flex items-start space-x-6">
+              <div className="flex-shrink-0">
+                <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+                  {assignedProject.freelancer.name ? (
+                    <span className="text-2xl font-medium text-gray-600">
+                      {assignedProject.freelancer.name
+                        .split(" ")
+                        .map(name => name[0])
+                        .join("")}
+                    </span>
+                  ) : (
+                    <User className="h-10 w-10 text-gray-400" />
+                  )}
+                </div>
+              </div>
+
+              <div className="flex-1 space-y-4">
+                <div>
+                  <h4 className="font-semibold text-gray-900 text-lg">
+                    {assignedProject.freelancer.name || "No name provided"}
+                  </h4>
+                  {assignedProject.freelancer.title && (
+                    <p className="text-gray-600">{assignedProject.freelancer.title}</p>
+                  )}
                 </div>
 
-                {/* Freelancer Info */}
-                <div className="flex-1 space-y-4">
-                  <div>
-                    <h4 className="font-semibold text-gray-900 text-lg">
-                      {assignedProject.freelancer.name || "No name provided"}
-                    </h4>
-                    {assignedProject.freelancer.title && (
-                      <p className="text-gray-600">{assignedProject.freelancer.title}</p>
-                    )}
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {assignedProject.freelancer.email && (
+                    <div>
+                      <p className="text-sm text-gray-500">Email</p>
+                      <p className="flex items-center text-gray-900">
+                        <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                        {assignedProject.freelancer.email}
+                      </p>
+                    </div>
+                  )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {assignedProject.freelancer.email && (
-                      <div>
-                        <p className="text-sm text-gray-500">Email</p>
-                        <p className="flex items-center text-gray-900">
-                          <Mail className="h-4 w-4 mr-2 text-gray-400" />
-                          {assignedProject.freelancer.email}
-                        </p>
-                      </div>
-                    )}
+                  {assignedProject.freelancer.phone && (
+                    <div>
+                      <p className="text-sm text-gray-500">Phone</p>
+                      <p className="flex items-center text-gray-900">
+                        <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                        {assignedProject.freelancer.phone}
+                      </p>
+                    </div>
+                  )}
 
-                    {assignedProject.freelancer.phone && (
-                      <div>
-                        <p className="text-sm text-gray-500">Phone</p>
-                        <p className="flex items-center text-gray-900">
-                          <Phone className="h-4 w-4 mr-2 text-gray-400" />
-                          {assignedProject.freelancer.phone}
-                        </p>
-                      </div>
-                    )}
+                  {(project.freelancerCity || project.freelancerCountry) && (
+                    <div>
+                      <p className="text-sm text-gray-500">Location</p>
+                      <p className="flex items-center text-gray-900">
+                        <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                        {[project.freelancerCity, getCountryName(project.freelancerCountry)]
+                          .filter(Boolean)
+                          .join(", ")}
+                      </p>
+                    </div>
+                  )}
 
-                    {(project.freelancerCity || project.freelancerCountry) && (
-                      <div>
-                        <p className="text-sm text-gray-500">Location</p>
-                        <p className="flex items-center text-gray-900">
-                          <MapPin className="h-4 w-4 mr-2 text-gray-400" />
-                          {[project.freelancerCity, getCountryName(project.freelancerCountry)]
-                            .filter(Boolean)
-                            .join(", ")}
-                        </p>
-                      </div>
-                    )}
-
-                    {project.bidAmount && (
-                      <div>
-                        <p className="text-sm text-gray-500">Bid Amount</p>
-                        <p className="flex items-center text-gray-900">
-                          <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
-                          ${project.bidAmount.toFixed(2)}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-
+                  {project.bidAmount && (
+                    <div>
+                      <p className="text-sm text-gray-500">Bid Amount</p>
+                      <p className="flex items-center text-gray-900">
+                        <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
+                        ${project.bidAmount.toFixed(2)}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          }
-          {/* Action Buttons */}
+          </div>
+
           <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
             <button
               onClick={onClose}
@@ -1816,9 +1439,363 @@ function ClientDashboard() {
       </div>
     );
   };
+
+  const Settings = () => {
+    const [settingsData, setSettingsData] = useState({
+      firstName: "John",
+      lastName: "Anderson",
+      email: "john.anderson@example.com",
+      phone: "+1 (555) 123-4567",
+      company: "TechStart Inc.",
+    
+    });
+
+    const [isLoading, setSaveLoading] = useState(false);
+    const [saveSuccess, setSaveSuccess] = useState(false);
+
+    const handleInputChange = (field, value) => {
+      if (field.startsWith("notifications.")) {
+        const notificationField = field.split(".")[1];
+        setSettingsData(prev => ({
+          ...prev,
+          notifications: {
+            ...prev.notifications,
+            [notificationField]: value,
+          },
+        }));
+      } else {
+        setSettingsData(prev => ({
+          ...prev,
+          [field]: value,
+        }));
+      }
+    };
+
+    const handleSaveSettings = async () => {
+      setSaveLoading(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error saving settings:", error);
+      } finally {
+        setSaveLoading(false);
+      }
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-900">Settings</h2>
+            <p className="text-gray-600 mt-1">
+              Manage your account and preferences
+            </p>
+          </div>
+          <div className="px-6 py-4">
+            <nav className="flex space-x-8">
+              {[
+                { id: "profile", label: "Profile", icon: User },
+                { id: "notifications", label: "Notifications", icon: Bell },
+                { id: "security", label: "Security", icon: Shield },
+                { id: "billing", label: "Billing", icon: CreditCard },
+              ].map(section => {
+                const Icon = section.icon;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => setActiveSettingsSection(section.id)}
+                    className={`flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      activeSettingsSection === section.id
+                        ? "bg-blue-100 text-blue-700"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 mr-2" />
+                    {section.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+
+        {activeSettingsSection === "profile" && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Profile Settings
+              </h3>
+              <p className="text-gray-600 mt-1">
+                Update your personal information and profile details
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-1">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="relative">
+                      <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <User className="h-12 w-12 text-blue-600" />
+                      </div>
+                      <button className="absolute bottom-4 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors">
+                        <Camera className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <h3 className="font-semibold text-gray-900">
+                      {clientData?.personName}
+                    </h3>
+                    
+                    <div className="mt-4 flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-sm text-green-600">Online</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="lg:col-span-2 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        value={clientData?.personName.split(" ")[0]}
+                        onChange={(e) =>
+                          handleInputChange("firstName", e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        value={clientData?.personName.split(" ")[1]}
+                        onChange={(e) =>
+                          handleInputChange("lastName", e.target.value)
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={clientData?.email}
+                      onChange={(e) =>
+                        handleInputChange("email", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={clientData?.phoneNumber}
+                      onChange={(e) =>
+                        handleInputChange("phone", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Company
+                    </label>
+                    <input
+                      type="text"
+                      value={clientData.companyName}
+                      onChange={(e) =>
+                        handleInputChange("company", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSettingsSection === "notifications" && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Notifications
+              </h3>
+              <p className="text-gray-600 mt-1">
+                Configure how and when you receive notifications
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              {[
+                {
+                  key: "newBids",
+                  label: "New bid notifications",
+                  description:
+                    "Get notified when freelancers submit bids on your projects",
+                },
+                {
+                  key: "projectUpdates",
+                  label: "Project updates",
+                  description:
+                    "Receive updates on your active projects and milestones",
+                },
+              ].map(item => (
+                <div
+                  key={item.key}
+                  className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0"
+                >
+                  <div>
+                    <p className="font-medium text-gray-900">{item.label}</p>
+                    <p className="text-sm text-gray-600">{item.description}</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={settingsData.notifications[item.key]}
+                      onChange={(e) =>
+                        handleInputChange(
+                          `notifications.${item.key}`,
+                          e.target.checked
+                        )
+                      }
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeSettingsSection === "security" && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">Security</h3>
+              <p className="text-gray-600 mt-1">
+                Manage your account security and authentication settings
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <Shield className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Change Password
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      Update your account password
+                    </p>
+                  </div>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeSettingsSection === "billing" && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="p-6 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">Billing</h3>
+              <p className="text-gray-600 mt-1">
+                Manage your payment methods and billing information
+              </p>
+            </div>
+            <div className="p-6 space-y-4">
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <CreditCard className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Payment Methods
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      Manage your payment options
+                    </p>
+                  </div>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+              <button className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div className="flex items-center">
+                  <FileText className="h-5 w-5 text-gray-400 mr-3" />
+                  <div className="text-left">
+                    <span className="font-medium text-gray-900">
+                      Billing History
+                    </span>
+                    <p className="text-sm text-gray-600">
+                      View your payment history
+                    </p>
+                  </div>
+                </div>
+                <span className="text-gray-400">›</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {(activeSettingsSection === "profile" ||
+          activeSettingsSection === "notifications") && (
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => {
+                setSettingsData({
+                  firstName: "John",
+                  lastName: "Anderson",
+                  email: "john.anderson@example.com",
+                  phone: "+1 (555) 123-4567",
+                  company: "TechStart Inc.",
+                  notifications: {
+                    newBids: true,
+                    projectUpdates: true,
+                  },
+                });
+              }}
+              className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Reset to Default
+            </button>
+            <button
+              onClick={handleSaveSettings}
+              disabled={isLoading}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+            >
+              {isLoading && (
+                <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+              )}
+              {isLoading ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
+        )}
+
+        {saveSuccess && (
+          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
+            <div className="flex items-center">
+              <CheckCircle className="h-5 w-5 mr-2" />
+              Settings saved successfully!
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const ProfileDropdown = () => (
     <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50 transform opacity-100 scale-100 transition-all duration-200">
-      {/* User Info Header */}
       <div className="p-6 border-b border-gray-100">
         <div className="flex items-center space-x-3">
           <div className="relative">
@@ -1828,21 +1805,15 @@ function ClientDashboard() {
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900">John Anderson</h3>
-            <p className="text-sm text-gray-600">john.anderson@example.com</p>
+            <h3 className="font-semibold text-gray-900">{clientData?.personName || "User"}</h3>
+            <p className="text-sm text-gray-600">{clientData?.email || "user@example.com"}</p>
             <div className="flex items-center mt-1">
-              <div className="flex items-center text-xs text-yellow-600">
-                <Star className="h-3 w-3 fill-current mr-1" />
-                <span>Premium Member</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Menu Items */}
       <div className="py-2">
-        {/* Account Section */}
         <div className="px-3 py-2">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             Account
@@ -1865,13 +1836,13 @@ function ClientDashboard() {
           className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           onClick={() => {
             setActiveTab("dashboard");
+            setShowProfileDropdown(false);
           }}
         >
           <Briefcase className="h-4 w-4 mr-3 text-gray-400" />
           My Projects
         </button>
 
-        {/* Billing Section */}
         <div className="border-t border-gray-100 mt-2">
           <div className="px-3 py-2">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -1897,7 +1868,6 @@ function ClientDashboard() {
           </button>
         </div>
 
-        {/* Settings Section */}
         <div className="border-t border-gray-100 mt-2">
           <div className="px-3 py-2">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -1930,7 +1900,6 @@ function ClientDashboard() {
           </button>
         </div>
 
-        {/* Help Section */}
         <div className="border-t border-gray-100 mt-2">
           <button className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
             <HelpCircle className="h-4 w-4 mr-3 text-gray-400" />
@@ -1938,7 +1907,6 @@ function ClientDashboard() {
           </button>
         </div>
 
-        {/* Logout */}
         <div className="border-t border-gray-100 mt-2">
           <button
             onClick={() => {
@@ -2000,7 +1968,6 @@ function ClientDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -2013,8 +1980,6 @@ function ClientDashboard() {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-
-              {/* Profile Dropdown */}
               <div className="relative" ref={profileDropdownRef}>
                 <button
                   onClick={() => setShowProfileDropdown(!showProfileDropdown)}
@@ -2024,8 +1989,9 @@ function ClientDashboard() {
                     <User className="h-5 w-5 text-blue-600" />
                   </div>
                   <ChevronDown
-                    className={`h-4 w-4 text-gray-400 transition-transform ${showProfileDropdown ? "rotate-180" : ""
-                      }`}
+                    className={`h-4 w-4 text-gray-400 transition-transform ${
+                      showProfileDropdown ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
 
@@ -2038,29 +2004,25 @@ function ClientDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-8">
-          {/* Sidebar */}
           <div className="w-64 bg-white rounded-xl shadow-sm border border-gray-100 h-fit">
             <nav className="p-6">
               <div className="space-y-2">
                 {[
                   { id: "dashboard", label: "Dashboard", icon: FileText },
-                  {
-                    id: "post-project",
-                    label: "Post Project",
-                    icon: PlusCircle,
-                  },
+                  { id: "post-project", label: "Post Project", icon: PlusCircle },
                   { id: "assigned-projects", label: "Assigned Projects", icon: CheckCircle },
                   { id: "settings", label: "Settings", icon: SettingsIcon },
-                ].map((item) => {
+                ].map(item => {
                   const Icon = item.icon;
                   return (
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${activeTab === item.id
-                        ? "bg-blue-50 text-blue-700 border border-blue-200"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                        }`}
+                      className={`w-full flex items-center px-4 py-3 text-left rounded-lg transition-colors ${
+                        activeTab === item.id
+                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                      }`}
                     >
                       <Icon className="h-5 w-5 mr-3" />
                       {item.label}
@@ -2071,7 +2033,6 @@ function ClientDashboard() {
             </nav>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1">
             {activeTab === "dashboard" && <Dashboard />}
             {activeTab === "post-project" && <PostProject />}
@@ -2082,12 +2043,7 @@ function ClientDashboard() {
         </div>
       </div>
 
-      {/* Modals */}
-          {showLogoutModal && <LogoutConfirmationModal />}
-
-      {showAssignModal && <AssignmentModal />}
-
-      {/* Show Assigned Project Details */}
+      {showLogoutModal && <LogoutConfirmationModal />}
       {selectedAssignedProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <AssignedProjectDetails
@@ -2097,7 +2053,6 @@ function ClientDashboard() {
         </div>
       )}
     </div>
-
   );
 }
 
