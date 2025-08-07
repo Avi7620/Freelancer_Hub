@@ -27,8 +27,7 @@ const ApplyProjectsSection = () => {
       setError(null);
 
       // Get token from localStorage - check multiple possible keys
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       if (!token) {
         throw new Error("No authentication token found. Please login first.");
@@ -71,6 +70,7 @@ const ApplyProjectsSection = () => {
 
       const data = await response.json();
       console.log("API Response data:", data);
+      data.filter((project) => project.projectStatus != "Open");
 
       // Assuming the API returns an array of projects
       // If the API returns data in a different structure (e.g., { projects: [...] }), adjust accordingly

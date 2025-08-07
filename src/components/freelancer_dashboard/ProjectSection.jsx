@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Plus,
   Search,
@@ -25,153 +25,113 @@ import {
   TrendingUp,
   FileText,
   Image,
-  Paperclip
-} from 'lucide-react';
+  Paperclip,
+} from "lucide-react";
 
-const ProjectsSection = () => {
-  const [viewMode, setViewMode] = useState('grid');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+const ProjectsSection = ({ freelancerBidData = [] }) => {
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showNewProject, setShowNewProject] = useState(false);
 
-  const projects = [
-    {
-      id: 1,
-      name: 'SaaS Dashboard Redesign',
-      client: 'TechFlow Inc.',
-      clientAvatar: 'TF',
-      status: 'In Progress',
-      priority: 'High',
-      progress: 85,
-      budget: 4500,
-      spent: 3825,
-      startDate: '2024-12-01',
-      dueDate: '2025-01-20',
-      description: 'Complete redesign of the existing dashboard with modern UI/UX principles',
-      tags: ['UI/UX', 'React', 'Dashboard'],
-      team: ['John Doe', 'Jane Smith'],
-      files: 12,
-      tasks: { completed: 17, total: 20 },
-      statusColor: 'bg-blue-500',
-      priorityColor: 'text-red-400'
-    },
-    {
-      id: 2,
-      name: 'Mobile App UI Kit',
-      client: 'StartupLab',
-      clientAvatar: 'SL',
-      status: 'Design Phase',
-      priority: 'Medium',
-      progress: 60,
-      budget: 3200,
-      spent: 1920,
-      startDate: '2024-12-15',
-      dueDate: '2025-01-25',
-      description: 'Comprehensive UI kit for mobile applications with 50+ components',
-      tags: ['Mobile', 'UI Kit', 'Figma'],
-      team: ['John Doe'],
-      files: 8,
-      tasks: { completed: 12, total: 20 },
-      statusColor: 'bg-yellow-500',
-      priorityColor: 'text-yellow-400'
-    },
-    {
-      id: 3,
-      name: 'E-commerce Platform',
-      client: 'RetailPro',
-      clientAvatar: 'RP',
-      status: 'Review',
-      priority: 'High',
-      progress: 95,
-      budget: 6800,
-      spent: 6460,
-      startDate: '2024-11-01',
-      dueDate: '2025-01-15',
-      description: 'Full-stack e-commerce solution with payment integration',
-      tags: ['E-commerce', 'Full-stack', 'Payment'],
-      team: ['John Doe', 'Mike Johnson', 'Sarah Wilson'],
-      files: 24,
-      tasks: { completed: 19, total: 20 },
-      statusColor: 'bg-green-500',
-      priorityColor: 'text-red-400'
-    },
-    {
-      id: 4,
-      name: 'Brand Identity Package',
-      client: 'Creative Studio',
-      clientAvatar: 'CS',
-      status: 'Research',
-      priority: 'Low',
-      progress: 40,
-      budget: 2100,
-      spent: 840,
-      startDate: '2025-01-01',
-      dueDate: '2025-02-01',
-      description: 'Complete brand identity including logo, guidelines, and marketing materials',
-      tags: ['Branding', 'Logo', 'Guidelines'],
-      team: ['John Doe'],
-      files: 5,
-      tasks: { completed: 8, total: 20 },
-      statusColor: 'bg-purple-500',
-      priorityColor: 'text-green-400'
-    },
-    {
-      id: 5,
-      name: 'Website Optimization',
-      client: 'Digital Agency',
-      clientAvatar: 'DA',
-      status: 'Completed',
-      priority: 'Medium',
-      progress: 100,
-      budget: 1800,
-      spent: 1800,
-      startDate: '2024-11-15',
-      dueDate: '2024-12-30',
-      description: 'Performance optimization and SEO improvements for existing website',
-      tags: ['SEO', 'Performance', 'Analytics'],
-      team: ['John Doe', 'Alex Brown'],
-      files: 15,
-      tasks: { completed: 15, total: 15 },
-      statusColor: 'bg-emerald-500',
-      priorityColor: 'text-yellow-400'
-    },
-    {
-      id: 6,
-      name: 'API Documentation',
-      client: 'DevTools Co.',
-      clientAvatar: 'DT',
-      status: 'On Hold',
-      priority: 'Low',
-      progress: 25,
-      budget: 1500,
-      spent: 375,
-      startDate: '2024-12-20',
-      dueDate: '2025-02-15',
-      description: 'Comprehensive API documentation with interactive examples',
-      tags: ['Documentation', 'API', 'Technical Writing'],
-      team: ['John Doe'],
-      files: 3,
-      tasks: { completed: 5, total: 20 },
-      statusColor: 'bg-gray-500',
-      priorityColor: 'text-green-400'
-    }
-  ];
+  // First ensure we're working with the data array from the response
+  const bidData = freelancerBidData.data || freelancerBidData;
 
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.client.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || project.status.toLowerCase().replace(' ', '-') === filterStatus;
+  const getPriorityFromStatus = (status) => {
+    switch (status) {
+      case "Pending":
+        return "Medium";
+      case "Accepted":
+        return "High";
+      case "Rejected":
+        return "Low";
+      default:
+        return "Medium";
+    }
+  };
+
+  // Helper functions
+  const formatDate = (dateString) => {
+    return new Date(dateString).toISOString().split("T")[0];
+  };
+
+  const getProgressFromStatus = (status) => {
+    switch (status) {
+      case "Accepted":
+        return 50;
+      case "Completed":
+        return 100;
+      case "Rejected":
+        return 0;
+      default:
+        return 25; // Pending
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Accepted":
+        return "bg-blue-500";
+      case "Completed":
+        return "bg-green-500";
+      case "Rejected":
+        return "bg-red-500";
+      default:
+        return "bg-yellow-500"; // Pending
+    }
+  };
+
+  const getPriorityColor = (status) => {
+    switch (status) {
+      case "Accepted":
+        return "text-red-400";
+      case "Completed":
+        return "text-green-400";
+      case "Rejected":
+        return "text-gray-400";
+      default:
+        return "text-yellow-400"; // Pending
+    }
+  };
+
+  // Map API bid data to project card format
+  const mappedProjects = (bidData || []).map((bid) => ({
+    id: bid.bidId,
+    projectId: bid.projectId,
+    name: bid.projectTitle,
+    client: bid.companyName,
+    clientAvatar: bid.companyName
+      ? bid.companyName.substring(0, 2).toUpperCase()
+      : bid.clientName
+      ? bid.clientName.substring(0, 2).toUpperCase()
+      : "CL",
+    status: bid.status,
+    budget: bid.projectBudget,
+    spent: bid.amount,
+    startDate: bid.createdAt ? formatDate(bid.createdAt) : "N/A",
+    dueDate: bid.projectDeadline ? formatDate(bid.projectDeadline) : "N/A",
+    description: bid.projectDescription,
+    deliveryDays: bid.deliveryDays,
+    statusColor: getStatusColor(bid.status),
+    priorityColor: getPriorityColor(bid.status),
+  }));
+
+  // Filter projects based on search term and status
+  const filteredProjects = mappedProjects.filter((project) => {
+    const matchesSearch = project.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesFilter =
+      filterStatus === "all" ||
+      project.status.toLowerCase() === filterStatus.toLowerCase();
     return matchesSearch && matchesFilter;
   });
 
   const statusOptions = [
-    { value: 'all', label: 'All Projects' },
-    { value: 'in-progress', label: 'In Progress' },
-    { value: 'design-phase', label: 'Design Phase' },
-    { value: 'review', label: 'Review' },
-    { value: 'research', label: 'Research' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'on-hold', label: 'On Hold' }
+    { value: "all", label: "All Projects" },
+    { value: "pending", label: "Pending" },
+    { value: "accepted", label: "Accepted" },
+    { value: "rejected", label: "Rejected" },
+    { value: "completed", label: "Completed" },
   ];
 
   const ProjectCard = ({ project }) => (
@@ -183,79 +143,47 @@ const ProjectsSection = () => {
               {project.clientAvatar}
             </div>
             <div>
-              <h3 className="font-semibold text-white text-lg">{project.name}</h3>
+              <h3 className="font-semibold text-white text-lg">
+                {project.name}
+              </h3>
               <p className="text-gray-400 text-sm">{project.client}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${project.statusColor} bg-opacity-20 text-white`}>
+            <div
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${project.statusColor} bg-opacity-20 text-white`}
+            >
               {project.status}
             </div>
-            <button className="p-2 text-gray-400 hover:text-white transition-colors">
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
           </div>
         </div>
 
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">{project.description}</p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tags.map((tag, index) => (
-            <span key={index} className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg">
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <div className="mb-4">
-          <div className="flex justify-between text-sm text-gray-400 mb-2">
-            <span>Progress</span>
-            <span>{project.progress}%</span>
-          </div>
-          <div className="w-full bg-gray-700 rounded-full h-2">
-            <div
-              className={`${project.statusColor} h-2 rounded-full transition-all duration-300`}
-              style={{ width: `${project.progress}%` }}
-            ></div>
-          </div>
-        </div>
+        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+          {project.description}
+        </p>
 
         <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
           <div>
             <div className="text-gray-400">Budget</div>
-            <div className="font-semibold text-emerald-400">${project.budget.toLocaleString()}</div>
+            <div className="font-semibold text-emerald-400">
+              ${project.budget.toLocaleString()}
+            </div>
           </div>
           <div>
-            <div className="text-gray-400">Spent</div>
-            <div className="font-semibold text-white">${project.spent.toLocaleString()}</div>
+            <div className="text-gray-400">Bid Amount</div>
+            <div className="font-semibold text-white">
+              ${project.spent.toLocaleString()}
+            </div>
           </div>
           <div>
             <div className="text-gray-400">Due Date</div>
             <div className="font-semibold text-white">{project.dueDate}</div>
           </div>
           <div>
-            <div className="text-gray-400">Tasks</div>
-            <div className="font-semibold text-white">{project.tasks.completed}/{project.tasks.total}</div>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-          <div className="flex items-center space-x-2">
-            <Users className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-400">{project.team.length} members</span>
-            <Paperclip className="w-4 h-4 text-gray-400 ml-2" />
-            <span className="text-sm text-gray-400">{project.files} files</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="p-2 text-gray-400 hover:text-blue-400 transition-colors">
-              <Eye className="w-4 h-4" />
-            </button>
-            <button className="p-2 text-gray-400 hover:text-emerald-400 transition-colors">
-              <Edit className="w-4 h-4" />
-            </button>
-            <button className="p-2 text-gray-400 hover:text-red-400 transition-colors">
-              <Trash2 className="w-4 h-4" />
-            </button>
+            <div className="text-gray-400">Days to Deliver</div>
+            <div className="font-semibold text-white">
+              {project.deliveryDays || "N/A"}
+            </div>
           </div>
         </div>
       </div>
@@ -268,9 +196,11 @@ const ProjectsSection = () => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-white">Projects</h1>
-          <p className="text-gray-400 mt-1">Manage and track all your freelance projects</p>
+          <p className="text-gray-400 mt-1">
+            Manage and track all your freelance projects
+          </p>
         </div>
-        <button 
+        <button
           onClick={() => setShowNewProject(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium flex items-center space-x-2 transition-colors"
         >
@@ -298,61 +228,50 @@ const ProjectsSection = () => {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
             >
-              {statusOptions.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
               ))}
             </select>
           </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center bg-gray-700 rounded-lg p-1">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                Grid
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
-                }`}
-              >
-                List
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Projects Grid */}
+      {/* Projects Grid - Now using filteredProjects */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filteredProjects.map(project => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+        {filteredProjects.length > 0 ? (
+          filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))
+        ) : (
+          <div className="text-center py-12 col-span-full">
+            <Folder className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-400 mb-2">
+              No projects found
+            </h3>
+            <p className="text-gray-500">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        )}
       </div>
-
-      {filteredProjects.length === 0 && (
-        <div className="text-center py-12">
-          <Folder className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-400 mb-2">No projects found</h3>
-          <p className="text-gray-500">Try adjusting your search or filter criteria</p>
-        </div>
-      )}
 
       {/* New Project Modal */}
       {showNewProject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-800 rounded-2xl border border-gray-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-gray-700">
-              <h2 className="text-2xl font-bold text-white">Create New Project</h2>
+              <h2 className="text-2xl font-bold text-white">
+                Create New Project
+              </h2>
             </div>
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Project Name</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Project Name
+                  </label>
                   <input
                     type="text"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -360,7 +279,9 @@ const ProjectsSection = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Client</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Client
+                  </label>
                   <input
                     type="text"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -368,7 +289,9 @@ const ProjectsSection = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Budget</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Budget
+                  </label>
                   <input
                     type="number"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -376,7 +299,9 @@ const ProjectsSection = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Due Date</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Due Date
+                  </label>
                   <input
                     type="date"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -384,7 +309,9 @@ const ProjectsSection = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Description
+                </label>
                 <textarea
                   rows={4}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
@@ -392,7 +319,9 @@ const ProjectsSection = () => {
                 ></textarea>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Tags
+                </label>
                 <input
                   type="text"
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500"
