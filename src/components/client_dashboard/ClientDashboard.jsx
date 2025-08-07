@@ -36,6 +36,7 @@ function ClientDashboard() {
   const [selectedAssignedProject, setSelectedAssignedProject] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const profileDropdownRef = useRef(null);
+
   const [clientData, setClientData] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [projects, setProjects] = useState([]);
@@ -45,7 +46,7 @@ function ClientDashboard() {
 
   const fetchClientData = async () => {
     let isMounted = true;
-    
+
     try {
       setLoading(true);
       const token = localStorage.getItem("token");
@@ -187,7 +188,7 @@ function ClientDashboard() {
               <div>
                 <p className="text-sm text-gray-500">Completed</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {projects.filter(p => p.status === "Completed").length}
+                  {projects.filter((p) => p.status === "Completed").length}
                 </p>
               </div>
             </div>
@@ -200,7 +201,7 @@ function ClientDashboard() {
               <div>
                 <p className="text-sm text-gray-500">In Progress</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {projects.filter(p => p.status === "In Progress").length}
+                  {projects.filter((p) => p.status === "In Progress").length}
                 </p>
               </div>
             </div>
@@ -213,7 +214,10 @@ function ClientDashboard() {
               <div>
                 <p className="text-sm text-gray-500">Total Spent</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  ${projects.reduce((sum, p) => sum + (p.budget || 0), 0).toFixed(2)}
+                  $
+                  {projects
+                    .reduce((sum, p) => sum + (p.budget || 0), 0)
+                    .toFixed(2)}
                 </p>
               </div>
             </div>
@@ -258,7 +262,7 @@ function ClientDashboard() {
             ) : (
               <div className="space-y-4">
                 {projects
-                  .filter(project => project.status === "Open")
+                  .filter((project) => project.status === "Open")
                   .map((project) => (
                     <div
                       key={project.id}
@@ -331,19 +335,22 @@ function ClientDashboard() {
     const [submitSuccess, setSubmitSuccess] = useState(false);
 
     const handleInputChange = (field, value) => {
-      setFormData(prev => ({ ...prev, [field]: value }));
-      if (errors[field]) {
-        setErrors(prev => ({ ...prev, [field]: "" }));
-      }
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
     };
 
     const validateForm = () => {
       const newErrors = {};
       if (!formData.title.trim()) newErrors.title = "Title is required";
-      if (!formData.description.trim()) newErrors.description = "Description is required";
-      if (!formData.budget || isNaN(formData.budget)) newErrors.budget = "Valid budget is required";
+      if (!formData.description.trim())
+        newErrors.description = "Description is required";
+      if (!formData.budget || isNaN(formData.budget))
+        newErrors.budget = "Valid budget is required";
       if (!formData.deadline) newErrors.deadline = "Deadline is required";
-      if (!formData.requiredSkills.length) newErrors.requiredSkills = "At least one skill is required";
+      if (!formData.requiredSkills.length)
+        newErrors.requiredSkills = "At least one skill is required";
 
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
@@ -522,10 +529,10 @@ function ClientDashboard() {
               onChange={(e) => {
                 const skills = e.target.value
                   .split(",")
-                  .map(skill => skill.trim());
+                  .map((skill) => skill.trim());
                 handleInputChange(
                   "requiredSkills",
-                  skills.filter(skill => skill)
+                  skills.filter((skill) => skill)
                 );
               }}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
@@ -540,7 +547,7 @@ function ClientDashboard() {
             )}
             <div className="flex flex-wrap gap-2 mt-2">
               {formData.requiredSkills
-                .filter(skill => skill)
+                .filter((skill) => skill)
                 .map((skill, index) => (
                   <span
                     key={index}
@@ -671,7 +678,14 @@ function ClientDashboard() {
 
     const handleAssignProject = async () => {
       if (!agreeTerms) {
-        setAssignError("You must agree to the terms before assigning the project");
+        setAssignError(
+          "You must agree to the terms before assigning the project"
+        );
+        return;
+      }
+
+      if (!selectedBid || !selectedProject) {
+        setAssignError("No bid or project selected");
         return;
       }
 
@@ -687,23 +701,29 @@ function ClientDashboard() {
         const requestBody = {
           projectId: selectedProject.id,
           freelancerId: selectedBid.freelancerId,
-          clientId: selectedProject.clientId,
+          clientId: clientData?.id, // Make sure clientData is available
         };
 
-        const response = await API.post('/client/projects/assign', requestBody, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+        const response = await API.post(
+          "/client/projects/assign",
+          requestBody,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
           }
-        });
+        );
 
         if (response.data.success) {
           setAssignSuccess(true);
-          setProjects(projects.map(project =>
-            project.id === selectedProject.id
-              ? { ...project, status: "Assigned" }
-              : project
-          ));
+          setProjects(
+            projects.map((project) =>
+              project.id === selectedProject.id
+                ? { ...project, status: "Assigned" }
+                : project
+            )
+          );
           setTimeout(() => {
             setShowAssignModal(false);
             setAssignSuccess(false);
@@ -717,7 +737,8 @@ function ClientDashboard() {
           throw new Error(response.data.message || "Failed to assign project");
         }
       } catch (error) {
-        const errorMessage = error.response?.data?.message ||
+        const errorMessage =
+          error.response?.data?.message ||
           error.message ||
           "An error occurred while assigning the project";
         setAssignError(errorMessage);
@@ -769,10 +790,10 @@ function ClientDashboard() {
     }
 
     const filteredBids = projectBids.data.bids.filter(
-      bid =>
+      (bid) =>
         bid.freelancerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bid.proposal.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bid.skills.some(skill =>
+        bid.skills.some((skill) =>
           skill.toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
@@ -787,7 +808,8 @@ function ClientDashboard() {
               </h2>
               <p className="text-gray-600 mt-1">
                 {projectBids.data.bids.length} freelancer
-                {projectBids.data.bids.length !== 1 ? "s have" : " has"} submitted proposals
+                {projectBids.data.bids.length !== 1 ? "s have" : " has"}{" "}
+                submitted proposals
               </p>
             </div>
             <div className="flex items-center space-x-3">
@@ -805,7 +827,7 @@ function ClientDashboard() {
           </div>
 
           <div className="space-y-4">
-            {filteredBids.map(bid => (
+            {filteredBids.map((bid) => (
               <div
                 key={bid.bidId}
                 className="border border-gray-200 rounded-lg p-6 hover:border-blue-300 transition-colors"
@@ -816,7 +838,7 @@ function ClientDashboard() {
                       <span className="text-gray-600 font-medium">
                         {bid.freelancerName
                           .split(" ")
-                          .map(name => name[0])
+                          .map((name) => name[0])
                           .join("")}
                       </span>
                     </div>
@@ -885,7 +907,7 @@ function ClientDashboard() {
           </div>
         </div>
 
-        {showAssignModal && (
+        {showAssignModal && selectedBid && selectedProject && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-gray-100">
@@ -915,7 +937,8 @@ function ClientDashboard() {
                       Project Assigned Successfully!
                     </h4>
                     <p className="text-green-700">
-                      The freelancer has been notified and can now start working on your project.
+                      The freelancer has been notified and can now start working
+                      on your project.
                     </p>
                     <button
                       onClick={() => {
@@ -929,87 +952,127 @@ function ClientDashboard() {
                   </div>
                 ) : (
                   <>
+                    {/* Project Details Section */}
                     <div className="bg-blue-50 rounded-lg p-4">
                       <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
                         <FileText className="h-5 w-5 mr-2" />
-                        Project: {selectedProject?.title}
+                        Project Details
                       </h4>
-                      <p className="text-blue-800 text-sm">
-                        {selectedProject?.description}
-                      </p>
-                      <div className="flex items-center space-x-4 mt-3 text-sm text-blue-700">
-                        <span className="flex items-center">
-                          <DollarSign className="h-4 w-4 mr-1" />
-                          Budget: ${selectedProject?.budget?.toFixed(2)}
-                        </span>
-                        <span className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          Due: {selectedProject?.deadline ? new Date(selectedProject.deadline).toLocaleDateString() : 'N/A'}
-                        </span>
+                      <div className="grid grid-cols-2 gap-4 mt-3">
+                        <div>
+                          <p className="text-sm text-blue-700">Project Title</p>
+                          <p className="font-medium">{selectedProject.title}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-blue-700">Status</p>
+                          <p className="font-medium">
+                            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                              {selectedProject.status}
+                            </span>
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-blue-700">Budget</p>
+                          <p className="font-medium">
+                            ${selectedProject.budget?.toFixed(2)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-blue-700">Deadline</p>
+                          <p className="font-medium">
+                            {selectedProject.deadline
+                              ? new Date(
+                                  selectedProject.deadline
+                                ).toLocaleDateString()
+                              : "N/A"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-blue-700">Description</p>
+                        <p className="text-blue-800 text-sm mt-1">
+                          {selectedProject.description}
+                        </p>
                       </div>
                     </div>
 
+                    {/* Freelancer Details Section */}
                     <div className="bg-gray-50 rounded-lg p-4">
                       <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
                         <User className="h-5 w-5 mr-2" />
-                        Selected Freelancer
+                        Freelancer Details
                       </h4>
                       <div className="flex items-start space-x-4">
                         <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                           <span className="text-gray-600 font-medium text-lg">
                             {selectedBid.freelancerName
-                              .split(" ")
-                              .map(name => name[0])
+                              ?.split(" ")
+                              .map((name) => name[0])
                               .join("")}
                           </span>
                         </div>
                         <div className="flex-1">
                           <h5 className="font-semibold text-gray-900 mb-1">
-                            {selectedBid.freelancerName}
+                            {selectedBid.freelancerName || "N/A"}
                           </h5>
-                          <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
-                            <span className="flex items-center">
-                              <MapPin className="h-4 w-4 mr-1" />
-                              {selectedBid.city}, {getCountryName(selectedBid.country)}
-                            </span>
-                          </div>
                           <div className="grid grid-cols-2 gap-4 mt-3">
-                            <div className="bg-white rounded-lg p-3 border">
-                              <p className="text-sm text-gray-600">Bid Amount</p>
-                              <p className="text-xl font-bold text-gray-900">
-                                ${selectedBid.amount.toFixed(2)}
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Bid Amount
+                              </p>
+                              <p className="font-medium">
+                                ${selectedBid.amount?.toFixed(2) || "0.00"}
                               </p>
                             </div>
-                            <div className="bg-white rounded-lg p-3 border">
-                              <p className="text-sm text-gray-600">Delivery Time</p>
-                              <p className="text-xl font-bold text-gray-900">
-                                {selectedBid.deliveryDays} day{selectedBid.deliveryDays !== 1 ? 's' : ''}
+                            <div>
+                              <p className="text-sm text-gray-500">
+                                Delivery Time
+                              </p>
+                              <p className="font-medium">
+                                {selectedBid.deliveryDays || "0"} day
+                                {selectedBid.deliveryDays !== 1 ? "s" : ""}
                               </p>
                             </div>
+                            {selectedBid.city && (
+                              <div>
+                                <p className="text-sm text-gray-500">
+                                  Location
+                                </p>
+                                <p className="font-medium">
+                                  {selectedBid.city}
+                                  {selectedBid.country
+                                    ? `, ${getCountryName(selectedBid.country)}`
+                                    : ""}
+                                </p>
+                              </div>
+                            )}
                           </div>
                           <div className="mt-3">
-                            <p className="text-sm text-gray-600 mb-2">Proposal:</p>
+                            <p className="text-sm text-gray-500">Proposal:</p>
                             <p className="text-gray-700 text-sm bg-white p-3 rounded border">
-                              {selectedBid.proposal}
+                              {selectedBid.proposal || "No proposal provided"}
                             </p>
                           </div>
-                          <div className="mt-3">
-                            <p className="text-sm text-gray-600 mb-2">Skills:</p>
-                            <div className="flex flex-wrap gap-2">
-                              {selectedBid.skills.map((skill, index) => (
-                                <span
-                                  key={index}
-                                  className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
-                                >
-                                  {skill}
-                                </span>
-                              ))}
+                          {selectedBid.skills?.length > 0 && (
+                            <div className="mt-3">
+                              <p className="text-sm text-gray-500">Skills:</p>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedBid.skills.map((skill, index) => (
+                                  <span
+                                    key={index}
+                                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs"
+                                  >
+                                    {skill}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     </div>
 
+                    {/* Terms Agreement Section */}
                     <div className="flex items-start space-x-3">
                       <input
                         type="checkbox"
@@ -1019,7 +1082,12 @@ function ClientDashboard() {
                         className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <label htmlFor="terms" className="text-sm text-gray-600">
-                        I agree to assign this project to the selected freelancer and understand that payment will be processed according to the agreed terms and project milestones.
+                        I agree to assign this project to{" "}
+                        {selectedBid.freelancerName} for $
+                        {selectedBid.amount?.toFixed(2)}
+                        with a delivery time of {selectedBid.deliveryDays} days.
+                        I understand that payment will be processed according to
+                        the agreed terms and project milestones.
                       </label>
                     </div>
 
@@ -1059,7 +1127,7 @@ function ClientDashboard() {
                         Assigning...
                       </>
                     ) : (
-                      'Assign Project'
+                      "Assign Project"
                     )}
                   </button>
                 </div>
@@ -1095,15 +1163,19 @@ function ClientDashboard() {
 
           if (response.data.success) {
             const filteredProjects = response.data.data.filter(
-              project => project.status !== "Open"
+              (project) => project.status !== "Open"
             );
             setAssignedProjects(filteredProjects);
           } else {
-            setError(response.data.message || "Failed to fetch assigned projects");
+            setError(
+              response.data.message || "Failed to fetch assigned projects"
+            );
           }
         } catch (err) {
           console.error("Error fetching assigned projects:", err);
-          setError(err.response?.data?.message || "Failed to fetch assigned projects");
+          setError(
+            err.response?.data?.message || "Failed to fetch assigned projects"
+          );
         } finally {
           setLoading(false);
         }
@@ -1174,7 +1246,7 @@ function ClientDashboard() {
               </div>
             ) : (
               <div className="space-y-4">
-                {assignedProjects.map(project => (
+                {assignedProjects.map((project) => (
                   <div
                     key={project.id}
                     className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors"
@@ -1241,20 +1313,29 @@ function ClientDashboard() {
             throw new Error("Authentication required");
           }
 
-          const response = await API.get(`/client/project-details/${project.id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await API.get(
+            `/client/project-details/${project.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
           if (response.data.success) {
             setAssignedProject(response.data.data);
           } else {
-            setError(response.data.message || "Failed to fetch assigned project");
+            setError(
+              response.data.message || "Failed to fetch assigned project"
+            );
           }
         } catch (err) {
           console.error("Error fetching assigned project:", err);
-          setError(err.response?.data?.message || err.message || "Failed to fetch assigned project");
+          setError(
+            err.response?.data?.message ||
+              err.message ||
+              "Failed to fetch assigned project"
+          );
         } finally {
           setLoading(false);
         }
@@ -1324,16 +1405,20 @@ function ClientDashboard() {
 
         <div className="p-6 space-y-6">
           <div className="bg-blue-50 rounded-lg p-4">
-            <h3 className="font-semibold text-blue-900 mb-2">Project Summary</h3>
+            <h3 className="font-semibold text-blue-900 mb-2">
+              Project Summary
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-blue-700">Status</p>
                 <p className="font-medium">
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    project.status === "Assigned"
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-green-100 text-green-800"
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded text-xs ${
+                      project.status === "Assigned"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-green-100 text-green-800"
+                    }`}
+                  >
                     {project.status}
                   </span>
                 </p>
@@ -1361,7 +1446,7 @@ function ClientDashboard() {
                     <span className="text-2xl font-medium text-gray-600">
                       {assignedProject.freelancer.name
                         .split(" ")
-                        .map(name => name[0])
+                        .map((name) => name[0])
                         .join("")}
                     </span>
                   ) : (
@@ -1376,7 +1461,9 @@ function ClientDashboard() {
                     {assignedProject.freelancer.name || "No name provided"}
                   </h4>
                   {assignedProject.freelancer.title && (
-                    <p className="text-gray-600">{assignedProject.freelancer.title}</p>
+                    <p className="text-gray-600">
+                      {assignedProject.freelancer.title}
+                    </p>
                   )}
                 </div>
 
@@ -1406,7 +1493,10 @@ function ClientDashboard() {
                       <p className="text-sm text-gray-500">Location</p>
                       <p className="flex items-center text-gray-900">
                         <MapPin className="h-4 w-4 mr-2 text-gray-400" />
-                        {[project.freelancerCity, getCountryName(project.freelancerCountry)]
+                        {[
+                          project.freelancerCity,
+                          getCountryName(project.freelancerCountry),
+                        ]
                           .filter(Boolean)
                           .join(", ")}
                       </p>
@@ -1417,8 +1507,8 @@ function ClientDashboard() {
                     <div>
                       <p className="text-sm text-gray-500">Bid Amount</p>
                       <p className="flex items-center text-gray-900">
-                        <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
-                        ${project.bidAmount.toFixed(2)}
+                        <DollarSign className="h-4 w-4 mr-2 text-gray-400" />$
+                        {project.bidAmount.toFixed(2)}
                       </p>
                     </div>
                   )}
@@ -1441,42 +1531,101 @@ function ClientDashboard() {
   };
 
   const Settings = () => {
-    const [settingsData, setSettingsData] = useState({
-      firstName: "John",
-      lastName: "Anderson",
-      email: "john.anderson@example.com",
-      phone: "+1 (555) 123-4567",
-      company: "TechStart Inc.",
-    
-    });
-
     const [isLoading, setSaveLoading] = useState(false);
     const [saveSuccess, setSaveSuccess] = useState(false);
+    const [formData, setFormData] = useState({
+      phone: "",
+      company: "",
+      notifications: {
+        newBids: true,
+        projectUpdates: true,
+      },
+    });
+
+    // Initialize form data when clientData is available
+    useEffect(() => {
+      if (clientData) {
+        setFormData({
+          phone: clientData.phoneNumber || "",
+          company: clientData.companyName || "",
+          notifications: {
+            newBids: true,
+            projectUpdates: true,
+          },
+        });
+      }
+    }, [clientData]);
 
     const handleInputChange = (field, value) => {
-      if (field.startsWith("notifications.")) {
-        const notificationField = field.split(".")[1];
-        setSettingsData(prev => ({
+      if (field.includes(".")) {
+        // Handle nested fields like notifications.newBids
+        const [parent, child] = field.split(".");
+        setFormData((prev) => ({
           ...prev,
-          notifications: {
-            ...prev.notifications,
-            [notificationField]: value,
+          [parent]: {
+            ...prev[parent],
+            [child]: value,
           },
         }));
       } else {
-        setSettingsData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           [field]: value,
         }));
       }
     };
 
+    const handleReset = () => {
+      if (clientData) {
+        setFormData({
+          phone: clientData.phoneNumber || "",
+          company: clientData.companyName || "",
+          notifications: {
+            newBids: true,
+            projectUpdates: true,
+          },
+        });
+      }
+    };
+
     const handleSaveSettings = async () => {
       setSaveLoading(true);
       try {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        setSaveSuccess(true);
-        setTimeout(() => setSaveSuccess(false), 3000);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Authentication required");
+        }
+
+        const response = await API.put(
+          "/client/profile",
+          {
+            phoneNumber: formData.phone,
+            companyName: formData.company,
+            // Add notification preferences if needed
+            notificationPreferences: formData.notifications,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setSaveSuccess(true);
+          await new promise((resolve) => setTimeout(resolve, 3000));
+          // Update client data in state
+          setClientData({
+            ...clientData,
+            phoneNumber: formData.phone,
+            companyName: formData.company,
+          });
+          // Hide success message after 3 seconds
+          setTimeout(() => setSaveSuccess(false), 3000);
+        } else {
+          throw new Error(response.data.message || "Failed to save settings");
+        }
       } catch (error) {
         console.error("Error saving settings:", error);
       } finally {
@@ -1497,10 +1646,9 @@ function ClientDashboard() {
             <nav className="flex space-x-8">
               {[
                 { id: "profile", label: "Profile", icon: User },
-                { id: "notifications", label: "Notifications", icon: Bell },
                 { id: "security", label: "Security", icon: Shield },
                 { id: "billing", label: "Billing", icon: CreditCard },
-              ].map(section => {
+              ].map((section) => {
                 const Icon = section.icon;
                 return (
                   <button
@@ -1520,6 +1668,16 @@ function ClientDashboard() {
             </nav>
           </div>
         </div>
+
+        {/* Success message popup - moved to top of return */}
+        {saveSuccess && (
+          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50">
+            <div className="flex items-center">
+              <CheckCircle className="h-5 w-5 mr-2" />
+              Settings saved successfully!
+            </div>
+          </div>
+        )}
 
         {activeSettingsSection === "profile" && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100">
@@ -1546,7 +1704,7 @@ function ClientDashboard() {
                     <h3 className="font-semibold text-gray-900">
                       {clientData?.personName}
                     </h3>
-                    
+
                     <div className="mt-4 flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-sm text-green-600">Online</span>
@@ -1561,10 +1719,8 @@ function ClientDashboard() {
                       </label>
                       <input
                         type="text"
+                        disabled
                         value={clientData?.personName.split(" ")[0]}
-                        onChange={(e) =>
-                          handleInputChange("firstName", e.target.value)
-                        }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -1574,10 +1730,8 @@ function ClientDashboard() {
                       </label>
                       <input
                         type="text"
+                        disabled
                         value={clientData?.personName.split(" ")[1]}
-                        onChange={(e) =>
-                          handleInputChange("lastName", e.target.value)
-                        }
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
@@ -1589,9 +1743,7 @@ function ClientDashboard() {
                     <input
                       type="email"
                       value={clientData?.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
+                      disabled
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -1601,7 +1753,7 @@ function ClientDashboard() {
                     </label>
                     <input
                       type="tel"
-                      value={clientData?.phoneNumber}
+                      value={formData.phone}
                       onChange={(e) =>
                         handleInputChange("phone", e.target.value)
                       }
@@ -1614,7 +1766,7 @@ function ClientDashboard() {
                     </label>
                     <input
                       type="text"
-                      value={clientData.companyName}
+                      value={formData.company}
                       onChange={(e) =>
                         handleInputChange("company", e.target.value)
                       }
@@ -1623,59 +1775,6 @@ function ClientDashboard() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        )}
-
-        {activeSettingsSection === "notifications" && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Notifications
-              </h3>
-              <p className="text-gray-600 mt-1">
-                Configure how and when you receive notifications
-              </p>
-            </div>
-            <div className="p-6 space-y-4">
-              {[
-                {
-                  key: "newBids",
-                  label: "New bid notifications",
-                  description:
-                    "Get notified when freelancers submit bids on your projects",
-                },
-                {
-                  key: "projectUpdates",
-                  label: "Project updates",
-                  description:
-                    "Receive updates on your active projects and milestones",
-                },
-              ].map(item => (
-                <div
-                  key={item.key}
-                  className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0"
-                >
-                  <div>
-                    <p className="font-medium text-gray-900">{item.label}</p>
-                    <p className="text-sm text-gray-600">{item.description}</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={settingsData.notifications[item.key]}
-                      onChange={(e) =>
-                        handleInputChange(
-                          `notifications.${item.key}`,
-                          e.target.checked
-                        )
-                      }
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-              ))}
             </div>
           </div>
         )}
@@ -1752,19 +1851,7 @@ function ClientDashboard() {
           activeSettingsSection === "notifications") && (
           <div className="flex justify-end space-x-4">
             <button
-              onClick={() => {
-                setSettingsData({
-                  firstName: "John",
-                  lastName: "Anderson",
-                  email: "john.anderson@example.com",
-                  phone: "+1 (555) 123-4567",
-                  company: "TechStart Inc.",
-                  notifications: {
-                    newBids: true,
-                    projectUpdates: true,
-                  },
-                });
-              }}
+              onClick={handleReset}
               className="px-6 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Reset to Default
@@ -1774,20 +1861,15 @@ function ClientDashboard() {
               disabled={isLoading}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
             >
-              {isLoading && (
-                <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+              {isLoading ? (
+                <>
+                  <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Saving...
+                </>
+              ) : (
+                "Save Changes"
               )}
-              {isLoading ? "Saving..." : "Save Changes"}
             </button>
-          </div>
-        )}
-
-        {saveSuccess && (
-          <div className="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg">
-            <div className="flex items-center">
-              <CheckCircle className="h-5 w-5 mr-2" />
-              Settings saved successfully!
-            </div>
           </div>
         )}
       </div>
@@ -1805,10 +1887,13 @@ function ClientDashboard() {
             <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-gray-900">{clientData?.personName || "User"}</h3>
-            <p className="text-sm text-gray-600">{clientData?.email || "user@example.com"}</p>
-            <div className="flex items-center mt-1">
-            </div>
+            <h3 className="font-semibold text-gray-900">
+              {clientData?.personName || "User"}
+            </h3>
+            <p className="text-sm text-gray-600">
+              {clientData?.email || "user@example.com"}
+            </p>
+            <div className="flex items-center mt-1"></div>
           </div>
         </div>
       </div>
@@ -1878,18 +1963,6 @@ function ClientDashboard() {
           <button
             onClick={() => {
               setActiveTab("settings");
-              setActiveSettingsSection("notifications");
-              setShowProfileDropdown(false);
-            }}
-            className="w-full flex items-center px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            <Bell className="h-4 w-4 mr-3 text-gray-400" />
-            Notifications
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveTab("settings");
               setActiveSettingsSection("security");
               setShowProfileDropdown(false);
             }}
@@ -1930,7 +2003,9 @@ function ClientDashboard() {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-gray-900">Confirm Logout</h3>
+            <h3 className="text-xl font-semibold text-gray-900">
+              Confirm Logout
+            </h3>
             <button
               onClick={() => setShowLogoutModal(false)}
               className="text-gray-400 hover:text-gray-600"
@@ -1940,7 +2015,8 @@ function ClientDashboard() {
           </div>
 
           <p className="text-gray-600 mb-6">
-            Are you sure you want to log out? You'll need to sign in again to access your account.
+            Are you sure you want to log out? You'll need to sign in again to
+            access your account.
           </p>
 
           <div className="flex justify-end space-x-4">
@@ -1954,7 +2030,7 @@ function ClientDashboard() {
               onClick={() => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
-                window.location.href = '/login';
+                window.location.href = "/login";
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
@@ -2009,10 +2085,18 @@ function ClientDashboard() {
               <div className="space-y-2">
                 {[
                   { id: "dashboard", label: "Dashboard", icon: FileText },
-                  { id: "post-project", label: "Post Project", icon: PlusCircle },
-                  { id: "assigned-projects", label: "Assigned Projects", icon: CheckCircle },
+                  {
+                    id: "post-project",
+                    label: "Post Project",
+                    icon: PlusCircle,
+                  },
+                  {
+                    id: "assigned-projects",
+                    label: "Assigned Projects",
+                    icon: CheckCircle,
+                  },
                   { id: "settings", label: "Settings", icon: SettingsIcon },
-                ].map(item => {
+                ].map((item) => {
                   const Icon = item.icon;
                   return (
                     <button

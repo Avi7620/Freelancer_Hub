@@ -56,7 +56,9 @@ const ProfileTab = ({
       </div>
     )}
     <div>
-      <h2 className="text-2xl font-bold text-white mb-6">Profile Information</h2>
+      <h2 className="text-2xl font-bold text-white mb-6">
+        Profile Information
+      </h2>
       <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
@@ -64,7 +66,6 @@ const ProfileTab = ({
           </div>
         ) : (
           <>
-
             <div className="flex items-center space-x-6 mb-8">
               <div className="relative">
                 {formState.profileImage ? (
@@ -147,18 +148,6 @@ const ProfileTab = ({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formState.phone}
-                    onChange={handleChange}
-                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
                     Country
                   </label>
                   <input
@@ -217,7 +206,6 @@ const ProfileTab = ({
                     Experience
                   </label>
                   <div>
-
                     <select
                       name="experience"
                       value={formState.experience}
@@ -226,7 +214,9 @@ const ProfileTab = ({
                     >
                       <option value="">Select experience level</option>
                       <option value="entry">Entry Level (0-2 years)</option>
-                      <option value="intermediate">Intermediate (2-5 years)</option>
+                      <option value="intermediate">
+                        Intermediate (2-5 years)
+                      </option>
                       <option value="expert">Expert (5+ years)</option>
                     </select>
                   </div>
@@ -240,7 +230,6 @@ const ProfileTab = ({
                     name="hourlyRate"
                     value={formState.hourlyRate}
                     onChange={handleChange}
-
                     placeholder="50"
                     min="0"
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -387,12 +376,14 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("email")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.email ? "bg-blue-600" : "bg-gray-600"
-                  }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.email ? "bg-blue-600" : "bg-gray-600"
+                }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.email ? "translate-x-6" : "translate-x-1"
-                    }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.email ? "translate-x-6" : "translate-x-1"
+                  }`}
                 />
               </button>
             </div>
@@ -408,14 +399,16 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("projectUpdates")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.projectUpdates ? "bg-blue-600" : "bg-gray-600"
-                  }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.projectUpdates ? "bg-blue-600" : "bg-gray-600"
+                }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.projectUpdates
-                    ? "translate-x-6"
-                    : "translate-x-1"
-                    }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.projectUpdates
+                      ? "translate-x-6"
+                      : "translate-x-1"
+                  }`}
                 />
               </button>
             </div>
@@ -431,18 +424,19 @@ const NotificationsTab = ({ notifications, setNotifications }) => {
               </div>
               <button
                 onClick={() => handleNotificationChange("paymentAlerts")}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${notifications.paymentAlerts ? "bg-blue-600" : "bg-gray-600"
-                  }`}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications.paymentAlerts ? "bg-blue-600" : "bg-gray-600"
+                }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${notifications.paymentAlerts
-                    ? "translate-x-6"
-                    : "translate-x-1"
-                    }`}
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    notifications.paymentAlerts
+                      ? "translate-x-6"
+                      : "translate-x-1"
+                  }`}
                 />
               </button>
             </div>
-
           </div>
         </div>
       </div>
@@ -486,10 +480,11 @@ const AppearanceTab = ({ theme, setTheme }) => {
             {themes.map((themeOption) => (
               <div
                 key={themeOption.id}
-                className={`p-4 rounded-lg border cursor-pointer transition-colors ${theme === themeOption.id
-                  ? "border-blue-500 bg-blue-500/10"
-                  : "border-gray-600 hover:border-gray-500"
-                  }`}
+                className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                  theme === themeOption.id
+                    ? "border-blue-500 bg-blue-500/10"
+                    : "border-gray-600 hover:border-gray-500"
+                }`}
                 onClick={() => setTheme(themeOption.id)}
               >
                 <div className="flex items-center space-x-3">
@@ -556,7 +551,8 @@ const SettingsSection = ({ freelancerData, onProfileUpdate }) => {
     if (freelancerData) {
       setFormState({
         firstName: freelancerData?.data.personName?.split(" ")[0] || "",
-        lastName: freelancerData?.data.personName?.split(" ").slice(1).join(" ") || "",
+        lastName:
+          freelancerData?.data.personName?.split(" ").slice(1).join(" ") || "",
         email: freelancerData?.data.email || "",
         phone: freelancerData?.data.phoneNumber || "",
         country: freelancerData?.data.country || "",
@@ -618,74 +614,76 @@ const SettingsSection = ({ freelancerData, onProfileUpdate }) => {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    setIsLoading(true);
-    setError(null);
-    setSuccess(null);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      setError(null);
+      setSuccess(null);
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    // Append all fields
-    formData.append("FirstName", formState.firstName);
-    formData.append("LastName", formState.lastName);
-    formData.append("Email", formState.email);
-    formData.append("Phone", formState.phone);
-    formData.append("Country", formState.country);
-    formData.append("City", formState.city);
-    formData.append("Title", formState.title);
-    formData.append("Description", formState.description);
-    formData.append("Experience", formState.experience);
-    formData.append("HourlyRate", formState.hourlyRate);
-    formData.append("Availability", formState.availability);
+      // Append all fields
+      formData.append("FirstName", formState.firstName);
+      formData.append("LastName", formState.lastName);
+      formData.append("Email", formState.email);
+      formData.append("Phone", formState.phone);
+      formData.append("Country", formState.country);
+      formData.append("City", formState.city);
+      formData.append("Title", formState.title);
+      formData.append("Description", formState.description);
+      formData.append("Experience", formState.experience);
+      formData.append("HourlyRate", formState.hourlyRate);
+      formData.append("Availability", formState.availability);
 
-    // Append arrays as JSON strings
-    formData.append("Skills", JSON.stringify(formState.skills));
-    formData.append("Categories", JSON.stringify(formState.categories));
+      // Append arrays as JSON strings
+      formData.append("Skills", JSON.stringify(formState.skills));
+      formData.append("Categories", JSON.stringify(formState.categories));
 
-    // Append profile image if it exists
-    if (formState.profileImageFile) {
-      formData.append("ProfileImage", formState.profileImageFile);
+      // Append profile image if it exists
+      if (formState.profileImageFile) {
+        formData.append("ProfileImage", formState.profileImageFile);
+      }
+
+      console.log("Submitting form data:"); // Debug log
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+
+      // Make the actual API call
+      const response = await API.put("/freelancer/profile", formData, {});
+
+      console.log("API response:", response.data); // Debug log
+
+      // Call parent with updated data
+      onProfileUpdate({
+        personName: `${formState.firstName} ${formState.lastName}`,
+        email: formState.email,
+        phoneNumber: formState.phone,
+        country: formState.country,
+        city: formState.city,
+        title: formState.title,
+        description: formState.description,
+        experience: formState.experience,
+        hourlyRate: formState.hourlyRate,
+        availability: formState.availability,
+        skills: formState.skills,
+        categories: formState.categories,
+        profileImage: formState.profileImage,
+      });
+
+      setSuccess("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
     }
-
-    console.log('Submitting form data:'); // Debug log
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
-    // Make the actual API call
-    const response = await API.put("/freelancer/profile", formData, {
-
-    });
-
-    console.log('API response:', response.data); // Debug log
-
-    // Call parent with updated data
-    onProfileUpdate({
-      personName: `${formState.firstName} ${formState.lastName}`,
-      email: formState.email,
-      phoneNumber: formState.phone,
-      country: formState.country,
-      city: formState.city,
-      title: formState.title,
-      description: formState.description,
-      experience: formState.experience,
-      hourlyRate: formState.hourlyRate,
-      availability: formState.availability,
-      skills: formState.skills,
-      categories: formState.categories,
-      profileImage: formState.profileImage,
-    });
-
-    setSuccess("Profile updated successfully!");
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    setError(error.response?.data?.message || error.message || "Failed to update profile. Please try again.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -697,10 +695,11 @@ const handleSubmit = async (e) => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${activeTab === tab.id
-                ? "text-blue-400 border-b-2 border-blue-500"
-                : "text-gray-400 hover:text-gray-200"
-                }`}
+              className={`px-4 py-3 font-medium flex items-center space-x-2 transition-colors ${
+                activeTab === tab.id
+                  ? "text-blue-400 border-b-2 border-blue-500"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
               onClick={() => setActiveTab(tab.id)}
             >
               <tab.icon className="w-5 h-5" />
