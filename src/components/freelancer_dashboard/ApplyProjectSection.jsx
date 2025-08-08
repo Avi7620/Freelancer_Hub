@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import BiddingModal from "./BiddingModal";
 
-const ApplyProjectsSection = () => {
+const ApplyProjectsSection = ({ setTotalProject }) => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [projects, setProjects] = useState([]);
@@ -71,6 +71,7 @@ const ApplyProjectsSection = () => {
       const data = await response.json();
       console.log("API Response data:", data);
       data.filter((project) => project.projectStatus != "Open");
+      setTotalProject(data.length);
 
       // Assuming the API returns an array of projects
       // If the API returns data in a different structure (e.g., { projects: [...] }), adjust accordingly

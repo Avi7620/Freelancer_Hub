@@ -59,7 +59,6 @@ const Navbar = () => {
             onClick={() => navigate("/")}
           >
             Freelancer Hub
-            
           </Typography>
 
           {/* Desktop Navigation */}
@@ -120,9 +119,6 @@ const Navbar = () => {
                 {item.label}
               </MenuItem>
             ))}
-            <MenuItem onClick={() => handleNavigation("/seller")}>
-              Become a Seller
-            </MenuItem>
             <MenuItem onClick={() => handleNavigation("/login")}>
               Login
             </MenuItem>

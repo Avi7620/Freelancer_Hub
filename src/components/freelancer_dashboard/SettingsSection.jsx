@@ -98,9 +98,6 @@ const ProfileTab = ({
                 <p className="text-gray-400">
                   {formState.title || "Freelancer"}
                 </p>
-                <p className="text-sm text-blue-400 mt-1">
-                  Member since {formState.joinDate || "January 2023"}
-                </p>
               </div>
             </div>
 
