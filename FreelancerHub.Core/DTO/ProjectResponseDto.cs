@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreelancerHub.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,7 @@ namespace FreelancerHub.Core.DTO
         public string[] RequiredSkills { get; set; }
         public DateTime CreatedAt { get; set; }
         public string CompanyName { get; set; }
+
+        public ProjectStatus projectStatus { get; set; }
     }
 }

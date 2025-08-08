@@ -4369,6 +4369,9 @@
           "companyName": {
             "type": "string",
             "nullable": true
+          },
+          "projectStatus": {
+            "$ref": "#/components/schemas/ProjectStatus"
           }
         },
         "additionalProperties": false
