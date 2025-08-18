@@ -82,7 +82,7 @@ namespace FreelancerHub.Core.Services
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)),
 
-                ValidateLifetime = false //should be false
+                ValidateLifetime = false 
             };
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();

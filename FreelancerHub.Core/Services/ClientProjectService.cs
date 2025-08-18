@@ -1,43 +1,43 @@
-﻿// ClientProjectService.cs
-using FreelancerHub.Core.Domain.Entities;
-using FreelancerHub.Core.DTO;
-using FreelancerHub.Core.DTO.FreelancerHub.Core.DTO;
-using FreelancerHub.Core.Interfaces;
-using FreelancerHub.Core.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿    // ClientProjectService.cs
+    using FreelancerHub.Core.Domain.Entities;
+    using FreelancerHub.Core.DTO;
+    using FreelancerHub.Core.DTO.FreelancerHub.Core.DTO;
+    using FreelancerHub.Core.Interfaces;
+    using FreelancerHub.Core.Services;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-namespace FreelancerHub.Infrastructure.Services
-{
-    public class ClientProjectService : IClientProjectService
+    namespace FreelancerHub.Infrastructure.Services
     {
-        private readonly IProjectRepository _projectRepository;
-        private readonly IClientRepository _clientRepository;
-
-        public ClientProjectService(
-            IProjectRepository projectRepository,
-            IClientRepository clientRepository)
+        public class ClientProjectService : IClientProjectService
         {
-            _projectRepository = projectRepository;
-            _clientRepository = clientRepository;
-        }
+            private readonly IProjectRepository _projectRepository;
+            private readonly IClientRepository _clientRepository;
 
-        public async Task<IEnumerable<ProjectWithStatusDto>> GetClientProjectsWithStatusAsync(Guid clientId)
-        {
-         
-            var client = await _clientRepository.GetClientById(clientId);
-            if (client == null)
+            public ClientProjectService(
+                IProjectRepository projectRepository,
+                IClientRepository clientRepository)
             {
-                throw new KeyNotFoundException("Client not found");
+                _projectRepository = projectRepository;
+                _clientRepository = clientRepository;
             }
 
-            // Get all projects for this client
-            var projects = await _projectRepository.GetProjectsByClient(clientId);
+            public async Task<IEnumerable<ProjectWithStatusDto>> GetClientProjectsWithStatusAsync(Guid clientId)
+            {
+         
+                var client = await _clientRepository.GetClientById(clientId);
+                if (client == null)
+                {
+                    throw new KeyNotFoundException("Client not found");
+                }
 
-            // Convert to DTOs with status information
-            return projects.Select(p => new ProjectWithStatusDto(p));
+                // Get all projects for this client
+                var projects = await _projectRepository.GetProjectsByClient(clientId);
+
+                // Convert to DTOs with status information
+                return projects.Select(p => new ProjectWithStatusDto(p));
+            }
         }
     }
-}
