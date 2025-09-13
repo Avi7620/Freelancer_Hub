@@ -1,0 +1,4594 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "FreelancerHub.Api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/freelancer/bids/submit": {
+      "post": {
+        "tags": [
+          "BidSubmission"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidSubmissionDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidSubmissionDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BidSubmissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/bids/{bidId}": {
+      "get": {
+        "tags": [
+          "BidSubmission"
+        ],
+        "parameters": [
+          {
+            "name": "bidId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BidDetailsDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/projects/{projectId}/bids": {
+      "get": {
+        "tags": [
+          "ClientBidFreelancers"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectBidsResponseDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/profile": {
+      "get": {
+        "tags": [
+          "ClientProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "ClientProfile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientProfileUpdateDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientProfileUpdateDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientProfileUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/client/projects/with-status": {
+      "get": {
+        "tags": [
+          "ClientProjects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithStatusDtoIEnumerableApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ClientSignup/register": {
+      "post": {
+        "tags": [
+          "ClientSignup"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSignupDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSignupDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientSignupDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/email/send": {
+      "post": {
+        "tags": [
+          "Email"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/freelancer/FreelancerAvailableProjects": {
+      "get": {
+        "tags": [
+          "FreelancerAvailableProjects"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/FreelancerAvailableProjects/filtered": {
+      "get": {
+        "tags": [
+          "FreelancerAvailableProjects"
+        ],
+        "parameters": [
+          {
+            "name": "skills",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "minBudget",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "maxBudget",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/bid-status": {
+      "get": {
+        "tags": [
+          "FreelancerBidStatus"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoIEnumerableApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/bid-status/{bidId}": {
+      "get": {
+        "tags": [
+          "FreelancerBidStatus"
+        ],
+        "parameters": [
+          {
+            "name": "bidId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerBidStatusDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/profile": {
+      "get": {
+        "tags": [
+          "FreelancerProfile"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerProfileResponseDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerProfileResponseDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelancerProfileResponseDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "FreelancerProfile"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "Country": {
+                    "type": "string"
+                  },
+                  "City": {
+                    "type": "string"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Experience": {
+                    "type": "string"
+                  },
+                  "HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Availability": {
+                    "type": "string"
+                  },
+                  "Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.ClientProfile.CompanyName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Country": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.City": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Title": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Description": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Experience": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Availability": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.ClientProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.AdminProfile.User.ClientProfile.Projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Country": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.City": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Title": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Description": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Experience": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Availability": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.CompanyName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.Projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.AdminProfile.User.FreelancerProfile.Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  },
+                  "User.AdminProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.AdminProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.AdminProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.AdminProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AdminProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.CompanyName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.AdminProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Country": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.City": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Title": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Description": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Experience": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Availability": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AdminProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Country": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.City": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Title": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Description": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Experience": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Availability": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.User.FreelancerProfile.Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  },
+                  "User.ClientProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.ClientProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.ClientProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.ClientProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.ClientProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.ClientProfile.Projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  },
+                  "User.FreelancerProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.Country": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.City": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.Title": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.Description": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.Experience": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.HourlyRate": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "User.FreelancerProfile.Availability": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.FreelancerProfile.Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.FreelancerProfile.PortfolioFilePaths": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "User.FreelancerProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.CompanyName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.Projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.CompanyName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.UserId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PersonName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.CreatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AdminProfile": {
+                    "$ref": "#/components/schemas/AdminProfile"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.ClientProfile": {
+                    "$ref": "#/components/schemas/ClientProfile"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.FreelancerProfile.User.ClientProfile.Projects": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  },
+                  "User.FreelancerProfile.User.FreelancerProfile": {
+                    "$ref": "#/components/schemas/FreelancerProfile"
+                  },
+                  "User.FreelancerProfile.User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.FreelancerProfile.User.UserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.Email": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.FreelancerProfile.User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.FreelancerProfile.User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "User.FreelancerProfile.Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  },
+                  "User.Id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "User.UserName": {
+                    "type": "string"
+                  },
+                  "User.NormalizedUserName": {
+                    "type": "string"
+                  },
+                  "User.Email": {
+                    "type": "string"
+                  },
+                  "User.NormalizedEmail": {
+                    "type": "string"
+                  },
+                  "User.EmailConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.PasswordHash": {
+                    "type": "string"
+                  },
+                  "User.SecurityStamp": {
+                    "type": "string"
+                  },
+                  "User.ConcurrencyStamp": {
+                    "type": "string"
+                  },
+                  "User.PhoneNumber": {
+                    "type": "string"
+                  },
+                  "User.PhoneNumberConfirmed": {
+                    "type": "boolean"
+                  },
+                  "User.TwoFactorEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.LockoutEnd": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "User.LockoutEnabled": {
+                    "type": "boolean"
+                  },
+                  "User.AccessFailedCount": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Bids": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Bid"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "UserId": {
+                  "style": "form"
+                },
+                "Country": {
+                  "style": "form"
+                },
+                "City": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Experience": {
+                  "style": "form"
+                },
+                "HourlyRate": {
+                  "style": "form"
+                },
+                "Availability": {
+                  "style": "form"
+                },
+                "Skills": {
+                  "style": "form"
+                },
+                "Categories": {
+                  "style": "form"
+                },
+                "PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.PersonName": {
+                  "style": "form"
+                },
+                "User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.UserId": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.UserId": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.CompanyName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.UserId": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Country": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.City": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Title": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Description": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Experience": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.HourlyRate": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Availability": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Skills": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Categories": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.FreelancerProfile.Bids": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ClientProfile.Projects": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.UserId": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Country": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.City": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Title": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Description": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Experience": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.HourlyRate": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Availability": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Skills": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Categories": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.UserId": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.CompanyName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ClientProfile.Projects": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.FreelancerProfile.Bids": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AdminProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.UserId": {
+                  "style": "form"
+                },
+                "User.ClientProfile.CompanyName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.UserId": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.UserId": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Country": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.City": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Title": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Description": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Experience": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.HourlyRate": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Availability": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Skills": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Categories": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.FreelancerProfile.Bids": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AdminProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.UserId": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Country": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.City": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Title": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Description": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Experience": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.HourlyRate": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Availability": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Skills": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Categories": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.UserId": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.FreelancerProfile.Bids": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.ClientProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.ClientProfile.Projects": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.UserId": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Country": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.City": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Title": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Description": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Experience": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.HourlyRate": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Availability": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Skills": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Categories": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.PortfolioFilePaths": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.UserId": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.UserId": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.CompanyName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ClientProfile.Projects": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AdminProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.UserId": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.CompanyName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.UserId": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PersonName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.CreatedAt": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AdminProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AdminProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.ClientProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ClientProfile.Projects": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.FreelancerProfile": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.Id": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.UserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.Email": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "User.FreelancerProfile.Bids": {
+                  "style": "form"
+                },
+                "User.Id": {
+                  "style": "form"
+                },
+                "User.UserName": {
+                  "style": "form"
+                },
+                "User.NormalizedUserName": {
+                  "style": "form"
+                },
+                "User.Email": {
+                  "style": "form"
+                },
+                "User.NormalizedEmail": {
+                  "style": "form"
+                },
+                "User.EmailConfirmed": {
+                  "style": "form"
+                },
+                "User.PasswordHash": {
+                  "style": "form"
+                },
+                "User.SecurityStamp": {
+                  "style": "form"
+                },
+                "User.ConcurrencyStamp": {
+                  "style": "form"
+                },
+                "User.PhoneNumber": {
+                  "style": "form"
+                },
+                "User.PhoneNumberConfirmed": {
+                  "style": "form"
+                },
+                "User.TwoFactorEnabled": {
+                  "style": "form"
+                },
+                "User.LockoutEnd": {
+                  "style": "form"
+                },
+                "User.LockoutEnabled": {
+                  "style": "form"
+                },
+                "User.AccessFailedCount": {
+                  "style": "form"
+                },
+                "Bids": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FreelancerSignup/register": {
+      "post": {
+        "tags": [
+          "FreelancerSignup"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "FirstName": {
+                    "type": "string"
+                  },
+                  "LastName": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  },
+                  "ConfirmPassword": {
+                    "type": "string"
+                  },
+                  "Phone": {
+                    "type": "string"
+                  },
+                  "Country": {
+                    "type": "string"
+                  },
+                  "City": {
+                    "type": "string"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Experience": {
+                    "type": "string"
+                  },
+                  "HourlyRate": {
+                    "type": "string"
+                  },
+                  "Availability": {
+                    "type": "string"
+                  },
+                  "Skills": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Categories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Portfolio": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  },
+                  "AgreeToTerms": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "FirstName": {
+                  "style": "form"
+                },
+                "LastName": {
+                  "style": "form"
+                },
+                "Email": {
+                  "style": "form"
+                },
+                "Password": {
+                  "style": "form"
+                },
+                "ConfirmPassword": {
+                  "style": "form"
+                },
+                "Phone": {
+                  "style": "form"
+                },
+                "Country": {
+                  "style": "form"
+                },
+                "City": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Experience": {
+                  "style": "form"
+                },
+                "HourlyRate": {
+                  "style": "form"
+                },
+                "Availability": {
+                  "style": "form"
+                },
+                "Skills": {
+                  "style": "form"
+                },
+                "Categories": {
+                  "style": "form"
+                },
+                "Portfolio": {
+                  "style": "form"
+                },
+                "AgreeToTerms": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/client/PostProject": {
+      "post": {
+        "tags": [
+          "PostProject"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/client/PostProject/{id}": {
+      "get": {
+        "tags": [
+          "PostProject"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/client/PostProject/my-projects": {
+      "get": {
+        "tags": [
+          "PostProject"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/client/projects/assign": {
+      "post": {
+        "tags": [
+          "ProjectAssignment"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectAssignmentDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectAssignmentDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectAssignmentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/freelancer/projects/{projectId}/details": {
+      "get": {
+        "tags": [
+          "ProjectDetails"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithClientDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/client/project-details/{projectId}": {
+      "get": {
+        "tags": [
+          "ProjectDetails"
+        ],
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithFreelancerDtoApiResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithFreelancerDtoApiResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithFreelancerDtoApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/User/client-id": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdminProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user": {
+            "$ref": "#/components/schemas/ApplicationUser"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApplicationUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "normalizedEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "emailConfirmed": {
+            "type": "boolean"
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "securityStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "concurrencyStamp": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumberConfirmed": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "boolean"
+          },
+          "lockoutEnd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lockoutEnabled": {
+            "type": "boolean"
+          },
+          "accessFailedCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personName": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "adminProfile": {
+            "$ref": "#/components/schemas/AdminProfile"
+          },
+          "clientProfile": {
+            "$ref": "#/components/schemas/ClientProfile"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Bid": {
+        "required": [
+          "amount",
+          "proposal"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proposal": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "freelancerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BidStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BidApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Bid"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BidDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proposal": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BidStatus"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BidDetailsDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/BidDetailsDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BidStatus": {
+        "enum": [
+          "Pending",
+          "Accepted",
+          "Rejected"
+        ],
+        "type": "string"
+      },
+      "BidSubmissionDto": {
+        "required": [
+          "amount",
+          "deliveryDays",
+          "projectId",
+          "proposal"
+        ],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proposal": {
+            "maxLength": 2000,
+            "minLength": 50,
+            "type": "string"
+          },
+          "amount": {
+            "maximum": 1000000,
+            "minimum": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "maximum": 365,
+            "minimum": 1,
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "BooleanApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "boolean"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientProfileUpdateDto": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientSignupDTO": {
+        "required": [
+          "companyName",
+          "contactPersonName",
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "maxLength": 100,
+            "minLength": 6,
+            "type": "string"
+          },
+          "contactPersonName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "format": "tel",
+            "nullable": true
+          },
+          "companyName": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateProjectDto": {
+        "required": [
+          "budget",
+          "deadline",
+          "description",
+          "requiredSkills",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "budget": {
+            "minimum": 0.01,
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "EmailRequest": {
+        "type": "object",
+        "properties": {
+          "toEmail": {
+            "type": "string",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBasicInfoDto": {
+        "type": "object",
+        "properties": {
+          "freelancerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBidDto": {
+        "type": "object",
+        "properties": {
+          "bidId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "proposal": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BidStatus"
+          },
+          "freelancerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "freelancerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "hourlyRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBidStatusDto": {
+        "type": "object",
+        "properties": {
+          "bidId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectBudget": {
+            "type": "number",
+            "format": "double"
+          },
+          "projectDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "clientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "proposal": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "deliveryDays": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BidStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBidStatusDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/FreelancerBidStatusDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerBidStatusDtoIEnumerableApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FreelancerBidStatusDto"
+            },
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerProfile": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "experience": {
+            "type": "string",
+            "nullable": true
+          },
+          "hourlyRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "availability": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "portfolioFilePaths": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "personName": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "experience": {
+            "type": "string",
+            "nullable": true
+          },
+          "hourlyRate": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "availability": {
+            "type": "string",
+            "nullable": true
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FreelancerProfileResponseDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/FreelancerProfileResponseDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginDTO": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "minLength": 1,
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Project": {
+        "required": [
+          "description",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "budget": {
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "string",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "acceptedFreelancerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectAssignmentDto": {
+        "required": [
+          "clientId",
+          "freelancerId",
+          "projectId"
+        ],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "freelancerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "clientId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectBidsResponseDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectStatus": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "hasBids": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FreelancerBidDto"
+            },
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "projectDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isAcceptingBids": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "daysActive": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectBidsResponseDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProjectBidsResponseDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectStatus": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectStatus": {
+        "enum": [
+          "Open",
+          "Assigned",
+          "Review",
+          "Completed",
+          "InProgress"
+        ],
+        "type": "string"
+      },
+      "ProjectWithClientDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectTitle": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "projectBudget": {
+            "type": "number",
+            "format": "double"
+          },
+          "projectDeadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "clientId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "clientName": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "bidCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithClientDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProjectWithClientDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithFreelancerDto": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "freelancer": {
+            "$ref": "#/components/schemas/FreelancerBasicInfoDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithFreelancerDtoApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProjectWithFreelancerDto"
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithStatusDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "budget": {
+            "type": "number",
+            "format": "double"
+          },
+          "deadline": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "companyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "bidCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "acceptedFreelancerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProjectWithStatusDtoIEnumerableApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectWithStatusDto"
+            },
+            "nullable": true
+          },
+          "details": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
